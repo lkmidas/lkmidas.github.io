@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>pwning - Category - Midas Blog</title>
+        <link>https://lkmidas.github.io/categories/pwning/</link>
+        <description>pwning - Category - Midas Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/pwning/" rel="self" type="application/rss+xml" /><item>
+    <title>Learning Linux Kernel Exploitation - Part 1</title>
+    <link>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</link>
+    <pubDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</guid>
+    <description><![CDATA[The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr]]></description>
+</item><item>
+    <title>Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP</title>
+    <link>https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/</link>
+    <pubDate>Sun, 03 Jan 2021 04:40:50 -0800</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/</guid>
+    <description><![CDATA[My technique of solving glibc 2.31 heap challenges with seccomp]]></description>
+</item></channel>
+</rss>

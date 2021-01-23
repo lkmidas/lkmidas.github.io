@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>ISITDTUCTF2020 Quals - rev02 writeup - Midas Blog</title><meta name="Description" content="Writeup for ISITDTUCTF2020 Quals rev02 challenge"><meta property="og:title" content="ISITDTUCTF2020 Quals - rev02 writeup" />
+<meta property="og:description" content="Writeup for ISITDTUCTF2020 Quals rev02 challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2020-10-12T20:01:13-07:00" />
+<meta property="article:modified_time" content="2020-10-12T20:01:13-07:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="ISITDTUCTF2020 Quals - rev02 writeup"/>
+<meta name="twitter:description" content="Writeup for ISITDTUCTF2020 Quals rev02 challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "ISITDTUCTF2020 Quals - rev02 writeup",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20201012-isitdtuctf2020quals-writeups\/"
+        },"genre": "posts","wordcount":  861 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20201012-isitdtuctf2020quals-writeups\/","datePublished": "2020-10-12T20:01:13-07:00","dateModified": "2020-10-12T20:01:13-07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for ISITDTUCTF2020 Quals rev02 challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">ISITDTUCTF2020 Quals - rev02 writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-10-12">2020-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;861 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#static-analysis">Static analysis</a></li>
+    <li><a href="#dynamic-analysis">Dynamic analysis</a></li>
+    <li><a href="#solving-the-equations">Solving the equations</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20201012-isitdtuctf2020quals-writeups/rev02.nes" rel="">rev02.nes</a>.</li>
+<li><strong>Category:</strong> Reverse engineering</li>
+<li><strong>Summary:</strong> The given file is a <strong>NES ROM</strong> file, which is a game ROM for the NES 8-bit video game console. The NES is based on the <strong>6502 microcontroller</strong> with a custom video controller called PPU. Therefore, this is essentially a 6502 assembly reverse engineering challenge. Our job is to find the correct password to get the flag.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Analyze statically -&gt; see something that looks like a password check.</li>
+<li>Analyze dynamically -&gt; learn the key mapping from some keys on the keyboard to memory.</li>
+<li>Reverse the checking routine -&gt; write solving script in <code>z3</code> to get the password.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="static-analysis">Static analysis</h2>
+<p>I first try to load the file into different disassemblers, namely <strong>IDA</strong> and <strong>Ghidra</strong>. By default, <strong>IDA</strong> doesn&rsquo;t have the option to analyze 6502 code. <strong>Ghidra</strong> on the other hand can, but provides poorly formatted assembly and wrong decompiled code (even though there are some Ghidra plugins that you can use to load it correctly).</p>
+<p>Later, the author suggested on the competition&rsquo;s Discord channel a program to emulate and debug NES files called <a href="http://fceux.com/web/download.html" target="_blank" rel="noopener noreffer">FCEUX</a>. This is the tool which I used to solve this challenge.</p>
+<p>By opening the ROM in FCEUX and  then opening the <strong>Debugger</strong> window, I could begin static analyzing the ROM. Looking around the <strong>code</strong> section (which is loaded at address <strong>0x8000</strong>) didn&rsquo;t reveal much, 6502 is a new architecture for me after all. Therefore, I started looking into the <strong>data</strong> that come after the code, I found the 2 interesting strings which are <code>GIVE ME THE PASSWORD</code> and <code>Correct! ISITDTU{</code>. By these, I could predict that this ROM will wait for a password to be entered, check it and then give us the flag if the password is correct.</p>
+<h2 id="dynamic-analysis">Dynamic analysis</h2>
+<p>I tried continuing static analyzing for a bit longer, but that didn&rsquo;t yield much result, so I started to analyze it dynamically. The program doesn&rsquo;t have any visual effect on the screen, it&rsquo;s just pitch black, but the author did say that the program still accepts input normally. Therefore, I opened the <strong>Hex Editor</strong> window to inspect the memory in real time and then started <strong>button mashing</strong> and found 2 keys to solve this:</p>
+<ul>
+<li>The input is stored at a 16 bytes buffer starting at address <strong>0x300</strong> in the memory space.</li>
+<li>The only <strong>7 valid input keys</strong> on the keyboard are: <code>s</code>, <code>d</code>, <code>f</code> and the arrow buttons. They are also mapped into the memory in the following way: <code>{s:a, d:u, f:t, left:l, right:i, up:n, down:h}</code>.</li>
+</ul>
+<p>Using the info that the input buffer is at <strong>0x300</strong>, I then looked into the code to find the part of it which access that buffer. That code started at address <strong>0x9131</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"> 00:9131:A2 <span class="m">00</span>     LDX <span class="c1">#$00</span>
+ 00:9133:AD <span class="m">00</span> <span class="m">03</span>  LDA <span class="nv">$0300</span>
+ 00:9136:18        CLC
+ 00:9137:6D <span class="m">01</span> <span class="m">03</span>  ADC <span class="nv">$0301</span>
+ 00:913A:90 <span class="m">02</span>     BCC <span class="nv">$913</span>E
+ 00:913C:E8        INX
+ 00:913D:18        CLC
+ 00:913E:6D <span class="m">02</span> <span class="m">03</span>  ADC <span class="nv">$0302</span>
+ 00:9141:90 <span class="m">01</span>     BCC <span class="nv">$9144</span>
+ 00:9143:E8        INX
+ 00:9144:E0 <span class="m">01</span>     CPX <span class="c1">#$01</span>
+ 00:9146:F0 <span class="m">03</span>     BEQ <span class="nv">$914</span>B
+ 00:9148:4C <span class="m">34</span> <span class="m">93</span>  JMP <span class="nv">$9334</span>
+ 00:914B:C9 4A     CMP <span class="c1">#$4A</span>
+ 00:914D:F0 <span class="m">03</span>     BEQ <span class="nv">$9152</span>
+ 00:914F:4C <span class="m">34</span> <span class="m">93</span>  JMP <span class="nv">$9334</span>
+ 00:9152:CA        DEX
+ ... <span class="o">(</span>the same code snippet <span class="k">for</span> the remaining bytes<span class="o">)</span>
+</code></pre></div><p>By reversing the instructions one by one while looking at the 6502 instruction set, its functionality can be briefly described as follow: <em>It loops through all the bytes in the buffer one by one, each byte is added with the two next bytes in the sequence, the result is then compared to a constant value</em>. This makes the checking process a <strong>system of  14 equations</strong> on 16 values, with the constraint being the values can only be one of the 7 characters listed above.</p>
+<h2 id="solving-the-equations">Solving the equations</h2>
+<p>I solved the equations using <code>z3</code>. The code itself is pretty simple: initialize a list of 16 <code>BitVec</code> of length 8, add the constraints and the equations, then just let the machine do the work.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="n">BitVec</span><span class="p">,</span> <span class="n">Solver</span><span class="p">,</span> <span class="n">Or</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BitVec</span><span class="p">(</span><span class="s1">&#39;v&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Or</span><span class="p">((</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;h&#39;</span><span class="p">))))</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x4a</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x44</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x3b</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x43</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x43</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x3f</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x42</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x42</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x42</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x37</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x3d</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x43</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x4b</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x4c</span><span class="p">)</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+<span class="n">ans</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">as_long</span><span class="p">())</span>
+<span class="k">print</span> <span class="n">result</span>
+</code></pre></div><p>The password is: <code>tuanlinhlnhatniu</code></p>
+<p>Using the mapping above and input the correct sequence into the emulator printed out the flag on the black screen:</p>
+<pre><code>ISITDTU{omg_the_nes-ted_if_in_n3s_is_s0_c00l}
+</code></pre><h2 id="appendix">Appendix</h2>
+<p>The z3 script to solve the problem is <a href="/posts/20201012-isitdtuctf2020quals-writeups/a.py" rel="">a.py</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-10-12</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20200319-angstromctf2020-writeups/" class="prev" rel="prev" title="AngstromCTF2020 - bookface writeup"><i class="fas fa-angle-left fa-fw"></i>AngstromCTF2020 - bookface writeup</a>
+            <a href="/posts/20201106-ascis2020quals-writeups/" class="next" rel="next" title="ASCIS2020 Quals - Findme, Crypt writeups">ASCIS2020 Quals - Findme, Crypt writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
