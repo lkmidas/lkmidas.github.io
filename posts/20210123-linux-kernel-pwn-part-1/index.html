@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>Learning Linux Kernel Exploitation - Part 1 - Midas Blog</title><meta name="Description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 1" />
-<meta property="og:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr" />
+        <title>Learning Linux Kernel Exploitation - Part 1 - Midas Blog</title><meta name="Description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 1" />
+<meta property="og:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" />
 <meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
@@ -16,7 +16,7 @@
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="Learning Linux Kernel Exploitation - Part 1"/>
-<meta name="twitter:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr"/>
+<meta name="twitter:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"/>
 <meta name="application-name" content="Midas Blog">
 <meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -29,13 +29,13 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/"
-        },"genre": "posts","wordcount":  3527 ,
+        },"genre": "posts","wordcount":  3525 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/","datePublished": "2021-01-23T16:33:12+07:00","dateModified": "2021-01-23T16:33:12+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
                 "@type": "Person",
                 "name": "Midas"
-            },"description": "The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr"
+            },"description": "The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"
     }
     </script></head>
     <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 1</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3527 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3525 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;17 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -130,7 +130,7 @@
             </div><div class="content" id="content"><h2 id="preface">Preface</h2>
 <p>In this series, I&rsquo;m going to write about some basic stuffs in Linux kernel exploitation that I have learned in the last few weeks: from basic environment setup to some popular Linux kernel mitigations, and their corresponding exploitation techniques.</p>
 <p>Back when I first started playing CTF and pwning about 2 years ago, everytime I heard other people talked about kernel exploitation, it was like a very difficult and magical topic to me, I tried to get into it several times, but always didn&rsquo;t know how to start because I didn&rsquo;t have the sufficient knowledge about kernels and operating systems at that point. A few weeks earlier, after having learned a lot more about computer science in general and operating systems in particular, I decided to try learning kernel pwning again, from the very basic. I know it&rsquo;s pretty late for a pwner like me to start learning this subject after so long, but as they always say, it&rsquo;s better late than never. It turns out that this topic is not as difficult as I have always thought it to be (but for sure it&rsquo;s not easy, remember that this is just the very basics that I have learned), it just requires a lot more initial in-depth knowledge and setup than normal userspace exploitation does. <em>Therefore, it requires pwners to be quite comfortable with userland exploitation before getting into kernel exploitation</em>.</p>
-<p>For the learning process, I used the environment provided by a challenge from <code>hxpCTF 2020</code> called <code>kernel ROP</code> to practice on. <em>Keep in mind that I only used it as a practice environment, this is not an actual writeup of the challenge itself</em> (even though the environment configuration in the last post may be the same as the challenge, so you can call that a writeup). The reason I chose this particular challenge is because:</p>
+<p>For the learning process, I used the environment provided by a challenge from <code>hxpCTF 2020</code> called <code>kernel-rop</code> to practice on. <em>Keep in mind that I only used it as a practice environment, this is not an actual writeup of the challenge itself</em> (even though the environment configuration in the last post may be the same as the challenge, so you can call that a writeup). The reason I chose this particular challenge is because:</p>
 <ol>
 <li>The configuration is quite standard and easy to modify to my practicing needs.</li>
 <li>The bug in the kernel module is extremely trivial and basic.</li>
@@ -149,7 +149,7 @@
 <h2 id="setting-up-the-environment">Setting up the environment</h2>
 <h3 id="first-look">First look</h3>
 <p>For a Linux kernel pwn challenge, our task is to exploit <strong>a vulnearable custom kernel module</strong> that is installed into the kernel on boot. In most cases, the module will be given along with some files that ultimately use <code>qemu</code> as the emulator for a Linux system. However in some rare cases, we might be given with a <code>VMWare</code> or <code>VirtualBox</code> VM image, or might not be given any emulation environment at all, but according to all the challenges that I have sampled, those are quite rare, so I will only explain the common cases, which are emulated by <code>qemu</code>.</p>
-<p>In particular, for the <code>kernel ROP</code> challenge, we are given a lot of files, but only these files are important for the <code>qemu</code> setup:</p>
+<p>In particular, for the <code>kernel-rop</code> challenge, we are given a lot of files, but only these files are important for the <code>qemu</code> setup:</p>
 <ul>
 <li><a href="/posts/20210123-linux-kernel-pwn-part-1/vmlinuz" rel="">vmlinuz</a> - the compressed Linux kernel, sometimes it&rsquo;s called <code>bzImage</code>, we can extract it into the actual kernel ELF file called <code>vmlinux</code>.</li>
 <li><a href="/posts/20210123-linux-kernel-pwn-part-1/initramfs.cpio.gz" rel="">initramfs.cpio.gz</a> - the Linux file system that is compressed with <code>cpio</code> and <code>gzip</code>, directories such as <code>/bin</code>, <code>/etc</code>, &hellip; are stored in this file, also the vulnearable kernel module is likely to be included in the file system as well. For other challenges, this file might come in some other compression schemes.</li>
@@ -224,7 +224,7 @@ mv ./initramfs.cpio.gz ../
             <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>This challenge uses <code>-hdb</code> to put <code>flag.txt</code> into <code>/dev/sda</code> instead of leaving the <code>flag.txt</code> as a normal file in the system. This is to prevent some dirty CTF tricks used by pwners.</em></div>
+            <div class="admonition-content"><em>This challenge uses <code>-hdb</code> to put <code>flag.txt</code> into <code>/dev/sda</code> instead of leaving the <code>flag.txt</code> as a normal file in the system. This is (maybe)to prevent some dirty CTF tricks used by pwners.</em></div>
         </div>
     </div>
 <p>The first thing that should be done here is to add <code>-s</code> option to it. This options allows us to debug the emulator&rsquo;s kernel remotely from our host machine. All we need to do is to boot the emulator up like normal, then in the host machine, run:</p>

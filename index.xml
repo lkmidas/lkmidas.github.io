@@ -11,7 +11,7 @@
     <pubDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</pubDate>
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</guid>
-    <description><![CDATA[The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel ROP: Setting up the environment and the simplest technique of ret2usr]]></description>
+    <description><![CDATA[The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr]]></description>
 </item><item>
     <title>TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</title>
     <link>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</link>
