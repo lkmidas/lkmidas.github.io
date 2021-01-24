@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/"
-        },"genre": "posts","wordcount":  3525 ,
+        },"genre": "posts","wordcount":  3526 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/","datePublished": "2021-01-23T16:33:12+07:00","dateModified": "2021-01-23T16:33:12+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 1</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3525 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3526 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;17 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -224,7 +224,7 @@ mv ./initramfs.cpio.gz ../
             <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>This challenge uses <code>-hdb</code> to put <code>flag.txt</code> into <code>/dev/sda</code> instead of leaving the <code>flag.txt</code> as a normal file in the system. This is (maybe)to prevent some dirty CTF tricks used by pwners.</em></div>
+            <div class="admonition-content"><em>This challenge uses <code>-hdb</code> to put <code>flag.txt</code> into <code>/dev/sda</code> instead of leaving the <code>flag.txt</code> as a normal file in the system. This is (maybe) to prevent some dirty CTF tricks used by pwners.</em></div>
         </div>
     </div>
 <p>The first thing that should be done here is to add <code>-s</code> option to it. This options allows us to debug the emulator&rsquo;s kernel remotely from our host machine. All we need to do is to boot the emulator up like normal, then in the host machine, run:</p>
