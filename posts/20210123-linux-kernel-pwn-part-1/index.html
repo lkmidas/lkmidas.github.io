@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>Learning Linux Kernel Exploitation - Part 1 - Midas Blog</title><meta name="Description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 1" />
-<meta property="og:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr" />
+        <title>Learning Linux Kernel Exploitation - Part 1 - Midas Blog</title><meta name="Description" content="The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 1" />
+<meta property="og:description" content="The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" />
 <meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
@@ -16,11 +16,11 @@
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="Learning Linux Kernel Exploitation - Part 1"/>
-<meta name="twitter:description" content="The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"/>
+<meta name="twitter:description" content="The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"/>
 <meta name="application-name" content="Midas Blog">
 <meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/linux-kernel-pwn-part-2/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -29,13 +29,13 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/"
-        },"genre": "posts","wordcount":  3536 ,
+        },"genre": "posts","wordcount":  3565 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/","datePublished": "2021-01-23T16:33:12+07:00","dateModified": "2021-01-23T16:33:12+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
                 "@type": "Person",
                 "name": "Midas"
-            },"description": "The first part of the series about my process of learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"
+            },"description": "The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr"
     }
     </script></head>
     <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
@@ -53,7 +53,7 @@
         title="/images/avatar.png" /></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><a class="menu-item" href="https://github.com/lkmidas/lkmidas.blog" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
                     <i class="fas fa-adjust fa-fw"></i>
                 </a>
             </div>
@@ -76,7 +76,7 @@
                 <span></span><span></span><span></span>
             </div>
         </div>
-        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a class="menu-item" href="https://github.com/lkmidas/lkmidas.blog" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 1</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3536 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3565 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;17 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -420,9 +420,12 @@ cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
 <span class="p">}</span>
 </code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>So that concludes my first post on my Linux kernel exploitation learning process. In this post, I have demonstrated the way to setup the environment for a Linux kernel pwn challenge, and also the simplest technique in kernel exploitation: <code>ret2usr</code>.</p>
-<p>In the next post, I will gradually increase the difficulty adding more and more mitigations, and show you the corresponding technique to bypass them.</p>
+<p>In the next post, I will gradually increase the difficulty by adding more and more mitigations, and show you the corresponding technique to bypass them.</p>
 <h2 id="appendix">Appendix</h2>
-<p>The full <code>ret2usr</code> exploitation script is <a href="/posts/20210123-linux-kernel-pwn-part-1/ret2usr.c" rel="">ret2usr.c</a>.</p></div><div class="post-footer" id="post-footer">
+<p>The script to extract kernel image is <a href="/posts/20210123-linux-kernel-pwn-part-1/extract-image.sh" rel="">extract-image.sh</a>.</p>
+<p>The script to decompress the file system is <a href="/posts/20210123-linux-kernel-pwn-part-1/decompress.sh" rel="">decompress.sh</a>.</p>
+<p>The script to compile exploit and compress file system is <a href="/posts/20210123-linux-kernel-pwn-part-1/compress.sh" rel="">compress.sh</a>.</p>
+<p>The full <code>ret2usr</code> exploitation code is <a href="/posts/20210123-linux-kernel-pwn-part-1/ret2usr.c" rel="">ret2usr.c</a>.</p></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -445,7 +448,8 @@ cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210103-tetctf2021-writeups/" class="prev" rel="prev" title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"><i class="fas fa-angle-left fa-fw"></i>TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</a></div>
+    <div class="post-nav"><a href="/posts/20210103-tetctf2021-writeups/" class="prev" rel="prev" title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"><i class="fas fa-angle-left fa-fw"></i>TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</a>
+            <a href="/posts/linux-kernel-pwn-part-2/" class="next" rel="next" title="Learning Linux Kernel Exploitation - Part 2">Learning Linux Kernel Exploitation - Part 2<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
@@ -459,5 +463,8 @@ cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
 </html>
