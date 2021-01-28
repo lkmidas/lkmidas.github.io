@@ -3,7 +3,14 @@
         <title>All Posts - Midas Blog</title>
         <link>https://lkmidas.github.io/posts/</link>
         <description>All Posts | Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 28 Jan 2021 16:04:24 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Learning Linux Kernel Exploitation - Part 2</title>
+    <link>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</link>
+    <pubDate>Thu, 28 Jan 2021 16:04:24 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</guid>
+    <description><![CDATA[The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP]]></description>
+</item><item>
     <title>Learning Linux Kernel Exploitation - Part 1</title>
     <link>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</link>
     <pubDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</pubDate>
