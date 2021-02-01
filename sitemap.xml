@@ -2,14 +2,15 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2021-01-28T16:04:24&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2021-02-01T10:03:59&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/justctf2020_writeups/</loc><lastmod>2021-02-01T10:03:59&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/</loc><lastmod>2021-02-01T10:03:59&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2021-02-01T10:03:59&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/writeups/</loc><lastmod>2021-02-01T10:03:59&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</loc><lastmod>2021-01-28T16:04:24&#43;07:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/</loc><lastmod>2021-01-28T16:04:24&#43;07:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2021-01-28T16:04:24&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/categories/pwning/</loc><lastmod>2021-01-28T16:04:24&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</loc><lastmod>2021-01-23T16:33:12&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</loc><lastmod>2021-01-03T04:48:09-08:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/categories/writeups/</loc><lastmod>2021-01-03T04:48:09-08:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/</loc><lastmod>2021-01-03T04:40:50-08:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/</loc><lastmod>2020-12-27T05:58:43-08:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</loc><lastmod>2020-12-01T02:43:38-08:00</lastmod></url><url>
