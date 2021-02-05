@@ -362,7 +362,7 @@ cat /proc/kallsyms <span class="p">|</span> grep ksymtab_prepare_kernel_cred
 <p>And that concludes this series. We have come to this point where we have a collection of techniques to bypass all of the most modern mitigation features in the Linux kernel. Below is a summary of the techniques we have used accross 3 parts:</p>
 <ol>
 <li>If the kernel has no protection, use <code>ret2usr</code>.</li>
-<li>If it has <code>SMEP</code>, <code>ret2usr</code> is no longer viable use <code>ROP</code> to call <code>commit_creds(prepare_kernel_cred(0))</code>.</li>
+<li>If it has <code>SMEP</code>, <code>ret2usr</code> is no longer viable, use <code>ROP</code> to call <code>commit_creds(prepare_kernel_cred(0))</code>.</li>
 <li>If overflow is limited on the stack, use a <code>pivot gadget</code>.</li>
 <li>If it has <code>KPTI</code>, modify <code>ROP</code> to use <code>KPTI trampoline</code> or <code>signal handler</code>.</li>
 <li>If it has <code>SMAP</code>, stack pivot is no longer viable.</li>
