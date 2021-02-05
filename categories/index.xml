@@ -3,19 +3,19 @@
         <title>Categories - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/</link>
         <description>Categories - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>pwning</title>
+    <link>https://lkmidas.github.io/categories/pwning/</link>
+    <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/categories/pwning/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
     <title>writeups</title>
     <link>https://lkmidas.github.io/categories/writeups/</link>
     <pubDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</pubDate>
     <author>Author</author>
     <guid>https://lkmidas.github.io/categories/writeups/</guid>
-    <description><![CDATA[]]></description>
-</item><item>
-    <title>pwning</title>
-    <link>https://lkmidas.github.io/categories/pwning/</link>
-    <pubDate>Thu, 28 Jan 2021 16:04:24 &#43;0700</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/categories/pwning/</guid>
     <description><![CDATA[]]></description>
 </item></channel>
 </rss>

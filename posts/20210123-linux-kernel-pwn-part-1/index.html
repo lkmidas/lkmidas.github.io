@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/"
-        },"genre": "posts","wordcount":  3565 ,
+        },"genre": "posts","wordcount":  3579 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210123-linux-kernel-pwn-part-1\/","datePublished": "2021-01-23T16:33:12+07:00","dateModified": "2021-01-23T16:33:12+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 1</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3565 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-23">2021-01-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3579 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;17 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -127,7 +127,11 @@
     <li><a href="#appendix">Appendix</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="preface">Preface</h2>
+            </div><div class="content" id="content"><ul>
+<li><a href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 2</a></li>
+<li><a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 3</a></li>
+</ul>
+<h2 id="preface">Preface</h2>
 <p>In this series, I&rsquo;m going to write about some basic stuffs in Linux kernel exploitation that I have learned in the last few weeks: from basic environment setup to some popular Linux kernel mitigations, and their corresponding exploitation techniques.</p>
 <p>Back when I first started playing CTF and pwning about 2 years ago, everytime I heard other people talked about kernel exploitation, it was like a very difficult and magical topic to me, I tried to get into it several times, but always didn&rsquo;t know how to start because I didn&rsquo;t have the sufficient knowledge about kernels and operating systems at that point. A few weeks earlier, after having learned a lot more about computer science in general and operating systems in particular, I decided to try learning kernel pwning again, from the very basic. I know it&rsquo;s pretty late for a pwner like me to start learning this subject after so long, but as they always say, it&rsquo;s better late than never. It turns out that this topic is not as difficult as I have always thought it to be (but for sure it&rsquo;s not easy, remember that this is just the very basics that I have learned), it just requires a lot more initial in-depth knowledge and setup than normal userspace exploitation does. <em>Therefore, it requires pwners to be quite comfortable with userland exploitation before getting into kernel exploitation</em>.</p>
 <p>For the learning process, I used the environment provided by a challenge from <code>hxpCTF 2020</code> called <code>kernel-rop</code> to practice on. <em>Keep in mind that I only used it as a practice environment, this is not an actual writeup of the challenge itself</em> (even though the environment configuration in the last post may be the same as the challenge, so you can call that a writeup). The reason I chose this particular challenge is because:</p>

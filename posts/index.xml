@@ -3,13 +3,20 @@
         <title>All Posts - Midas Blog</title>
         <link>https://lkmidas.github.io/posts/</link>
         <description>All Posts | Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
-    <title>justCTF2020[*] - debug_me_if_you_can, REmap writeups</title>
-    <link>https://lkmidas.github.io/posts/justctf2020_writeups/</link>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Learning Linux Kernel Exploitation - Part 3</title>
+    <link>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</link>
+    <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</guid>
+    <description><![CDATA[The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection]]></description>
+</item><item>
+    <title>justCTF[*]2020 - debug_me_if_you_can, REmap writeups</title>
+    <link>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</link>
     <pubDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</pubDate>
     <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/justctf2020_writeups/</guid>
-    <description><![CDATA[Writeups for justCTF2020[*] reversing challenges]]></description>
+    <guid>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</guid>
+    <description><![CDATA[Writeups for justCTF[*]2020 reversing challenges]]></description>
 </item><item>
     <title>Learning Linux Kernel Exploitation - Part 2</title>
     <link>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</link>
@@ -66,12 +73,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</guid>
     <description><![CDATA[Writeup for ISITDTUCTF2020 Quals rev02 challenge]]></description>
-</item><item>
-    <title>AngstromCTF2020 - bookface writeup</title>
-    <link>https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/</link>
-    <pubDate>Thu, 19 Mar 2020 19:56:49 -0700</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/</guid>
-    <description><![CDATA[Writeup for AngstromCTF2020 bookface challenge]]></description>
 </item></channel>
 </rss>
