@@ -3,7 +3,14 @@
         <title>pwning - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/pwning/</link>
         <description>pwning - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/pwning/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/pwning/" rel="self" type="application/rss+xml" /><item>
+    <title>Linux Kernel Exploitation Technique by overwriting modprobe_path</title>
+    <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
+    <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</guid>
+    <description><![CDATA[A popular and powerful technique to exploit the linux kernel]]></description>
+</item><item>
     <title>Learning Linux Kernel Exploitation - Part 3</title>
     <link>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</link>
     <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>

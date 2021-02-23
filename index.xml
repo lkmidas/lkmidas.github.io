@@ -3,9 +3,16 @@
         <title>Midas Blog</title>
         <link>https://lkmidas.github.io/</link>
         <description>Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</lastBuildDate>
             <atom:link href="https://lkmidas.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Linux Kernel Exploitation Technique by overwriting modprobe_path</title>
+    <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
+    <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</guid>
+    <description><![CDATA[A popular and powerful technique to exploit the linux kernel]]></description>
+</item><item>
     <title>Learning Linux Kernel Exploitation - Part 3</title>
     <link>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</link>
     <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>
@@ -68,12 +75,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</guid>
     <description><![CDATA[Writeups for ASCIS/SVATTT2020 Quals reversing challenges]]></description>
-</item><item>
-    <title>ISITDTUCTF2020 Quals - rev02 writeup</title>
-    <link>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</link>
-    <pubDate>Mon, 12 Oct 2020 20:01:13 -0700</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</guid>
-    <description><![CDATA[Writeup for ISITDTUCTF2020 Quals rev02 challenge]]></description>
 </item></channel>
 </rss>

