@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>Linux Kernel Exploitation Technique by overwriting modprobe_path - Midas Blog</title><meta name="Description" content="A popular and powerful technique to exploit the linux kernel"><meta property="og:title" content="Linux Kernel Exploitation Technique by overwriting modprobe_path" />
+        <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path - Midas Blog</title><meta name="Description" content="A popular and powerful technique to exploit the linux kernel"><meta property="og:title" content="Linux Kernel Exploitation Technique: Overwriting modprobe_path" />
 <meta property="og:description" content="A popular and powerful technique to exploit the linux kernel" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" />
@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
-<meta name="twitter:title" content="Linux Kernel Exploitation Technique by overwriting modprobe_path"/>
+<meta name="twitter:title" content="Linux Kernel Exploitation Technique: Overwriting modprobe_path"/>
 <meta name="twitter:description" content="A popular and powerful technique to exploit the linux kernel"/>
 <meta name="application-name" content="Midas Blog">
 <meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -24,7 +24,7 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Linux Kernel Exploitation Technique by overwriting modprobe_path",
+        "headline": "Linux Kernel Exploitation Technique: Overwriting modprobe_path",
         "inLanguage": "en",
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -91,7 +91,7 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">Linux Kernel Exploitation Technique by overwriting modprobe_path</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animated flipInX">Linux Kernel Exploitation Technique: Overwriting modprobe_path</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-23">2021-02-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1758 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;9 minutes&nbsp;</div>
@@ -185,7 +185,7 @@
         </div>
     </div>
 <h2 id="the-overwriting-modprobe_path-technique">The overwriting modprobe_path technique</h2>
-<p>First of all, what is <code>modprobe</code>? According to wikipedia: &ldquo;<em><code>modprobe</code> is a Linux program originally written by Rusty Russell and used to add a loadable kernel module to the Linux kernel or to remove a loadable kernel module from the kernel</em>&rdquo;. Effectively, this is a program that will be executed when we install or uninstall a new module into the linux kernel. The path to it is a kernel global variable, which is default to be <code>/sbin/modprobe</code>, we can check it ourselves by running the following command:</p>
+<p>First of all, what is <code>modprobe</code>? According to wikipedia: &ldquo;<em><code>modprobe</code> is a Linux program originally written by Rusty Russell and used to add a loadable kernel module to the Linux kernel or to remove a loadable kernel module from the kernel</em>&rdquo;. Essentially, this is a program that will be executed when we install or uninstall a new module into the linux kernel. The path to it is a kernel global variable, which is default to be <code>/sbin/modprobe</code>, we can check it ourselves by running the following command:</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/sys/kernel/modprobe
 -&gt; /sbin/modprobe
 </code></pre></div><p>As of now, you might be wondering why and how this program is going to be useful for kernel exploitation. Let me tell you the two things that make it so exploitable:</p>

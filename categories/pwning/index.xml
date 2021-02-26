@@ -4,7 +4,7 @@
         <link>https://lkmidas.github.io/categories/pwning/</link>
         <description>pwning - Category - Midas Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/pwning/" rel="self" type="application/rss+xml" /><item>
-    <title>Linux Kernel Exploitation Technique by overwriting modprobe_path</title>
+    <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path</title>
     <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
     <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
     <author>Author</author>
