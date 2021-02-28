@@ -3,7 +3,14 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>AeroCTF2021 - Dummyper writeups</title>
+    <link>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</link>
+    <pubDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</guid>
+    <description><![CDATA[Writeup for AeroCTF2021 Finals Dummyper challenge]]></description>
+</item><item>
     <title>justCTF[*]2020 - debug_me_if_you_can, REmap writeups</title>
     <link>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</link>
     <pubDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</pubDate>

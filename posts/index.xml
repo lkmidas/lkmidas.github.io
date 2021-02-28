@@ -3,7 +3,14 @@
         <title>All Posts - Midas Blog</title>
         <link>https://lkmidas.github.io/posts/</link>
         <description>All Posts | Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>AeroCTF2021 - Dummyper writeups</title>
+    <link>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</link>
+    <pubDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</guid>
+    <description><![CDATA[Writeup for AeroCTF2021 Finals Dummyper challenge]]></description>
+</item><item>
     <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path</title>
     <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
     <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
@@ -66,12 +73,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</guid>
     <description><![CDATA[Writeup for ASCIS/SVATTT2020 Finals RWE challenge]]></description>
-</item><item>
-    <title>ASCIS2020 Quals - Findme, Crypt writeups</title>
-    <link>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</link>
-    <pubDate>Fri, 06 Nov 2020 05:56:39 -0800</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</guid>
-    <description><![CDATA[Writeups for ASCIS/SVATTT2020 Quals reversing challenges]]></description>
 </item></channel>
 </rss>

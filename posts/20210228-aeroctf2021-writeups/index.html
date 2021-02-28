@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>AeroCTF2021 - Dummyper writeups - Midas Blog</title><meta name="Description" content="Writeup for AeroCTF2021 Finals Dummyper challenge"><meta property="og:title" content="AeroCTF2021 - Dummyper writeups" />
+<meta property="og:description" content="Writeup for AeroCTF2021 Finals Dummyper challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" />
+<meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/>
+<meta property="article:published_time" content="2021-02-28T15:33:12+07:00" />
+<meta property="article:modified_time" content="2021-02-28T15:33:12+07:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="AeroCTF2021 - Dummyper writeups"/>
+<meta name="twitter:description" content="Writeup for AeroCTF2021 Finals Dummyper challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AeroCTF2021 - Dummyper writeups",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20210228-aeroctf2021-writeups\/"
+        },"genre": "posts","wordcount":  1561 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20210228-aeroctf2021-writeups\/","datePublished": "2021-02-28T15:33:12+07:00","dateModified": "2021-02-28T15:33:12+07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for AeroCTF2021 Finals Dummyper challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">AeroCTF2021 - Dummyper writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-28">2021-02-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1561 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#analyzing-main-function">Analyzing main function</a></li>
+    <li><a href="#analyzing-the-3rd-function">Analyzing the 3rd function</a></li>
+    <li><a href="#analyzing-the-2nd-function">Analyzing the 2nd function</a></li>
+    <li><a href="#decrypting-the-1st-function">Decrypting the 1st function</a></li>
+    <li><a href="#analyzing-the-1st-function">Analyzing the 1st function</a></li>
+    <li><a href="#finding-key-iv-and-decrypting-the-flag">Finding key, IV and decrypting the flag</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20210228-aeroctf2021-writeups/dump" rel="">dump</a>.</li>
+<li><strong>Description:</strong> <code>This stupid program has encrypted our flag. We only have a dump left.</code></li>
+<li><strong>Category:</strong> Reverse engineering</li>
+<li><strong>Summary</strong>: We are given some kind of dump file that looks like a valid ELF file. The task is to reverse engineer, recover it and inspect its memory to decrypt the flag that it has encrypted.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Analyze the main function -&gt; see 3 functions, the 1st one seems to be encrypted.</li>
+<li>Analyze the 3rd function -&gt; learn that our given <a href="/posts/20210228-aeroctf2021-writeups/dump" rel="">dump</a> file is actually the <code>.text</code>, <code>.data</code> and the <code>heap</code> of the executing process that is dumped out.</li>
+<li>Analyze the 2nd function -&gt; learn that it encrypts the first function by xoring it with 32 bytes that are read from an unknown <code>stream</code>, also there seems to be some trash data that got insert after the real key.</li>
+<li>Use the knowledge that the new ELF file format always include the <code>endbr64</code> instruction at the start of each compiled function -&gt; xor its opcode with the first 4 bytes of the encrypted code to get the first 4 bytes of the xor key -&gt; search for it in the memory and decrypt the code.</li>
+<li>Analyze the 1st function -&gt; learn that it reads the flag into the beginning of the data dump, then encrypts the flag using <code>AES-CBC</code>, the <code>key</code> and <code>IV</code> are also stored somewhere in the data dump the same as the xor key before.</li>
+<li>Use the knowledge that the code for <code>AES-CBC</code> actually hard copy the <code>key</code> and <code>IV</code> into a <code>AES_ctx</code> struct, also stored somewhere in the dump, to search for duplicates byte string that is 16 bytes in length -&gt; find the <code>key</code> and <code>IV</code> to decrypt the flag.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="analyzing-main-function">Analyzing main function</h2>
+<p>Right after loading the <a href="/posts/20210228-aeroctf2021-writeups/dump" rel="">dump</a> file into IDA, it seems that IDA recognizes that this is a valid ELF file, not a <code>core</code> dump of any kind. In the <code>main</code> function, we can see that it makes 3 calls to 3 smaller functions:</p>
+<ol>
+<li>The first function seems to be encrypted.</li>
+<li>The second function has a xor loop, which I initially passed and checked the third function first.</li>
+<li>The third function looks like it is where our <code>dump</code> file is generated, so I start reversing this function first.</li>
+</ol>
+<h2 id="analyzing-the-3rd-function">Analyzing the 3rd function</h2>
+<p>This function first read the file <code>/proc/self/mem</code>. In a Linux system, this is a symbolic link to <code>/proc/&lt;pid&gt;/mem</code>, where <code>&lt;pid&gt;</code> is the process id of the current running process. The file stores information about the virtual memory mapping of the current process.
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>You can run the command <code>cat /proc/self/mem</code> in a <code>bash</code> shell to see how this file looks like. Also, if you are a pwn player, you may recognize that it is exactly the same as what you get from the command <code>vmmap</code> in <code>pwndbg</code>.</em></div>
+        </div>
+    </div></p>
+<p>It converts the first 12 chars of the file&rsquo;s content to integer, which is the base of <code>.text</code> section. Then it looks for the line with the string <code>&quot;[heap]&quot;</code>, then read 12 chars after <code>-</code> in that line, which is the end of <code>heap</code> section. After that, it read the content of <code>/proc/self/mem</code>, which contains all the actual memory sections' content of the current running process, then read from <code>.text</code>&rsquo;s base to <code>heap</code>&rsquo;s end. Finally, it writes out that content to a file named <code>dump</code>, which is the file that is given to us.</p>
+<p>Therefore, our given file is not the actual binary itself, but instead the memory content from that start of <code>.text</code> to the end of <code>heap</code> of the process up to the point of time in which the process is reaching the 3rd function. And because initially, I saw that the 1st function in <code>main</code> looks like it is encrypted, I could conclude that the 2nd function is where it encrypts the code that it has executed in the 1st function, so I continued my investigation there.</p>
+<h2 id="analyzing-the-2nd-function">Analyzing the 2nd function</h2>
+<p>The 2nd function first uses <code>mprotect</code> to set the page that contains the code in <code>.text</code> to be a <code>RWX</code> page. Then it makes a call to an encrypted function at offset <code>0x13a9</code>, then read 32 bytes to it. At this point of time, I had no clue what this function really is yet, but there is still some information that I could get from it:</p>
+<ol>
+<li>It takes 1 parameter, which looks like a size of some sort.</li>
+<li>It returns a pointer.</li>
+<li>The function then reads into the pointer from an unknown <code>stream</code>, the number of bytes read is the same as the parameter.</li>
+</ol>
+<p>Those info bring me to a conclusion that this maybe is <code>malloc()</code>, or some sort of allocation function (there was no further information to be sure what kind of allocation it is). It then continues to read from that unknown <code>stream</code> 64 more times, with a random number of bytes. These bytes aren&rsquo;t used anywhere, so I assumed that it is just some kind of distraction. Finally, it uses the first 32 bytes that it read as a <code>XOR</code> key to encrypt 896 bytes of code from offset <code>0x13a9</code> onwards. Therefore, the task now is to find the correct key to decrypt the code.</p>
+<h2 id="decrypting-the-1st-function">Decrypting the 1st function</h2>
+<p>Firstly, I wanted to find out what the unknown <code>stream</code> is. By looking at the strings in the file, I saw <code>/dev/urandom</code>, so I immediately assumed that the stream is just a file stream from opening <code>urandom</code>.</p>
+<p>Because my initial suspect is that the function at <code>0x13a9</code> is <code>malloc()</code>, I tried to dig into the hex dump of our <a href="/posts/20210228-aeroctf2021-writeups/dump" rel="">dump</a> file to find any piece of data that looks like <code>heap chunks</code>. Unfortunately, It looks like all the random data are stored contiguously, not in separate chunks, so the function is some kind of contiguous allocation in <code>data</code> section and not <code>malloc()</code>. And probably in the 1st function, the program has already allocated a bunch of data in that section, leaving our xor key somewhere in between.</p>
+<p>To find the xor key, the trick that I used is by using the knowledge that in new ELF file compilers, they always insert an <code>endbr64</code> instruction at the beginning of each compiled function. The instruction <code>endbr64</code> is 4 bytes in length (<code>F3 0F 1E FA</code>), giving us the first 4 bytes of plain code, we also know the first 4 bytes of the encrypted code, so we can <code>xor</code> them together to get the first 4 bytes of the key. Then I simply search for that 4-byte sequence in <code>dump</code> to find the key, which is at offset <code>0x4ba74</code> in the binary. Finally, I wrote a small piece of IDA script to decrypt and patch the encrypted code:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">malduck</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./dump&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mh">0x4ba74</span><span class="p">:</span><span class="mh">0x4ba74</span><span class="o">+</span><span class="mh">0x20</span><span class="p">]</span>
+<span class="n">encrypted</span> <span class="o">=</span> <span class="n">ida_bytes</span><span class="o">.</span><span class="n">get_bytes</span><span class="p">(</span><span class="mh">0x13a9</span><span class="p">,</span> <span class="mi">896</span><span class="p">)</span>
+<span class="n">decrypted</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">)</span>
+<span class="n">ida_bytes</span><span class="o">.</span><span class="n">patch_bytes</span><span class="p">(</span><span class="mh">0x13a9</span><span class="p">,</span> <span class="n">decrypted</span><span class="p">)</span>
+</code></pre></div><h2 id="analyzing-the-1st-function">Analyzing the 1st function</h2>
+<p>The first function is not that complicated, it allocates a 128-byte buffer, then read the <code>flag.txt</code> file&rsquo;s content into it, then it go into the encryption routine.</p>
+<p>The encryption routine has the following steps:</p>
+<ol>
+<li>Randomly allocate and read a bunch of distracting data (just like in the second function).</li>
+<li>Allocate a 32-byte buffer.</li>
+<li>Randomly allocate and read a bunch of distracting data.</li>
+<li>Allocate a 16-byte buffer.</li>
+<li>Randomly allocate and read a bunch of distracting data.</li>
+<li>Read 32 bytes into the 32-byte buffer, and 16 bytes into the 16-byte buffer.</li>
+<li>Allocate a 192-byte buffer.</li>
+<li>Randomly allocate and read a bunch of distracting data.</li>
+<li>Make 3 calls to 3 more functions.</li>
+</ol>
+<p>By looking at the 3 functions at the end and using <code>findcrypt</code> plugin from IDA, I immediately recognized that this is the code for <code>AES-CBC</code> (this is because I have already encountered these codes before in the past). The author actually borrowed the exact same <code>AES</code> code from <a href="https://github.com/kokke/tiny-AES-c" target="_blank" rel="noopener noreffer">this github repo</a>. That makes it extremely easy, because by comparing with the source, I could conclude that the 32-byte buffer is the <code>key</code> (even though the key is only the first 16 bytes), the 16-byte buffer is the <code>IV</code>, and the 192-byte buffer is the <code>AES_ctx</code> struct. The question then is how to find the <code>key</code> and the <code>IV</code> in a bunch of random trash data.</p>
+<h2 id="finding-key-iv-and-decrypting-the-flag">Finding key, IV and decrypting the flag</h2>
+<p>By looking at the <code>AES</code> code, I realized that the <code>key</code> and <code>IV</code> are hard copy into <code>AES_ctx</code>. Therefore, they will appear <em><strong>twice</strong></em> in the data dump. Using this knowledge, I wrote a small piece of python code to kinda bruteforce to find all the 16-byte sequences that appears more than once in the data dump. I ended up finding 2 such sequences, which is perfect because one of them must be the key, and the other is the IV. I simply tried both case to decrypt the flag (the encrypted flag can easily be found because it is just the first 128 bytes of the data dump, no random data was inserted before it).</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">malduck</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./dump&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mh">0x5060</span><span class="p">:</span><span class="mh">0x5b6e0</span><span class="p">]</span>
+
+<span class="n">enc_flag</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mh">0x80</span><span class="p">]</span>
+
+<span class="n">candidate</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;&#34;</span>
+<span class="n">key_iv</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mh">0x10</span><span class="p">:</span>
+    <span class="n">candidate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="mh">0x10</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">key_iv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1">#print(aes.cbc.decrypt(key_iv[0], key_iv[1], enc_flag))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">aes</span><span class="o">.</span><span class="n">cbc</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">key_iv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key_iv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">enc_flag</span><span class="p">))</span>
+</code></pre></div><p>The flag is <code>Aero{d37fd6db2f8d562422aaf2a83dc62043}</code>.</p>
+<h2 id="appendix">Appendix</h2>
+<p>The script for decrypting the code is <a href="/posts/20210228-aeroctf2021-writeups/decrypt_code.py" rel="">decrypt_code.py</a>.</p>
+<p>The script for decrypting the flag is <a href="/posts/20210228-aeroctf2021-writeups/decrypt_flag.py" rel="">decrypt_flag.py</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20210223-linux-kernel-pwn-modprobe/" class="prev" rel="prev" title="Linux Kernel Exploitation Technique: Overwriting modprobe_path"><i class="fas fa-angle-left fa-fw"></i>Linux Kernel Exploitation Technique: Overwriting modprobe_path</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>
