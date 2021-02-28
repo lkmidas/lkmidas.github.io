@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210228-aeroctf2021-writeups\/"
-        },"genre": "posts","wordcount":  1561 ,
+        },"genre": "posts","wordcount":  1674 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210228-aeroctf2021-writeups\/","datePublished": "2021-02-28T15:33:12+07:00","dateModified": "2021-02-28T15:33:12+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">AeroCTF2021 - Dummyper writeups</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-28">2021-02-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1561 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-28">2021-02-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1674 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -204,7 +204,30 @@
 </ol>
 <p>By looking at the 3 functions at the end and using <code>findcrypt</code> plugin from IDA, I immediately recognized that this is the code for <code>AES-CBC</code> (this is because I have already encountered these codes before in the past). The author actually borrowed the exact same <code>AES</code> code from <a href="https://github.com/kokke/tiny-AES-c" target="_blank" rel="noopener noreffer">this github repo</a>. That makes it extremely easy, because by comparing with the source, I could conclude that the 32-byte buffer is the <code>key</code> (even though the key is only the first 16 bytes), the 16-byte buffer is the <code>IV</code>, and the 192-byte buffer is the <code>AES_ctx</code> struct. The question then is how to find the <code>key</code> and the <code>IV</code> in a bunch of random trash data.</p>
 <h2 id="finding-key-iv-and-decrypting-the-flag">Finding key, IV and decrypting the flag</h2>
-<p>By looking at the <code>AES</code> code, I realized that the <code>key</code> and <code>IV</code> are hard copy into <code>AES_ctx</code>. Therefore, they will appear <em><strong>twice</strong></em> in the data dump. Using this knowledge, I wrote a small piece of python code to kinda bruteforce to find all the 16-byte sequences that appears more than once in the data dump. I ended up finding 2 such sequences, which is perfect because one of them must be the key, and the other is the IV. I simply tried both case to decrypt the flag (the encrypted flag can easily be found because it is just the first 128 bytes of the data dump, no random data was inserted before it).</p>
+<p>By looking at the <code>AES</code> code, I realized that the <code>key</code> and <code>IV</code> are hard copy into <code>AES_ctx</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">AES_init_ctx_iv</span><span class="p">(</span><span class="k">struct</span> <span class="n">AES_ctx</span><span class="o">*</span> <span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="n">uint8_t</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="n">uint8_t</span><span class="o">*</span> <span class="n">iv</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">KeyExpansion</span><span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">RoundKey</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+  <span class="n">memcpy</span> <span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">Iv</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">AES_BLOCKLEN</span><span class="p">);</span> <span class="cm">/* hard copy IV */</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">KeyExpansion</span><span class="p">(</span><span class="n">uint8_t</span><span class="o">*</span> <span class="n">RoundKey</span><span class="p">,</span> <span class="k">const</span> <span class="n">uint8_t</span><span class="o">*</span> <span class="n">Key</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+  <span class="n">uint8_t</span> <span class="n">tempa</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// Used for the column/row operations
+</span><span class="c1"></span>  
+  <span class="c1">// The first round key is the key itself.
+</span><span class="c1"></span>  <span class="cm">/* Hard copy key */</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Nk</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">RoundKey</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Key</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">];</span>
+    <span class="n">RoundKey</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Key</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">RoundKey</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Key</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="n">RoundKey</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">Key</span><span class="p">[(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><p>Therefore, they will appear <em><strong>twice</strong></em> in the data dump. Using this knowledge, I wrote a small piece of python code to kinda bruteforce to find all the 16-byte sequences that appears more than once in the data dump. I ended up finding 2 such sequences, which is perfect because one of them must be the key, and the other is the IV. I simply tried both case to decrypt the flag (the encrypted flag can easily be found because it is just the first 128 bytes of the data dump, no random data was inserted before it).</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">malduck</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./dump&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mh">0x5060</span><span class="p">:</span><span class="mh">0x5b6e0</span><span class="p">]</span>
