@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>OMHCTF2021 - Flag saver, GRUB writeups - Midas Blog</title><meta name="Description" content="Writeup for OMHCTF2021 Flag saver, GRUB challenge"><meta property="og:title" content="OMHCTF2021 - Flag saver, GRUB writeups" />
+<meta property="og:description" content="Writeup for OMHCTF2021 Flag saver, GRUB challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-17T10:28:35&#43;07:00" />
+<meta property="article:modified_time" content="2021-05-17T10:28:35&#43;07:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="OMHCTF2021 - Flag saver, GRUB writeups"/>
+<meta name="twitter:description" content="Writeup for OMHCTF2021 Flag saver, GRUB challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "OMHCTF2021 - Flag saver, GRUB writeups",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20210517-omhctf2021-writeups\/"
+        },"genre": "posts","wordcount":  2846 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20210517-omhctf2021-writeups\/","datePublished": "2021-05-17T10:28:35+07:00","dateModified": "2021-05-17T10:28:35+07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for OMHCTF2021 Flag saver, GRUB challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">OMHCTF2021 - Flag saver, GRUB writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-05-17">2021-05-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2846 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;14 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#flag-saver">Flag saver</a>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#analyzing-the-screensaver-file">Analyzing the ScreenSaver file</a></li>
+        <li><a href="#analyzing-the-2-forms">Analyzing the 2 forms</a></li>
+        <li><a href="#analyzing-the-shuffling-logic">Analyzing the shuffling logic</a></li>
+        <li><a href="#reimplementing-swapping-logic">Reimplementing swapping logic</a></li>
+        <li><a href="#appendix">Appendix</a></li>
+      </ul>
+    </li>
+    <li><a href="#grub">GRUB</a>
+      <ul>
+        <li><a href="#introduction-1">Introduction</a></li>
+        <li><a href="#about-grubiso">About grub.iso</a></li>
+        <li><a href="#about-regexp">About regexp</a></li>
+        <li><a href="#the-first-2-mappings">The first 2 mappings</a></li>
+        <li><a href="#the-function-t">The function t</a></li>
+        <li><a href="#the-function-u">The function u</a></li>
+        <li><a href="#solving-the-equations">Solving the equations</a></li>
+        <li><a href="#appendix-1">Appendix</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="flag-saver">Flag saver</h2>
+<h3 id="introduction">Introduction</h3>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20210517-omhctf2021-writeups/flag_saver/ScreenSaver.scr" rel="">ScreenSaver.scr</a>, <a href="/posts/20210517-omhctf2021-writeups/flag_saver/screenshot.png" rel="">screenshot.png</a>.</li>
+<li><strong>Description:</strong> <code>We think one of our developers is hiding some secrets. Unfortunately he's using secure screen saver, which makes a jigsaw from the screen! We managed to take a screenshot of the screen when he went to the toilet. We also have a copy of the screen saver.</code></li>
+<li><strong>Category:</strong> Reverse engineering</li>
+<li><strong>Summary:</strong> A custom Windows screen saver reversing challenge. Our job is to find out what it does and reconstruct the actual screenshot from the screen saver screenshot.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Take a look at the <a href="/posts/20210517-omhctf2021-writeups/flag_saver/screenshot.png" rel="">screenshot.png</a> -&gt; It seems like it&rsquo;s a screenshot that is splitted up into pieces of the same size and shuffled around.</li>
+<li>Analyze <a href="/posts/20210517-omhctf2021-writeups/flag_saver/ScreenSaver.scr" rel="">ScreenSaver.scr</a> -&gt; A Windows screen saver file is actually a .NET executable, use a .NET decompiler of your choice to analyze.</li>
+<li>Analyze the 2 main forms: <code>SettingForm</code> and <code>ScreenSaverForm</code> -&gt; Learn that <code>SettingForm</code> is to set how many pieces, and <code>ScreenSaverForm</code> is where the actual shuffling logic is implemented.</li>
+<li>Analyze shuffling logic -&gt; Learn that it uses simple number generator to select pairs of pieces to swap.</li>
+<li>Reimplement the swapping logic -&gt; swap backwards to recover the actual screenshot.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h3 id="analyzing-the-screensaver-file">Analyzing the ScreenSaver file</h3>
+<p>First and foremost, I took a quick look at the given screenshot. It looks like it&rsquo;s just a normal screenshot that is splitted into small rectangles of the same size and scrambled around. This fits the description of the challenge, which stated it&rsquo;s &ldquo;a jigsaw from the screen&rdquo;. Therefore, it is almost certain that our goal is to unscramble this screenshot and the flag will appear somewhere on the screen.</p>
+<p>The challenge gives us a <code>.scr</code> file, which is a screen saver file used by Microsoft Windows. This was my first time working with this kind of file, so I threw it into a hex editor to find out what it looks like. I found out that there is the bytes <code>MZ</code> in the header of the file, which means it&rsquo;s likely to be an actual Windows executable. After some quick googling, I knew that this is a .NET executable, so I just used a .NET decompiler of choice (my preference is <a href="https://www.telerik.com/products/decompiler.aspx" target="_blank" rel="noopener noreffer">Telerik JustDecompile</a>, but <code>ILSpy</code> or <code>DNSpy</code> works just as well).</p>
+<p>The file decompiled cleanly, which was a relief. It has 4 classes:</p>
+<ol>
+<li><code>LCG</code></li>
+<li><code>Program</code></li>
+<li><code>ScreenSaverForm</code></li>
+<li><code>SettingsForm</code></li>
+</ol>
+<p>The program&rsquo;s entrypoint is in the class <code>Program</code>. The <code>main</code> method is actually just to parse the arguments to decide if it should run <code>SettingForms</code> or <code>ScreenSaverFrom</code>, so those are my next target:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C#" data-lang="C#"><span class="c1">//...
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="n">str</span> <span class="p">==</span> <span class="s">&#34;/c&#34;</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Application</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="k">new</span> <span class="n">SettingsForm</span><span class="p">());</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">str</span> <span class="p">==</span> <span class="s">&#34;/p&#34;</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">str1</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="n">Application</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="k">new</span> <span class="n">ScreenSaverForm</span><span class="p">(</span><span class="k">new</span> <span class="n">IntPtr</span><span class="p">(</span><span class="kt">long</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">str1</span><span class="p">))));</span>
+      <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">MessageBox</span><span class="p">.</span><span class="n">Show</span><span class="p">(</span><span class="s">&#34;Missing handle!&#34;</span><span class="p">,</span> <span class="s">&#34;FlagSaver&#34;</span><span class="p">,</span> <span class="n">MessageBoxButtons</span><span class="p">.</span><span class="n">OK</span><span class="p">,</span> <span class="n">MessageBoxIcon</span><span class="p">.</span><span class="n">Exclamation</span><span class="p">);</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">str</span> <span class="p">==</span> <span class="s">&#34;/s&#34;</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Program</span><span class="p">.</span><span class="n">ShowScreenSaver</span><span class="p">();</span>
+  <span class="n">Application</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//...
+</span></code></pre></div><h3 id="analyzing-the-2-forms">Analyzing the 2 forms</h3>
+<p>The <code>SettingsForm</code> is quite simple, all it does is creating a <code>TextBox</code> to get an integer value from the user, and then save it in the registry key <code>SOFTWARE\FlagSaver</code>, under the value <code>text</code>. It can also load the saved value from the key as well:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C#" data-lang="C#"><span class="k">private</span> <span class="k">void</span> <span class="n">LoadSettings</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="n">RegistryKey</span> <span class="n">registryKey</span> <span class="p">=</span> <span class="n">Registry</span><span class="p">.</span><span class="n">CurrentUser</span><span class="p">.</span><span class="n">OpenSubKey</span><span class="p">(</span><span class="s">&#34;SOFTWARE\\FlagSaver&#34;</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">registryKey</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+   <span class="p">{</span>
+       <span class="k">this</span><span class="p">.</span><span class="n">textBox</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="s">&#34;256&#34;</span><span class="p">;</span>
+       <span class="k">return</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">this</span><span class="p">.</span><span class="n">textBox</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="n">registryKey</span><span class="p">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&#34;text&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">private</span> <span class="k">void</span> <span class="n">SaveSettings</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="n">Registry</span><span class="p">.</span><span class="n">CurrentUser</span><span class="p">.</span><span class="n">CreateSubKey</span><span class="p">(</span><span class="s">&#34;SOFTWARE\\FlagSaver&#34;</span><span class="p">).</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&#34;text&#34;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">textBox</span><span class="p">.</span><span class="n">Text</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>However, up to this point, we still have no information on where this value is used, so let&rsquo;s just continue with <code>ScreenSaverForm</code>. This class is where most of the logic is implemented. The first notable method is <code>LoadSettings()</code>, where it literally just loads the <code>text</code> value saved in <code>SettingsForm</code> and stored it in a property called <code>this.pieces</code>. By the name of it, it looks like the settings is just to set how many pieces does the user want to split the screen up into when the screen saver runs.</p>
+<p>The method that registers the screen saver is <code>ScreenSaverForm_Load()</code>, which has some notable points such as:</p>
+<ul>
+<li>The screenshot before going into screen saving is only captured once with <code>this.screenCapture = this.TakeScreenShot();</code>.</li>
+<li>The tick rate is set to 3000 ms, the event that happens on each tick is defined by the method <code>MoveTimer_Tick()</code>.</li>
+</ul>
+<p>In <code>MoveTimer_Tick()</code>, a bitmap of size <code>this.pieces x this.pieces</code> is created from the <code>this.screenCapture</code>, then it is shuffled by <code>bitmap = this.ShuffleArray(bitmap);</code>. Finally, it just draws the shuffled bitmap on the screen. Therefore, if we can reverse <code>ShuffleArray</code>, we can reconstruct the actual screenshot from the screen saver screenshot.</p>
+<h3 id="analyzing-the-shuffling-logic">Analyzing the shuffling logic</h3>
+<p>This is the shuffling logic:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C#" data-lang="C#"><span class="k">private</span> <span class="n">Image</span><span class="p">[]</span> <span class="n">ShuffleArray</span><span class="p">(</span><span class="n">Image</span><span class="p">[]</span> <span class="n">imgarray</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">pieces</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">pieces</span><span class="p">;</span>
+    <span class="n">LCG</span> <span class="n">lCG</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LCG</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">lcg</span><span class="p">.</span><span class="n">NextValue</span><span class="p">(),</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="m">65537</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="n">pieces</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="n">pieces</span><span class="p">;</span> <span class="n">j</span><span class="p">++)</span>
+        <span class="p">{</span>
+            <span class="kt">long</span> <span class="n">num1</span> <span class="p">=</span> <span class="n">lCG</span><span class="p">.</span><span class="n">NextValue</span><span class="p">()</span> <span class="p">%</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">num</span><span class="p">;</span>
+            <span class="kt">long</span> <span class="n">num2</span> <span class="p">=</span> <span class="n">lCG</span><span class="p">.</span><span class="n">NextValue</span><span class="p">()</span> <span class="p">%</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">num</span><span class="p">;</span>
+            <span class="n">Image</span> <span class="n">image</span> <span class="p">=</span> <span class="n">imgarray</span><span class="p">[</span><span class="k">checked</span><span class="p">((</span><span class="n">IntPtr</span><span class="p">)</span><span class="n">num1</span><span class="p">)];</span>
+            <span class="n">imgarray</span><span class="p">[</span><span class="k">checked</span><span class="p">((</span><span class="n">IntPtr</span><span class="p">)</span><span class="n">num1</span><span class="p">)]</span> <span class="p">=</span> <span class="n">imgarray</span><span class="p">[</span><span class="k">checked</span><span class="p">((</span><span class="n">IntPtr</span><span class="p">)</span><span class="n">num2</span><span class="p">)];</span>
+            <span class="n">imgarray</span><span class="p">[</span><span class="k">checked</span><span class="p">((</span><span class="n">IntPtr</span><span class="p">)</span><span class="n">num2</span><span class="p">)]</span> <span class="p">=</span> <span class="n">image</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">imgarray</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>It uses the class <code>LCG</code>, which I had not taken a look at yet. But what this method basically does is looping <code>this.pieces ^ 2</code> times, with each loop, it takes 2 numbers from <code>lCG</code>, and then swap the position the 2 pieces with the corresponding indices in the <code>imgarray</code>. Knowing this, we can easily rearrange the screen saver screenshot to the original one by swapping it in the reverse order. Time to look at <code>LCG</code> to see how numbers are generated:</p>
+<div class="highlight"><pre class="chroma"><code class="language-C#" data-lang="C#"><span class="k">internal</span> <span class="k">class</span> <span class="nc">LCG</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">long</span> <span class="n">seed</span> <span class="p">=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="m">51966</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="kt">long</span> <span class="n">modulus</span> <span class="p">=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="m">65537</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="kt">long</span> <span class="n">a</span> <span class="p">=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="m">57005</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="kt">long</span> <span class="n">c</span> <span class="p">=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="m">48879</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="n">LCG</span><span class="p">(</span><span class="kt">long</span> <span class="n">seed</span><span class="p">,</span> <span class="kt">long</span> <span class="n">modulus</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">seed</span> <span class="p">=</span> <span class="n">seed</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">modulus</span> <span class="p">=</span> <span class="n">modulus</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">long</span> <span class="n">NextValue</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">seed</span> <span class="p">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">a</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="n">seed</span> <span class="p">+</span> <span class="k">this</span><span class="p">.</span><span class="n">c</span><span class="p">)</span> <span class="p">%</span> <span class="k">this</span><span class="p">.</span><span class="n">modulus</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">seed</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>Nothing complicated here, it&rsquo;s just basic arithmetic operations on hard-coded numbers. Note that in <code>ShuffleArray</code>, there are 2 instances of <code>LCG</code>, which are <code>lcg</code> and <code>lCG</code>. <code>lcg</code> is a global instance that is instantiated together with <code>ScreenSaverForm</code>: <code>private LCG lcg = new LCG((long)51966, (long)128)</code>, and <code>lCG</code> is a local instance that is instantiated with the seeds coming from <code>lcg</code>. Now I had all the information about the shuffling process, I could basically just rewrite the methods to get the list of all the indices that are swapped, then swap them in the reverse order.</p>
+<h3 id="reimplementing-swapping-logic">Reimplementing swapping logic</h3>
+<p>First, I wanted to split up the given scrambled screenshot into an array of small pieces. We don&rsquo;t know how many pieces did the author set with <code>SettingsForm</code>, but we can just simply count it from the given screenshot. It is a 1920x1080 resolution screen, with 120x120 pieces, which makes each piece a 16x9 rectangle. I splitted it using python <code>Pillow</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">M</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;screenshot.png&#34;</span><span class="p">)</span>
+<span class="n">imgarray</span> <span class="o">=</span> <span class="p">[</span><span class="n">im</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="n">N</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">M</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)]</span> <span class="c1"># column by column</span>
+</code></pre></div><p>Note that I didn&rsquo;t know if Windows stores these pieces in the flat array row by row or column by column, so I just tried both out to see which works (it&rsquo;s column by column btw). After that, I reimplemented <code>LCG</code> and <code>ShuffleArray</code> to get the list of swapped indices:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">LCG</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">modulus</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modulus</span> <span class="o">=</span> <span class="n">modulus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">57005</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mi">48879</span>
+
+    <span class="k">def</span> <span class="nf">next_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulus</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span>
+
+
+<span class="n">pieces</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">lcg</span> <span class="o">=</span> <span class="n">LCG</span><span class="p">(</span><span class="mi">51966</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="n">shuffle_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">def</span> <span class="nf">shuffle</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="n">pieces</span> <span class="o">*</span> <span class="n">pieces</span>
+    <span class="n">lCG</span> <span class="o">=</span> <span class="n">LCG</span><span class="p">(</span><span class="n">lcg</span><span class="o">.</span><span class="n">next_value</span><span class="p">(),</span> <span class="mi">65537</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pieces</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pieces</span><span class="p">):</span>
+            <span class="n">num1</span> <span class="o">=</span> <span class="n">lCG</span><span class="o">.</span><span class="n">next_value</span><span class="p">()</span> <span class="o">%</span> <span class="n">num</span>
+            <span class="n">num2</span> <span class="o">=</span> <span class="n">lCG</span><span class="o">.</span><span class="n">next_value</span><span class="p">()</span> <span class="o">%</span> <span class="n">num</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">num1</span><span class="p">,</span> <span class="n">num2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">shuffle_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shuffle</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># Get the reversed order swapping list</span>
+</code></pre></div><p>Since I didn&rsquo;t know at which tick did the screenshot get taken, so I simply tried to bruteforce it, starting with 10 ticks. Finally, I could just rearrange the pieces, and merge them back into the original image:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">rearrange_one_tick</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="k">return</span> <span class="n">a</span>
+
+<span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">new_im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">),</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span> <span class="o">//</span> <span class="n">pieces</span><span class="p">)</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">pieces</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">new_im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
+    <span class="n">new_im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&#34;./results/result_{}.png&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">rearrange</span><span class="p">(</span><span class="n">tick_cnt</span><span class="p">):</span>
+    <span class="n">newarray</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">imgarray</span><span class="p">)</span>
+    <span class="n">new_array</span> <span class="o">=</span> <span class="n">rearrange_one_tick</span><span class="p">(</span><span class="n">newarray</span><span class="p">,</span> <span class="n">shuffle_list</span><span class="p">[</span><span class="n">tick_cnt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">save_image</span><span class="p">(</span><span class="n">newarray</span><span class="p">,</span> <span class="n">tick_cnt</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">rearrange</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div><p>Fortunately, the author is nice, and the screenshot is taken at the 2nd tick only, the flag is:</p>
+<pre><code>flat{Screen_saver_is_not_a_good_flag_saver}
+</code></pre><h3 id="appendix">Appendix</h3>
+<p>The solution script is <a href="/posts/20210517-omhctf2021-writeups/flag_saver/a.py" rel="">a.py</a>.</p>
+<p>The resulting image is <a href="/posts/20210517-omhctf2021-writeups/flag_saver/results/result_2.png" rel="">result_2.png</a>.</p>
+<hr>
+<h2 id="grub">GRUB</h2>
+<h3 id="introduction-1">Introduction</h3>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20210517-omhctf2021-writeups/grub/grub.iso" rel="">grub.iso</a>.</li>
+<li><strong>Description:</strong> <code>Huh. This GRUB password lock seems... different. Do you think you could bypass it?</code></li>
+<li><strong>Category:</strong> Reverse engineering</li>
+<li><strong>Summary:</strong> This challenge gives us a <code>GRUB</code> iso image. Its password protection is checked with a shell script that contains a lot of regular expression checks. Our goal is to find a correct password that satisfies all the checks.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Mount <a href="/posts/20210517-omhctf2021-writeups/grub/grub.iso" rel="">grub.iso</a> -&gt; Find a <code>grub.cfg</code> file that contains the password checking logic.</li>
+<li>Analyze the checking logic -&gt; Learn that it uses <code>regexp</code> to make alot of regular expression assignments/checks.</li>
+<li>Simplify the regex checks into normal logical equations -&gt; use <code>z3</code> to solve them.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h3 id="about-grubiso">About grub.iso</h3>
+<p>GRUB is a bootloader package from GNU, which provides a user the choice to boot one of multiple operating systems installed on a computer or select a specific kernel configuration available on a particular operating system&rsquo;s partitions. The <code>iso</code> file that is given to us is actually a GRUB boot image. We can mount the image to see what&rsquo;s inside using this command on a Linux environment:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo mount -o loop grub.iso tmp
+</code></pre></div><p>With <code>tmp</code> being an empty directory, or a mount point. By the time I started working on this challenge, my teammate <code>@pickaxe</code> already mounted it and extracted a file called <code>grub.cfg</code>, where all of the checking process is executed.</p>
+<h3 id="about-regexp">About regexp</h3>
+<p>As we can see, <code>grub.cfg</code> is literally just a shell script that uses a lot of <code>regexp</code> to perform variable assignments and checks. I struggled for a bit because there is no <code>regexp</code> to be found on my Linux machine, but turned out it was just a GRUB command that is documented <a href="https://www.gnu.org/software/grub/manual/grub/html_node/regexp.html" target="_blank" rel="noopener noreffer">here</a>. What special about it is not only that it can match a string with a regular expression, it can also set the matched part into another variable. For example, the first check in <code>grub.cfg</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">regexp --set a <span class="s2">&#34;^p4\{([0-9A-Q]{54})\}\$&#34;</span> <span class="s2">&#34;</span><span class="nv">$flag</span><span class="s2">&#34;</span>
+</code></pre></div><div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>If you are new or not very familiar with regex (like me), the website <a href="https://regexr.com/" target="_blank" rel="noopener noreffer">https://regexr.com/</a> would help a lot. Just copy your regex there and it will explain each elements.</em></div>
+        </div>
+    </div>
+<p>So this first check is the flag format check, the flag must starts with <code>p4{</code>, end with <code>}</code>, and its body must contains exactly 54 characters, which must only be digits from 0 to 9, or uppercase letters from A to Q. The <code>--set</code> option makes it so that the matching part inside the parentheses <code>([0-9A-Q]{54})</code> will be assigned to the variable <code>a</code> (the parts in parentheses are usually called &ldquo;groups&rdquo; in regex). At the end of this command, if our flag doesn&rsquo;t match, it will halt, otherwise it will assign the body of the flag (the part between the curly braces) to <code>a</code> and continue.</p>
+<h3 id="the-first-2-mappings">The first 2 mappings</h3>
+<p>Next up is 2 large while loops. They look menacing, but there is nothing to them, really. The first loop match the first character of <code>a</code> with all the possible characters for the flag body. If it doesn&rsquo;t match, nothing happends, otherwise <code>b</code> will be concatenated with a unique sequence for each character, and <code>a</code> will be set to the remaining part. For example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="k">if</span> regexp --set a <span class="s2">&#34;^0(.*)\$&#34;</span> <span class="s2">&#34;</span><span class="nv">$a</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">then</span> <span class="nv">b</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">b</span><span class="si">}</span><span class="s2">aaa&#34;</span><span class="p">;</span> <span class="k">fi</span>
+</code></pre></div><p>In regex <code>^</code> at the start of the expression means matching from the start of the string, not in between. This will match the first character of <code>a</code> with <code>0</code>, if it matches, the group <code>(.*)</code> following <code>0</code>, which means any sequence after <code>0</code> will be reassigned to <code>a</code>. This can be rewritten in python as follow:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">b</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;0&#34;</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="s2">&#34;aaa&#34;</span>
+    <span class="k">elif</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;1&#34;</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="s2">&#34;aab&#34;</span>
+    <span class="k">elif</span> <span class="o">...</span>
+<span class="o">...</span>
+</code></pre></div><p>The next loop is basically the same, this time mapping <code>b</code> to <code>c</code>, it&rsquo;s logic is as follow:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">c</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;aa&#34;</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">+=</span> <span class="s2">&#34;R&#34;</span>
+    <span class="k">elif</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;ab&#34;</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">+=</span> <span class="s2">&#34;S&#34;</span>
+    <span class="k">elif</span> <span class="o">...</span>
+<span class="o">...</span>
+</code></pre></div><p>Note that because <code>a</code> is 54 bytes long, <code>b</code> will be 162 bytes and <code>c</code> will be 81 bytes. Also, <code>c</code> only contains uppercase characters from R to Z. Because <code>a</code> to <code>b</code> to <code>c</code> are all one-to-one mappings, we can just solve for <code>c</code> and then map back to <code>a</code>.</p>
+<h3 id="the-function-t">The function t</h3>
+<p>The first major function for the checking is called <code>t</code>. This function takes 1 parameter, which is a string contains integers separated by commas. The first <code>regexp</code> in <code>t</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">regexp --set 1:C --set 2:B <span class="s2">&#34;^([0-9]*),(.*)&#34;</span> <span class="s2">&#34;</span><span class="nv">$B</span><span class="s2">&#34;</span>
+</code></pre></div><p><code>B</code> is initialized as <code>$1</code>, which is the parameter. This regex matches 2 groups: <code>([0-9]*)</code> before the comma, and <code>(.*)</code> after the comma. Basically it takes the first number before the first comma in the parameter and assigns it to <code>C</code>, then the rest of the parameter after the comma is reassigned to <code>B</code>. This is all in a while loop to loop through all the numbers in the parameter. The next <code>regexp</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">regexp --set D <span class="s2">&#34;^.{</span><span class="nv">$C</span><span class="s2">}(.)&#34;</span> <span class="s2">&#34;</span><span class="nv">$c</span><span class="s2">&#34;</span>
+</code></pre></div><p>In regex, the number inside the curly brackets is the quantifier for the token preceding it, matching the corresponding amount of that token. For example <code>a{4}</code> means matching four consecutive <code>a</code>. In this case, we have <code>.{$C}</code>, which means match any <code>C</code> consecutive characters. The character after that is in a group <code>(.)</code>, this character will be assigned to <code>D</code>. If you think about it, this expression is basically just <code>D = c[C]</code>. <code>D</code> is then concatenate to <code>A</code>, which is initialized as an empty string.</p>
+<p>Finally after the loop, we have this match:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">regexp <span class="s2">&#34;^R?S?T?U?V?W?X?Y?Z?\$&#34;</span> <span class="s2">&#34;</span><span class="nv">$A</span><span class="s2">&#34;</span>
+</code></pre></div><p>The <code>?</code> token means that it matches 0 or 1 occurrence of the preceding token. So in this case it means that our <code>A</code> string must contains characters in an ascending order. Therefore, in conclusion, a call to <code>t &quot;51,50,49,48,&quot;</code> is equivalent to saying <code>c[51] &lt; c[50] &lt; c[49] &lt; c[48]</code>. The checks done by <code>t</code> can be easily rewritten in <code>z3</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">[</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">t</span><span class="p">([</span><span class="mi">27</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">t</span><span class="p">([</span><span class="mi">59</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">41</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">48</span><span class="p">])</span>
+<span class="n">t</span><span class="p">([</span><span class="mi">51</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">49</span><span class="p">,</span><span class="mi">48</span><span class="p">])</span>
+<span class="n">t</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">26</span><span class="p">])</span>
+<span class="n">t</span><span class="p">([</span><span class="mi">54</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">74</span><span class="p">,</span><span class="mi">66</span><span class="p">,</span><span class="mi">76</span><span class="p">])</span>
+<span class="n">t</span><span class="p">([</span><span class="mi">79</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">70</span><span class="p">])</span>
+</code></pre></div><h3 id="the-function-u">The function u</h3>
+<p>The next major check is <code>u</code>. It also takes a string as a parameter, but this time the string is the regular expression itself. The first <code>regexp</code> in <code>u</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">regexp --set 1:R --set 2:S --set 3:T --set 4:U --set 5:V --set 6:W --set 7:X --set 8:Y --set 9:Z <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="nv">$c</span><span class="s2">&#34;</span>
+<span class="nv">A</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$R$S$T$U$V$W$X$Y$Z</span><span class="s2">&#34;</span>
+</code></pre></div><p>This sets a total of 9 variables <code>R</code> to <code>Z</code> using <code>regexp</code>, then concatenate them into <code>A</code>. The string to match with is our <code>c</code>, and the expression is the parameter. We can take a look at all the parameters and see that they all have 9 groups containing 1 character <code>(.)</code> in them, corresponds to 9 variables. So <code>A</code> is just 9 characters taken from <code>c</code> and concatenate together. The next series of <code>regexp</code>, starting with <code>regexp R $A</code> basically just means that &ldquo;is the character R in <code>A</code> or not&rdquo; (in shell script, a character without quotes like <code>R</code> is the same as with quotes <code>&quot;R&quot;</code>). A total of 9 checks means that 9 characters of <code>A</code> must be unique. I rewritten this in <code>z3</code> (a little but lazy and hackish by me, but it works):</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">u</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;}&#39;</span><span class="p">:</span>
+                <span class="n">off</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="n">off</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">4</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">off</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">])</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="n">off</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span>
+        <span class="k">elif</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">82</span><span class="p">,</span> <span class="mi">91</span><span class="p">):</span>
+        <span class="n">cond</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="n">cond</span> <span class="o">=</span> <span class="n">Or</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+
+
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{9}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{18}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{27}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{36}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{45}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{54}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{63}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{72}(.)(.)(.)(.)(.)(.)(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{1}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{2}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{3}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{4}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{5}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{6}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{7}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.).{8}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{3}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{6}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{27}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{30}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{33}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{54}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{57}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{60}(.)(.)(.).{6}(.)(.)(.).{6}(.)(.)(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;(.).{9}(.).{9}(.).{9}(.).{9}(.).{9}(.).{9}(.).{9}(.).{9}(.)&#34;</span><span class="p">)</span>
+<span class="n">u</span><span class="p">(</span><span class="s2">&#34;.{8}(.).{7}(.).{7}(.).{7}(.).{7}(.).{7}(.).{7}(.).{7}(.).{7}(.)&#34;</span><span class="p">)</span>
+</code></pre></div><h3 id="solving-the-equations">Solving the equations</h3>
+<p>That&rsquo;s all the checks in <code>grub.cfg</code>, we can just let <code>z3</code> do it work now and get the solution for <code>c</code>. After that, simply map it back to <code>b</code> and then to <code>a</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">sat</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+    
+    <span class="n">c_res</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">LEN</span><span class="p">)]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+
+    <span class="n">d1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;R&#39;</span><span class="p">:</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">:</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">:</span><span class="s1">&#39;ba&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span><span class="s1">&#39;bb&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span><span class="s1">&#39;bc&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">:</span><span class="s1">&#39;ca&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span><span class="s1">&#39;cb&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">:</span><span class="s1">&#39;cc&#39;</span><span class="p">}</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aaa&#39;</span><span class="p">:</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;aab&#39;</span><span class="p">:</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;aac&#39;</span><span class="p">:</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;aba&#39;</span><span class="p">:</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;abb&#39;</span><span class="p">:</span><span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">:</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;aca&#39;</span><span class="p">:</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;acb&#39;</span><span class="p">:</span><span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;acc&#39;</span><span class="p">:</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;baa&#39;</span><span class="p">:</span><span class="s1">&#39;9&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;bab&#39;</span><span class="p">:</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;bac&#39;</span><span class="p">:</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;bba&#39;</span><span class="p">:</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">:</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;bbc&#39;</span><span class="p">:</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;bca&#39;</span><span class="p">:</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;bcb&#39;</span><span class="p">:</span><span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;bcc&#39;</span><span class="p">:</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;caa&#39;</span><span class="p">:</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;cab&#39;</span><span class="p">:</span><span class="s1">&#39;J&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cac&#39;</span><span class="p">:</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;cba&#39;</span><span class="p">:</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;cbb&#39;</span><span class="p">:</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;cbc&#39;</span><span class="p">:</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;cca&#39;</span><span class="p">:</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;ccb&#39;</span><span class="p">:</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc&#39;</span><span class="p">:</span><span class="s1">&#39;Q&#39;</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c_res</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="n">d1</span><span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">+=</span> <span class="n">d2</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]]</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;p4{&#39;</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">)</span>
+
+    
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;unsat&#34;</span><span class="p">)</span>
+</code></pre></div><p>The flag is:</p>
+<pre><code>p4{DOO73LBP6EI461D6HP3N2MM6M953PKJ8MK1A2BGAB8FCIQE9Q4B96E}
+</code></pre><h3 id="appendix-1">Appendix</h3>
+<p>The solution script is <a href="/posts/20210517-omhctf2021-writeups/grub/a.py" rel="">a.py</a>.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-05-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20210228-aeroctf2021-writeups/" class="prev" rel="prev" title="AeroCTF2021 - Dummyper writeups"><i class="fas fa-angle-left fa-fw"></i>AeroCTF2021 - Dummyper writeups</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>

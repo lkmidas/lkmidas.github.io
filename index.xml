@@ -3,15 +3,22 @@
         <title>Midas Blog</title>
         <link>https://lkmidas.github.io/</link>
         <description>Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 17 May 2021 10:28:35 &#43;0700</lastBuildDate>
             <atom:link href="https://lkmidas.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>OMHCTF2021 - Flag saver, GRUB writeups</title>
+    <link>https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/</link>
+    <pubDate>Mon, 17 May 2021 10:28:35 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/</guid>
+    <description><![CDATA[Writeup for OMHCTF2021 Flag saver, GRUB challenge]]></description>
+</item><item>
     <title>AeroCTF2021 - Dummyper writeups</title>
     <link>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</link>
     <pubDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</pubDate>
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</guid>
-    <description><![CDATA[Writeup for AeroCTF2021 Finals Dummyper challenge]]></description>
+    <description><![CDATA[Writeup for AeroCTF2021 Dummyper challenge]]></description>
 </item><item>
     <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path</title>
     <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
@@ -68,12 +75,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/</guid>
     <description><![CDATA[Writeups for ISITDTUCTF2020 Finals reversing challenges]]></description>
-</item><item>
-    <title>ASCIS2020 Finals - RWE writeup</title>
-    <link>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</link>
-    <pubDate>Tue, 01 Dec 2020 02:43:38 -0800</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</guid>
-    <description><![CDATA[Writeup for ASCIS/SVATTT2020 Finals RWE challenge]]></description>
 </item></channel>
 </rss>
