@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210719-ggctf2021-writeups\/"
-        },"genre": "posts","wordcount":  4729 ,
+        },"genre": "posts","wordcount":  4728 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210719-ggctf2021-writeups\/","datePublished": "2021-07-19T19:40:02+07:00","dateModified": "2021-07-19T19:40:02+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">GoogleCTF2021 - weather writeups</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-07-19">2021-07-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4729 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-07-19">2021-07-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4728 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;23 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -220,7 +220,7 @@
 <li><code>prec</code> is the precision of a non-integer number, for example <code>%.69f</code> results in <code>info-&gt;prec = 69</code>. By default this is -1.</li>
 <li><code>is_long_double</code>, <code>is_short</code>, <code>is_long</code> and <code>is_char</code> are 1-bit fields that correspond to the flags <code>ll</code>, <code>h</code>, <code>l</code>, <code>hh</code>, respectively, before the format type. Only one of these bit can be 1 at a time, for example: <code>%lx</code> sets <code>info-&gt;is_long</code> to 1 and the rest to 0.</li>
 <li><code>left</code>, <code>showsign</code> are also 1-bit fields that correspond to the flags <code>-</code> and <code>+</code> at the start of the format, right after <code>%</code>. Only one of these two can be 1 at a time, for example <code>%+6x</code> or <code>%-9x</code>.</li>
-<li><code>pad</code> is the padding character and can only be either whitespace (<code>' '</code>) or zero (<code>'0'</code>), default to whitespace. The first byte after <code>%</code> or <code>+/-</code> will determine this, if it&rsquo;s <code>0</code> then <code>info-&gt;pad = '0'</code>, for example: <code>%69x</code> will be whitespace-padded and <code>%069</code> is 0-padded.</li>
+<li><code>pad</code> is the padding character and can only be either whitespace (<code>' '</code>) or zero (<code>'0'</code>), default to whitespace. The first byte after <code>%</code> or <code>+/-</code> will determine this, if it&rsquo;s <code>0</code> then <code>info-&gt;pad = '0'</code>, for example: <code>%69x</code> is whitespace-padded and <code>%069</code> is 0-padded.</li>
 </ul>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
@@ -234,7 +234,7 @@
 <ul>
 <li><code>%C</code> is easier to understand now, it uses <code>left</code>, <code>showsign</code> and <code>pad</code> fields to determine the type of comparison. Afterwards, it uses the comparison result to decide to call another <code>fprintf</code> or not (all functions in <code>printf</code> family shares the registered format handlers). Notice that there are 2 different memory regions that are accessed here: one is 32-bit accessed in the comparison at address <code>70A0</code>, I called it <code>REGS</code>; the other is 8-bit accessed and contains other format strings at address <code>5080</code>, I called it <code>MEM</code>. So this <code>%C</code> format is basically a conditional call function that implements 4 different calls, I name them <code>CLZ</code>, <code>CGZ</code>, <code>CEZ</code> and <code>CALL</code>.</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kr">__int64</span> <span class="kr">__fastcall</span> <span class="nf">format_C_jcc</span><span class="p">(</span><span class="n">FILE</span> <span class="o">*</span><span class="n">stream</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">printf_info</span> <span class="o">*</span><span class="n">info</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="k">const</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kr">__int64</span> <span class="kr">__fastcall</span> <span class="nf">format_C_call</span><span class="p">(</span><span class="n">FILE</span> <span class="o">*</span><span class="n">stream</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">printf_info</span> <span class="o">*</span><span class="n">info</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="k">const</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
   <span class="kt">int</span> <span class="n">prec</span><span class="p">;</span> <span class="c1">// [rsp+24h] [rbp-Ch]
 </span><span class="c1"></span>  <span class="n">_BOOL4</span> <span class="n">cmp_flag</span><span class="p">;</span> <span class="c1">// [rsp+2Ch] [rbp-4h]
@@ -304,7 +304,7 @@
   <span class="o">*</span><span class="p">(</span><span class="n">_DWORD</span> <span class="o">*</span><span class="p">)</span><span class="n">addr</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
   <span class="k">return</span> <span class="mi">0LL</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div><p>So in summary, these formats defined a VM as follow: A register-based VM that operates on a set of 32-bit registers and an 8-bit accessed memory. It has 11 arithmetic instructions and 4 call instructions. However, there is one more instruction that is not explicitly defined which is <code>RET</code>. After all, this VM operates on <code>printf</code>, and <code>printf</code> will stop printing at the end of a string. Therefore, a null byte <code>\x00</code> can be understood as a <code>RET</code> instruction. The binary will jump into this VM using the <code>printf</code> format <code>%F</code>, which then call <code>printf</code> format <code>%52C</code>, which means an unconditional <code>CALL</code> to <code>MEM[52]</code>.</p>
+</code></pre></div><p>So in summary, these formats defined a VM as follow: A register-based VM that operates on a set of 32-bit registers and an 8-bit accessed memory. It has 11x3x4 arithmetic instructions and 4 call instructions. However, there is one more instruction that is not explicitly defined which is <code>RET</code>. After all, this VM operates on <code>printf</code>, and <code>printf</code> will stop printing at the end of a string. Therefore, a null byte <code>\x00</code> can be understood as a <code>RET</code> instruction. The binary will jump into this VM using the <code>printf</code> format <code>%F</code>, which then call <code>printf</code> format <code>%52C</code>, which means an unconditional <code>CALL</code> to <code>MEM[52]</code>.</p>
 <h2 id="writing-an-emulator--disassembler">Writing an emulator + disassembler</h2>
 <p>Emulating unfamiliar instruction sets is actually one of my interest, so immediately I decided to solve this challenge using an emulator. The first step is to parse each format strings into different fields. My method is a naive one but it works in this case, the steps are:</p>
 <ol>
@@ -319,7 +319,7 @@
 <li>If <code>.</code> is in the string, goto 12.</li>
 <li>From the bottom up, remove all non-digit characters.</li>
 <li>What is left is <code>width</code>, end.</li>
-<li>Split the string by <code>.</code>, the first half in <code>width</code> if it&rsquo;s not empty.</li>
+<li>Split the string by <code>.</code>, the first half is <code>width</code> if it&rsquo;s not empty.</li>
 <li>From the bottom up of the second half, remove all non-digit characters.</li>
 <li>What is left is <code>prec</code>, end.</li>
 </ol>
@@ -898,7 +898,7 @@
 <p>Some changes need to be made for the emulator:</p>
 <ul>
 <li>We know that the real code starts at <code>MEM[200]</code>, so I declared <code>z3</code> variables when the VM hits <code>MEM[200]</code>.</li>
-<li>The function at <code>MEM[500]</code> accesses our input, at <code>MEM[531]</code> there is a comparison with out input. Because our input is <code>z3</code> variables now, it will cause <code>python</code> to raise an exception when using <code>z3</code> variables in a <code>if-else</code> condition. Therefore, I made it so that it always returns <code>True</code> at <code>MEM[531]</code> if <code>z3</code> variables is in the condition.</li>
+<li>The function at <code>MEM[500]</code> accesses our input, at <code>MEM[531]</code> there is a comparison with our input. Because our input is <code>z3</code> variables now, it will cause <code>python</code> to raise an exception when using <code>z3</code> variables in a <code>if-else</code> condition. Therefore, I made it so that it always returns <code>True</code> at <code>MEM[531]</code> if <code>z3</code> variables is in the condition.</li>
 <li>We know the comparison is at <code>MEM[244]</code>, so I add the <code>z3</code> constraint when the VM reaches there.</li>
 </ul>
 <p>The full solver/emulator/disassembler is at <a href="/posts/20210719-ggctf2021-writeups/a.py" rel="">a.py</a>. Let it run for a while and it will give us the correct input: <code>TheNewFlagHillsByTheCtfWoods</code>.</p>
