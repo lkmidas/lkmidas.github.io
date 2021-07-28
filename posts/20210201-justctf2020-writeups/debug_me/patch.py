@@ -43,7 +43,7 @@ rip = [0x17f9, 0x16d4, 0x17cb, 0x1404, 0x13b2, 0x13d2, 0x136b, 0x1384, 0x152d]
 CC = [0x17dc, 0x16b7, 0x17c6, 0x13E7, 0x1399, 0x13cd, 0x1352, 0x137f, 0x1528]
 
 for i in range(len(rip)):
-    ida_bytes.patch_bytes(CC[i], '\x90'*(rip[i] - CC[i])
+    ida_bytes.patch_bytes(CC[i], b'\x90'*(rip[i] - CC[i]))
 
 # Patch the encrypted bytes
 def patch(patches):
