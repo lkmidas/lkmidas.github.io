@@ -3,7 +3,14 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 19 Jul 2021 19:40:02 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>GoogleCTF2022 - eldar writeups</title>
+    <link>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</link>
+    <pubDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</guid>
+    <description><![CDATA[Writeup for GoogleCTF2022 eldar challenge]]></description>
+</item><item>
     <title>GoogleCTF2021 - weather writeups</title>
     <link>https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/</link>
     <pubDate>Mon, 19 Jul 2021 19:40:02 &#43;0700</pubDate>
@@ -66,12 +73,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</guid>
     <description><![CDATA[Writeup for ISITDTUCTF2020 Quals rev02 challenge]]></description>
-</item><item>
-    <title>AngstromCTF2020 - bookface writeup</title>
-    <link>https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/</link>
-    <pubDate>Thu, 19 Mar 2020 19:56:49 -0700</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20200319-angstromctf2020-writeups/</guid>
-    <description><![CDATA[Writeup for AngstromCTF2020 bookface challenge]]></description>
 </item></channel>
 </rss>

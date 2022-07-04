@@ -3,9 +3,16 @@
         <title>Midas Blog</title>
         <link>https://lkmidas.github.io/</link>
         <description>Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 19 Jul 2021 19:40:02 &#43;0700</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</lastBuildDate>
             <atom:link href="https://lkmidas.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>GoogleCTF2022 - eldar writeups</title>
+    <link>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</link>
+    <pubDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</guid>
+    <description><![CDATA[Writeup for GoogleCTF2022 eldar challenge]]></description>
+</item><item>
     <title>GoogleCTF2021 - weather writeups</title>
     <link>https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/</link>
     <pubDate>Mon, 19 Jul 2021 19:40:02 &#43;0700</pubDate>
@@ -68,12 +75,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</guid>
     <description><![CDATA[Writeups for TetCTF2021 heap pwn challenges]]></description>
-</item><item>
-    <title>Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP</title>
-    <link>https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/</link>
-    <pubDate>Sun, 03 Jan 2021 04:40:50 -0800</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/</guid>
-    <description><![CDATA[My technique of solving glibc 2.31 heap challenges with seccomp]]></description>
 </item></channel>
 </rss>

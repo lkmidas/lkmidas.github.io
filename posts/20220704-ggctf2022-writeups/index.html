@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>GoogleCTF2022 - eldar writeups - Midas Blog</title><meta name="Description" content="Writeup for GoogleCTF2022 eldar challenge"><meta property="og:title" content="GoogleCTF2022 - eldar writeups" />
+<meta property="og:description" content="Writeup for GoogleCTF2022 eldar challenge" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-03T22:28:02+07:00" />
+<meta property="article:modified_time" content="2022-07-03T22:28:02+07:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="GoogleCTF2022 - eldar writeups"/>
+<meta name="twitter:description" content="Writeup for GoogleCTF2022 eldar challenge"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "GoogleCTF2022 - eldar writeups",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20220704-ggctf2022-writeups\/"
+        },"genre": "posts","wordcount":  4812 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20220704-ggctf2022-writeups\/","datePublished": "2022-07-03T22:28:02+07:00","dateModified": "2022-07-03T22:28:02+07:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeup for GoogleCTF2022 eldar challenge"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">GoogleCTF2022 - eldar writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-03">2022-07-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4812 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;23 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preface">Preface</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#analyzing-the-binary">Analyzing the binary</a></li>
+    <li><a href="#about-the-elf-relocation-metadata-machine">About the ELF relocation metadata machine</a></li>
+    <li><a href="#writing-a-vm-parser">Writing a VM parser</a></li>
+    <li><a href="#attempting-to-one-shot-with-z3">Attempting to one-shot with Z3</a></li>
+    <li><a href="#debugging-the-vm">Debugging the VM</a></li>
+    <li><a href="#analyzing-the-first-shuffling-algorithm">Analyzing the first shuffling algorithm</a></li>
+    <li><a href="#analyzing-the-24-byte-buffer-checking-algorithm">Analyzing the 24-byte buffer checking algorithm</a></li>
+    <li><a href="#analyzing-the-last-12-bytes-of-serial-checking-algorithm">Analyzing the last 12 bytes of serial checking algorithm</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="preface">Preface</h2>
+<p>Another year another exotic VM reversing challenge from Google CTF. In my opinion, this year&rsquo;s challenge is way more difficult and complex than last year, but it is also a lot more interesting as well. There are actually so many little delicate details in this challenge that I don&rsquo;t think I can recall every single step that I did, but hopefully I can explain how everything works and my solution to solving them.</p>
+<h2 id="introduction">Introduction</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given files:</strong> <a href="/posts/20220704-ggctf2022-writeups/eldar" rel="">eldar</a>, <a href="/posts/20220704-ggctf2022-writeups/serial.c" rel="">serial.c</a>, <a href="/posts/20220704-ggctf2022-writeups/Makefile" rel="">Makefile</a>.</li>
+<li><strong>Description:</strong> We found this app on a recent Ubuntu system, but the serial is missing from <code>serial.c</code>. Can you figure out a valid serial? Just put it into <code>serial.c</code> and run the app with <code>make &amp;&amp; make run</code>.</li>
+<li><strong>Category:</strong> Reverse engineering</li>
+<li><strong>Summary</strong>: A VM reverse engineering challenge. This VM is created using ELF relocation metadata and symbol metadata. The flag is divided into 2 parts and each of them goes through a series of arithmetic operations and algorithms to reach the final check. Several z3 scripts are required to solve this challenge.</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>Analyze <code>eldar</code> file -&gt; it&rsquo;s just a simple file that takes a value <code>serial</code> from <code>libserial.so</code> that we can compile from <code>serial.c</code>, but the check is nowhere to be seen and instead the relocation section of the file is MASSIVE with tons of relocation metadata.</li>
+<li><a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer">This paper</a> and <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer">this talk</a> provide many useful information about using ELF relocation metadata as a VM -&gt; write a script to parse the relocation metadata out as VM instructions.</li>
+<li>Analyze the VM code -&gt; figure out that the first 16 bytes of <code>serial</code> and the last 12 bytes go through different calculations -&gt; our goal is to make the output of the VM equals to 0.</li>
+<li>Analyze the first part -&gt; figure out that the first 16 bytes go through a shuffling algorithm to generate a 24 bytes buffer, each 2 bytes of <code>serial</code> correspond to 3 bytes of this buffer -&gt; each byte of the buffer is multiplied by a constant and sum together several times with other negative constants -&gt; the sum needs to be equal to 0 for the output to be 0.</li>
+<li>Write a script to parse out the constants.</li>
+<li>Write a z3 script to solve the 24-byte buffer -&gt; bruteforce the first 16 bytes of serial using this result.</li>
+<li>Analyze the second part -&gt; figure out that the last 12 bytes of <code>serial</code> are treated somewhat the same as the 24-byte buffer, except that not only multiplications, the VM jumps to x86 shellcodes to do bitwise operations as well.</li>
+<li>Write a script to parse out the multiplication constants from the VM code and the bitwise operations from the pieces of shellcodes.</li>
+<li>Write a z3 script to solve the last 12 bytes of <code>serial</code> -&gt; combine the 2 parts to get flag.</li>
+</ol>
+</div>
+        </div>
+    </div>
+<h2 id="analyzing-the-binary">Analyzing the binary</h2>
+<p>The code in the binary itself is super simple. The binary is linked with <code>libserial.so</code> which we can build from the give source file <code>serial.c</code>. This lib&rsquo;s only purpose is to provide the binary with a string <code>serial</code> in a buffer at address <code>0x404040</code>, which is expected to be 29 bytes (28 bytes and a NULL byte). There is a value <code>fail</code> at address <code>0x404060</code> and if it&rsquo;s equal to 0, our <code>serial</code> is the correct flag.</p>
+<p>The problem here is that there is no other code in the binary, there is no function to check <code>serial</code>, no function to set <code>fail</code>. Instead, if we scroll down in IDA to the relocation section at <code>0x804000</code>, we can see a huge region with an unsual amount of relocation metadata. These metadata are not processed by the binary itself, but instead by the system&rsquo;s <strong>ELF Loader</strong>. So the suspicion here is that the binary actually uses the <strong>ELF Loader</strong> to perform checks on <code>serial</code> before executing itself, using those metadata.</p>
+<p>By the sheer size of the metadata region, I suspected this to be a VM revering challenge (also because Google CTF loves this kind of weird machine challenges).</p>
+<h2 id="about-the-elf-relocation-metadata-machine">About the ELF relocation metadata machine</h2>
+<p>This technique of running a &ldquo;weird&rdquo; virtual machine using ELF relocation metadata and symbol metadata has been discovered and explained a long time a go in the paper <a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer">“Weird Machines” in ELF: A Spotlight on the Underappreciated Metadata</a> and the talk <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer">Programming Weird Machines with ELF Metadata</a> (yes they were 10 years ago!). The idea is to use the <strong>ELF Loader</strong> as an interpreter to execute a weird VM with carefully crafted ELF relocation metadata as VM instructions and symbol metadata as registers.</p>
+<p>In our binary <code>eldar</code>, those metadata is located in the section mapped at address <code>0x804000</code>, which can be inspected in IDA. The symbol metadata table is located at <code>0x804064</code>, while the relocation metadata is located at <code>0x80428A</code>. I&rsquo;d like to talk about relocation metadata first, because these are our VM instructions. Take a look at the structure of each relocation <code>Elf64_Rela</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Addr</span> <span class="n">r_offset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Xword</span> <span class="n">r_info</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Sxword</span> <span class="n">r_addend</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">Elf64_Rela</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define ELF64_R_SYM(info)             ((info)&gt;&gt;32)
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define ELF64_R_TYPE(info)            ((Elf64_Word)(info))
+</span></span></span></code></pre></div><p>By looking at a few of them, we can see that <code>r_offset</code> contains an address, <code>r_info</code> contains the type of relocation in the lower 32 bits and the index of a symbol in the higher 32 bits, <code>r_addend</code> contains a value, all of these fields are 64 bits in length. We can dump all of these metadata in a neat and pretty format using the command <code>readelf -r eldar</code>. By quickly looking through the relocation metadata, we can see that the binary uses only 4 types of relocation: <code>R_X86_64_RELATIVE</code>, <code>R_X86_64_COPY</code>, <code>R_X86_64_64</code> and <code>R_X86_64_32</code>, so basically this VM only has 4 types of instruction. Since out binary doesn&rsquo;t have PIE, the base address of it is considered to be 0. Let <code>sym</code> be the corresponding <code>ELF64_R_SYM</code> part of <code>r_info</code>, this is how each type of relocation works:</p>
+<ul>
+<li><code>R_X86_64_RELATIVE</code> : <code>*r_offset = r_addend</code></li>
+<li><code>R_X86_64_COPY</code> : <code>memcpy(r_offset, sym.value, sym.size)</code></li>
+<li><code>R_X86_64_64</code> : <code>*r_offset = sym.value + r_addend</code></li>
+<li><code>R_X86_64_32</code> : <code>*(DWORD*)r_offset = (DWORD)(sym.value + r_addend)</code></li>
+</ul>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">IDA goes absolutely crazy and wrong when displaying the relocation metadata, I don&rsquo;t really know why it happens, but it&rsquo;s better to look at the output of <code>readelf -r</code> when inspecting those.</div>
+        </div>
+    </div>
+<p>In this VM, symbols act as registers. By using <code>readelf -s eldar</code>, we can see that the VM uses 10 of them with the names from <code>^A</code> to <code>^J</code>:</p>
+<pre tabindex="0"><code>Num:    Value          Size Type    Bind   Vis      Ndx Name
+  0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+  1: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    1 ^A
+  2: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^B
+  3: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^C
+  4: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^D
+  5: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^E
+  6: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^F
+  7: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^G
+  8: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^H
+  9: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^I
+ 10: 0000000000804000     8 OBJECT  LOCAL  DEFAULT    1 ^J
+</code></pre><p>They are located at address <code>0x804064</code> as mentioned before, so by writing to this memory region, it can modify the values of its registers. Let&rsquo;s take a look at the structure of each symbol metadata to understand it more:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Word</span>      <span class="n">st_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">st_info</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">st_other</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Half</span>      <span class="n">st_shndx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Addr</span>      <span class="n">st_value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Elf64_Xword</span>     <span class="n">st_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">Elf64_Sym</span><span class="p">;</span>
+</span></span></code></pre></div><p>This structure is 24 bytes in size. The first 64 bits contains <code>st_name</code>, <code>st_info</code>, <code>st_other</code> and <code>st_shndx</code>, these are not so important yet so I&rsquo;ll explain them later when needed. Then the last 2 fields contain the value of the symbol (<code>sym.value</code>) and it&rsquo;s size (<code>sym.size</code>). Therefore, the VM can use <code>R_X86_64_RELATIVE</code> to move an immediate value to a symbol or any place in memory, <code>R_X86_64_64</code> or <code>R_X86_64_32</code> to move the value (64 bits or 32 bits, respectively) of a symbol to another symbol or any place in memory, and <code>R_X86_64_COPY</code> to copy the data at the address in a symbol&rsquo;s value to another place in memory, and by changing <code>sym.size</code>, it can control how many bytes to copy.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Because the relocation metadata also reside in the same memory region, it can self-modify its &ldquo;instructions&rdquo; on the fly as well. This is actually the technique that this VM uses a lot.</em></div>
+        </div>
+    </div>
+<p>After understanding how this ELF relocation metadata VM works, I proceeded to write a parser to parse out the instructions and format them in a way that is easy to read.</p>
+<h2 id="writing-a-vm-parser">Writing a VM parser</h2>
+<p>Because of the self-modifying nature of this VM, a static code parser is not good enough. Instead, we need to write a parser that also has an emulator inside it, to emulate the execution of the VM at each instruction while parsing them. Luckily for us, there is no jump instruction in this VM, so we can simply emulate and parse the instructions linearly one by one. I used the <code>serial</code> input value of <code>abcdefghijklmnopqrstuvwxyz{\}</code> to easily recognize in the code where our input is used.</p>
+<p>For the instructions, I decided to print them in the form of <code>&lt;dest&gt; &lt;- &lt;data&gt;</code>. For the symbol registers. I name each of their 8 bytes as <code>FLAG_X</code>, <code>VAL_X</code> and <code>LEN_X</code>, with <code>X</code> being the name of the symbols from <code>A</code> to <code>J</code>. I also associate their exact address in the memory with them for pretty printing:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">dynsym</span> <span class="o">=</span> <span class="mh">0x80406c</span>
+</span></span><span class="line"><span class="cl"><span class="n">regs</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">regs</span><span class="p">[</span><span class="n">dynsym</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mi">24</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;VAL_&#34;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">regs</span><span class="p">[</span><span class="n">dynsym</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mi">24</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;LEN_&#34;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">regs</span><span class="p">[</span><span class="n">dynsym</span> <span class="o">-</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mi">24</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;TYPE_&#34;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div><p>Below is the main part of the parser code in <a href="/posts/20220704-ggctf2022-writeups/parse_opcode.py" rel="">parse_opcode.py</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">while</span> <span class="n">pc</span> <span class="o">&lt;</span> <span class="mh">0xa5a000</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{:08x}</span><span class="s2">: &#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pc</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">r_offset</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r_type</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">pc</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffff</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r_sym</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">pc</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r_addend</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">pc</span><span class="o">+</span><span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">print_offset</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">r_offset</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">print_addend</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">r_addend</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">r_offset</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_offset</span> <span class="o">=</span> <span class="n">regs</span><span class="p">[</span><span class="n">r_offset</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">r_addend</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_addend</span> <span class="o">=</span> <span class="s2">&#34;&amp;&#34;</span> <span class="o">+</span> <span class="n">regs</span><span class="p">[</span><span class="n">r_addend</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">sym_addr</span> <span class="o">=</span> <span class="n">dynsym</span> <span class="o">+</span> <span class="n">r_sym</span><span class="o">*</span><span class="mi">24</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write64</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="n">r_addend</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">,</span> <span class="n">print_addend</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sym_len</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">sym_addr</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">writen</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="n">r_addend</span> <span class="o">+</span> <span class="n">readn</span><span class="p">(</span><span class="n">read64</span><span class="p">(</span><span class="n">sym_addr</span><span class="p">),</span> <span class="n">sym_len</span><span class="p">),</span> <span class="n">sym_len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- [</span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">,</span> <span class="n">regs</span><span class="p">[</span><span class="n">sym_addr</span><span class="p">],</span> <span class="n">print_addend</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write64</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="n">r_addend</span> <span class="o">+</span> <span class="n">read64</span><span class="p">(</span><span class="n">sym_addr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">,</span> <span class="n">regs</span><span class="p">[</span><span class="n">sym_addr</span><span class="p">],</span> <span class="n">print_addend</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mh">0xa</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write32</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="n">r_addend</span> <span class="o">+</span> <span class="n">read64</span><span class="p">(</span><span class="n">sym_addr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- DWORD(</span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">)&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">,</span> <span class="n">regs</span><span class="p">[</span><span class="n">sym_addr</span><span class="p">],</span> <span class="n">print_addend</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;UNKNOWN R_TYPE&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">pc</span> <span class="o">+=</span> <span class="mi">24</span>
+</span></span></code></pre></div><p>The parser outputs a massive file with 100,000+ lines of instructions. Although this is understandable because the VM can only do assignments and additions, without any control flow instructions, so it will have to unroll every loop and also each mathematical operation takes many instructions to execute. This is a small part of the parsed code for example, reading out input at <code>0x404040</code>:</p>
+<pre tabindex="0"><code>...
+00806372: VAL_B 	&lt;- 404040
+0080638a: LEN_B 	&lt;- 1
+008063a2: VAL_G 	&lt;- [VAL_B + 0]
+008063ba: VAL_B 	&lt;- &amp;VAL_G
+008063d2: LEN_B 	&lt;- 8
+008063ea: 806412 	&lt;- [VAL_B + 0]
+00806402: VAL_D 	&lt;- VAL_D + 804061
+0080641a: 806412 	&lt;- 0
+00806432: 8040cd 	&lt;- DWORD(VAL_A + 0)
+0080644a: VAL_B 	&lt;- 8042ba
+00806462: VAL_F 	&lt;- [VAL_B + 0]
+0080647a: VAL_B 	&lt;- &amp;VAL_D
+00806492: 8064ba 	&lt;- [VAL_B + 0]
+008064aa: VAL_E 	&lt;- VAL_D + 61
+008064c2: 8064ba 	&lt;- 0
+...
+</code></pre><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>There is a lot of <code>804000 &lt;- 0</code> instructions in the code, this is basically just a NOP instruction.</em></div>
+        </div>
+    </div>
+<h2 id="attempting-to-one-shot-with-z3">Attempting to one-shot with Z3</h2>
+<p>As usual with VM flag checker reversing challenges, with the VM code emulator in hand, I decided to try injecting z3 variables to the input and let the emulator solve itself (just like what I did with <a href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" target="_blank" rel="noopener noreffer">Google CTF 2021 VM challenge</a>). However, things are not as easy this time. There are some problems that prevents this approach to success:</p>
+<ul>
+<li>The first algorithm in the VM code uses out input as index to memory, both on ther read side and on the write side. Unfortunately, z3 variables can&rsquo;t be used as array index, and using z3 <code>Array()</code> to model the whole VM memory is not feasible at all.</li>
+<li>The final part of the VM code actually jumps to x86 shellcode to execute them, then jump back to VM code (will explain later). A lot more work would be needed to parse and emulate those code as well.</li>
+<li>There are way too many operations that z3 might not be able to solve by itself without manual simplification (not so sure about this one).</li>
+</ul>
+<p>Therefore, in the end, I had to go back to the good old way of doing proper reversing on the VM code to understand its algorithm.</p>
+<h2 id="debugging-the-vm">Debugging the VM</h2>
+<p>As I said, the VM code is quite complex, so statically reading the code and writing scripts are error-prone methods. I needed a way to verify if my assumptions are correct or not. To do this, the easiest way is to debug the VM code. However, this VM is special: relocation metadata are processed by the <strong>ELF Loader</strong>, not by the binary itself, so debugging the binary is useless because the VM already finishes executing the moment the binary starts to run.</p>
+<p>The first debugging method that comes to mind is to debug the loader itself. We can see what loader the binary use with the command <code>ldd eldar</code>, in my case it&rsquo;s <code>/lib64/ld-linux-x86-64.so.2</code>. Then we can run <code>/lib64/ld-linux-x86-64.so.2 ./eldar</code> to run the loader on the binary and debug it this way. However, the loader is a very big program that does multiple different things, not just processing relocation metadata. This method for me is purely pain and suffering to even try.</p>
+<p>The method that I used is that I wrote a simple script to patch the binary and remove parts of relocation metadata. For example, if I want to debug the VM up to the instruction at address <code>0x956c42</code>, I can just remove all metadata from address <code>0x956c5a</code> onwards, then set a breakpoint at the binary&rsquo;s <code>main</code> and inspect the memory of the VM region. This is indeed quite time-consuming, but it&rsquo;s super easy to do.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;eldar&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">start</span> <span class="o">=</span> <span class="mh">0x956c5a</span> <span class="o">-</span> <span class="mh">0x800000</span>
+</span></span><span class="line"><span class="cl"><span class="n">end</span> <span class="o">=</span> <span class="mh">0xa59d3a</span> <span class="o">-</span> <span class="mh">0x800000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">new_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\0</span><span class="s2">&#34;</span><span class="o">*</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">end</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;eldar-test&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+</span></span></code></pre></div><p>Now that we have all the tools ready to reverse the code, let me try to explain its algorithms part by part.</p>
+<h2 id="analyzing-the-first-shuffling-algorithm">Analyzing the first shuffling algorithm</h2>
+<p>By searching for the address of out input bytes from <code>0x404040</code> to <code>0x40405b</code>, I realized that <code>serial</code> is divided into 2 parts that get checked separately: the first 16 bytes and the last 12 bytes. The first 16 bytes go through 2 stages of calculations and this part will explain the first.</p>
+<p>The first algorithm to be applied on the first 16 bytes starts at address <code>0x804ae2</code> and ends at <code>0x97eb2a</code>. Here I&rsquo;ll try to explain a small bit of code at the beginning of it, then the rest of the code is analyzed using the same method (most of them are just unrolled loops, so they have very similar patterns).</p>
+<p>At the beginning, we can see that the code initializes values from <code>0x00</code> to <code>0xff</code> to an int64 array starting at <code>0x8042ba</code>. Then comes the main part:</p>
+<pre tabindex="0"><code>00806372: VAL_B 	&lt;- 404040
+0080638a: LEN_B 	&lt;- 1
+008063a2: VAL_G 	&lt;- [VAL_B + 0]
+008063ba: VAL_B 	&lt;- &amp;VAL_G
+008063d2: LEN_B 	&lt;- 8
+008063ea: 806412 	&lt;- [VAL_B + 0]
+00806402: VAL_D 	&lt;- VAL_D + 804061
+0080641a: 806412 	&lt;- 0
+00806432: 8040cd 	&lt;- DWORD(VAL_A + 0)
+0080644a: VAL_B 	&lt;- 8042ba
+00806462: VAL_F 	&lt;- [VAL_B + 0]
+0080647a: VAL_B 	&lt;- &amp;VAL_D
+00806492: 8064ba 	&lt;- [VAL_B + 0]
+008064aa: VAL_E 	&lt;- VAL_D + 61
+008064c2: 8064ba 	&lt;- 0
+008064da: VAL_B 	&lt;- &amp;VAL_E
+008064f2: 80651a 	&lt;- [VAL_B + 0]
+0080650a: VAL_E 	&lt;- VAL_E + c2
+00806522: 80651a 	&lt;- 0
+0080653a: 806562 	&lt;- [VAL_B + 0]
+00806552: VAL_E 	&lt;- VAL_E + 184
+0080656a: 806562 	&lt;- 0
+00806582: VAL_E 	&lt;- VAL_E + 8042ba
+0080659a: 8042ba 	&lt;- [VAL_E + 0]
+008065b2: 8065ca 	&lt;- [VAL_B + 0]
+008065ca: 8045c2 	&lt;- VAL_F + 0
+008065e2: VAL_B 	&lt;- 8042c2
+008065fa: 806622 	&lt;- [VAL_B + 0]
+00806612: VAL_D 	&lt;- VAL_D + 1
+0080662a: 806622 	&lt;- 0
+...
+</code></pre><p>Our <code>serial</code> is at address <code>0x404040</code> and contains the value <code>abcdefghijklmnopqrstuvwxyz{|}</code>, so this code starts out by reading the first byte of our input to <code>VAL_G</code>. Because <code>VAL_G</code> initial value is <code>0x804000</code>, it becomes <code>0x804061</code>. Then the value of <code>VAL_G</code> is written to address <code>0x806412</code>. If we take a look at the addresses of the instructions, <code>0x806412</code> is actually an address in the nearby code, that&rsquo;s why we can see the <code>VAL_G</code>&rsquo;s value <code>0x804061</code> appears on the instruction at address <code>0x806402</code>. The code actually modifies the <code>r_addend</code> of the next instruction&rsquo;s metadata to load the value of <code>VAL_G</code> into <code>VAL_D</code>. Then it uses a <code>DWORD</code> assignment to clear out the upper bytes of <code>VAL_D</code>, leaving only <code>0x61</code>, which is the first byte of our <code>serial</code>. Next, <code>VAL_D + 0x61</code> is loaded into <code>VAL_E</code> and <code>VAL_E</code> is added to itself 2 more times, which in the end means <code>VAL_E = serial[0] * 8</code>. It&rsquo;s then added to <code>0x8042ba</code>, which is the beginning of the int64 array initialized earlier. All these works just simply equivalent to getting the address of <code>int64_array[serial[0]]</code>, because each element of the array is 8 bytes in size, hence the multiplication by 8 is used to retrieve the exact address. The final few instructions basically swap the value of <code>int64_array[serial[0]]</code> with <code>int64_array[0]</code>.</p>
+<p>The code then continues to process address <code>0x404041</code>, then back to <code>0x404040</code> and then <code>0x404041</code> again. By searching for the value <code>404040</code> in the parsed code, we can see that this &ldquo;loop&rdquo; is executed 128 times, some calculations are done after that, and then it proceeds to do the same with <code>0x404042</code> and <code>0x404043</code>. Finally, these loops will end with <code>0x40404e</code> and <code>0x40404f</code>. Using the same analyzing method as above, I figured out that this part of the code uses this swapping algorithm to generate a <strong>24-byte buffer</strong> at address <code>0x804aca</code>, with each 2 bytes of the serial generate 3 bytes of this buffer. The algorithm is rewritten in python in <a href="/posts/20220704-ggctf2022-writeups/logic_1.py" rel="">logic_1.py</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">serial</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;abcdefghijklmnopqrstuvwxyz{|}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">wtf</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x8</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mem</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mh">0x100</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">serial</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">serial</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">mem</span><span class="p">[(</span><span class="n">mem</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">wtf</span> <span class="o">+=</span> <span class="n">tmp</span>
+</span></span></code></pre></div><p>I am not an algorithm person or a math guy, so I don&rsquo;t really know if this algorithm is reversible or not. However, because of the nature of the 2 bytes to 3 bytes mapping, if we know the value of the 24-byte buffer, we can simply <strong>bruteforce</strong> the first 16 bytes of <code>serial</code> 2 bytes at once, without reversing this algorithm.</p>
+<p>Therefore, the goal here is to calculate the correct value for this 24-byte buffer, let&rsquo;s proceed to see how this buffer is checked.</p>
+<h2 id="analyzing-the-24-byte-buffer-checking-algorithm">Analyzing the 24-byte buffer checking algorithm</h2>
+<p>This part starts at address <code>0x97eb72</code> and ends at <code>0xa29092</code>.</p>
+<pre tabindex="0"><code>0097eb72: VAL_G 	&lt;- fffffffffffa00b1
+0097eb8a: VAL_B 	&lt;- 804aca
+0097eba2: LEN_B 	&lt;- 1
+0097ebba: VAL_E 	&lt;- [VAL_B + 0]
+0097ebd2: VAL_F 	&lt;- 0
+0097ebea: VAL_B 	&lt;- &amp;VAL_F
+0097ec02: LEN_B 	&lt;- 8
+0097ec1a: 97ec42 	&lt;- [VAL_B + 0]
+0097ec32: VAL_F 	&lt;- VAL_F + 0
+0097ec4a: 97ec42 	&lt;- 0
+0097ec62: VAL_B 	&lt;- &amp;VAL_E
+0097ec7a: 97eca2 	&lt;- [VAL_B + 0]
+0097ec92: VAL_F 	&lt;- VAL_F + e2
+0097ecaa: 97eca2 	&lt;- 0
+0097ecc2: VAL_B 	&lt;- &amp;VAL_F
+0097ecda: 97ed02 	&lt;- [VAL_B + 0]
+0097ecf2: VAL_F 	&lt;- VAL_F + e2
+0097ed0a: 97ed02 	&lt;- 0
+0097ed22: 97ed4a 	&lt;- [VAL_B + 0]
+0097ed3a: VAL_F 	&lt;- VAL_F + 1c4
+0097ed52: 97ed4a 	&lt;- 0
+0097ed6a: 97ed92 	&lt;- [VAL_B + 0]
+0097ed82: VAL_F 	&lt;- VAL_F + 388
+0097ed9a: 97ed92 	&lt;- 0
+0097edb2: VAL_B 	&lt;- &amp;VAL_E
+0097edca: 97edf2 	&lt;- [VAL_B + 0]
+0097ede2: VAL_F 	&lt;- VAL_F + e2
+0097edfa: 97edf2 	&lt;- 0
+0097ee12: VAL_B 	&lt;- &amp;VAL_F
+0097ee2a: 97ee52 	&lt;- [VAL_B + 0]
+0097ee42: VAL_F 	&lt;- VAL_F + 7f2
+0097ee5a: 97ee52 	&lt;- 0
+0097ee72: VAL_B 	&lt;- &amp;VAL_E
+0097ee8a: 97eeb2 	&lt;- [VAL_B + 0]
+0097eea2: VAL_F 	&lt;- VAL_F + e2
+0097eeba: 97eeb2 	&lt;- 0
+0097eed2: VAL_B 	&lt;- &amp;VAL_F
+0097eeea: 97ef12 	&lt;- [VAL_B + 0]
+0097ef02: VAL_F 	&lt;- VAL_F + 10c6
+0097ef1a: 97ef12 	&lt;- 0
+0097ef32: 97ef5a 	&lt;- [VAL_B + 0]
+0097ef4a: VAL_F 	&lt;- VAL_F + 218c
+0097ef62: 97ef5a 	&lt;- 0
+0097ef7a: VAL_B 	&lt;- &amp;VAL_E
+0097ef92: 97efba 	&lt;- [VAL_B + 0]
+0097efaa: VAL_F 	&lt;- VAL_F + e2
+0097efc2: 97efba 	&lt;- 0
+0097efda: VAL_B 	&lt;- &amp;VAL_F
+0097eff2: 97f01a 	&lt;- [VAL_B + 0]
+0097f00a: VAL_F 	&lt;- VAL_F + 43fa
+0097f022: 97f01a 	&lt;- 0
+0097f03a: VAL_B 	&lt;- &amp;VAL_E
+0097f052: 97f07a 	&lt;- [VAL_B + 0]
+0097f06a: VAL_F 	&lt;- VAL_F + e2
+0097f082: 97f07a 	&lt;- 0
+0097f09a: VAL_B 	&lt;- &amp;VAL_F
+0097f0b2: 97f0da 	&lt;- [VAL_B + 0]
+0097f0ca: VAL_G 	&lt;- VAL_G + 88d6
+...
+</code></pre><p>Quite a lengthy bit of code, but it&rsquo;s actually super simple. Firstly, a negative int64 is loaded into <code>VAL_G</code>, then 1 byte is loaded from address <code>0x804aca</code> (which is the start of the 24-byte buffer) to <code>VAL_F</code>. <code>VAL_F</code> is then continuously added to itself until it reaches the value of <code>0x88d6</code>, then it&rsquo;s added to <code>VAL_G</code>. This is basically just a multiplication of the first byte of the 24-byte buffer with a constant and adding the result to <code>VAL_G</code>. We can simply get the multiplication constant by doing <code>0x88d6 / 0xe2 = 155</code>. This multiplication pattern repeats itself 24 times for all the bytes, each with a different constant, then <code>VAL_G</code> is finally added to <code>VAL_D</code>. After that, <code>VAL_G</code> is loaded with a new negative int64 and the whole big process repeats again, also for 24 times. In the end, we want <code>VAL_D</code> to be 0, so this is basically just a system of 24 equations that must equal to 0, with 24 variables to solve. Suppose the 24-byte buffer is called <code>v</code>, constants are <code>aX</code>, all the equations are in the form of:</p>
+<pre tabindex="0"><code>a0 * v[0] + a1 * v[1] + ... + a23 * v[23] == 0xffffffffffxxxxxx
+</code></pre><p>I wrote a script to parse out all the constants (<a href="/posts/20220704-ggctf2022-writeups/parse_consts_1.py" rel="">parse_consts_1.py</a>), then plug all the equations into z3 to solve. It took a while for z3 to solve, but it&rsquo;s definitely solvable. The z3 script is <a href="/posts/20220704-ggctf2022-writeups/solve_1.py" rel="">solve_1.py</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">V_LEN</span> <span class="o">=</span> <span class="mi">24</span>
+</span></span><span class="line"><span class="cl"><span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">V_LEN</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">V_LEN</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">BitVec</span><span class="p">(</span><span class="s2">&#34;v_</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="mi">64</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">And</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mh">0xff</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">mults</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">155</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span> <span class="mi">208</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">214</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">138</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">111</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">254</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">134</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">249</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="mi">58</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">202</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">151</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">164</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">58</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">consts</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xfffffffffffa00b1</span><span class="p">,</span> <span class="mh">0xfffffffffffa608a</span><span class="p">,</span> <span class="mh">0xfffffffffffa0a1e</span><span class="p">,</span> <span class="mh">0xfffffffffffa7510</span><span class="p">,</span> <span class="mh">0xfffffffffff9b125</span><span class="p">,</span> <span class="mh">0xfffffffffff9e59c</span><span class="p">,</span> <span class="mh">0xfffffffffff85543</span><span class="p">,</span> <span class="mh">0xfffffffffff99fda</span><span class="p">,</span> <span class="mh">0xfffffffffff967ac</span><span class="p">,</span> <span class="mh">0xfffffffffffa22b9</span><span class="p">,</span> <span class="mh">0xfffffffffffa49e3</span><span class="p">,</span> <span class="mh">0xfffffffffff86f81</span><span class="p">,</span> <span class="mh">0xfffffffffffb7d48</span><span class="p">,</span> <span class="mh">0xfffffffffff8a759</span><span class="p">,</span> <span class="mh">0xfffffffffff88a1d</span><span class="p">,</span> <span class="mh">0xfffffffffff9f131</span><span class="p">,</span> <span class="mh">0xfffffffffffa59be</span><span class="p">,</span> <span class="mh">0xfffffffffff78985</span><span class="p">,</span> <span class="mh">0xfffffffffff9924c</span><span class="p">,</span> <span class="mh">0xfffffffffff70587</span><span class="p">,</span> <span class="mh">0xfffffffffff9ac6e</span><span class="p">,</span> <span class="mh">0xfffffffffff92853</span><span class="p">,</span> <span class="mh">0xfffffffffffa0636</span><span class="p">,</span> <span class="mh">0xfffffffffff8dda8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xffffffffffffffff</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0xffffff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sol_count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">solutions</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Checking&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="n">sol_count</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">sat</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">V_LEN</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">solutions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sol_count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;sol_count=&#34;</span><span class="p">,</span> <span class="n">sol_count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">cond</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">V_LEN</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cond</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Not</span><span class="p">(</span><span class="n">cond</span><span class="p">))</span>
+</span></span></code></pre></div><p>Then, with the 24-byte buffer ready, I wrote another script to bruteforce the first 16 bytes of the <code>serial</code> (<a href="/posts/20220704-ggctf2022-writeups/brute_1.py" rel="">brute_1.py</a>):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">wtf</span> <span class="o">=</span> <span class="p">[</span><span class="mi">134</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">232</span><span class="p">,</span> <span class="mi">232</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">182</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">one_round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mem</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mh">0x100</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[(</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">        <span class="n">swap</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">mem</span><span class="p">[(</span><span class="n">mem</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">mem</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">tmp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wtf</span><span class="p">),</span> <span class="mi">3</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x21</span><span class="p">,</span> <span class="mh">0x7f</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x21</span><span class="p">,</span> <span class="mh">0x7f</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tmp</span> <span class="o">=</span> <span class="n">one_round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">wtf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">wtf</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">wtf</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><p>And that&rsquo;s the first part of the flag solved: <code>CTF{H0p3_y0u_l1k</code></p>
+<h2 id="analyzing-the-last-12-bytes-of-serial-checking-algorithm">Analyzing the last 12 bytes of serial checking algorithm</h2>
+<p>This part starts at address <code>0xa29152</code> to the end. We are immediately greeted with a very bizarre and unusual pattern right at the start:</p>
+<pre tabindex="0"><code>00a29152: a290c2 	&lt;- 5500404040c7c748
+00a2916a: a290ca 	&lt;- c7e87d8948e58948
+00a29182: a290d2 	&lt;- 45c700000000fc45
+00a2919a: a290da 	&lt;- 8b3beb00000000f8
+00a291b2: a290e2 	&lt;- 458b48d06348fc45
+00a291ca: a290ea 	&lt;- 3c00b60fd00148e8
+00a291e2: a290f2 	&lt;- 6348fc458b147620
+00a291fa: a290fa 	&lt;- d00148e8458b48d0
+00a29212: a29102 	&lt;- b807767e3c00b60f
+00a2922a: a2910a 	&lt;- b805eb00000001
+00a29242: a29112 	&lt;- 4583f84509000000
+00a2925a: a2911a 	&lt;- bf7e1bfc7d8301fc
+00a29272: a29122 	&lt;- 8b48d06348fc458b
+00a2928a: a2912a 	&lt;- b60fd00148e845
+00a292a2: a29132 	&lt;- 458bf84509c0b60f
+00a292ba: a2913a 	&lt;- c3c35d9848f8
+00a292d2: VAL_C 	&lt;- a290c2
+00a292ea: TYPE_C 	&lt;- 1000a0000001a
+00a29302: VAL_E 	&lt;- VAL_C
+00a2931a: VAL_B 	&lt;- a59caa
+00a29332: LEN_B 	&lt;- 90
+00a2934a: a290c2 	&lt;- [VAL_B + 0]
+</code></pre><p>A bunch of seemingly gibberish data is copied to an empty memory region. Then the start address of that region is assigned to <code>VAL_C</code>. The next 2 instructions are the weird ones: <code>TYPE_C</code> is actually changed to something different, and its value is immediately moved to <code>VAL_E</code>, which doesn&rsquo;t really make any sense. There are 78 occurences of this pattern, and by debugging them, it doesn&rsquo;t seem like <code>VAL_C</code> is assigned to <code>VAL_E</code> at all. Also this new type of <code>C</code> is not recognizable by <code>readelf</code>, as it says <code>&lt;OS specific&gt;: 10</code>.</p>
+<p>So what&rsquo;s happening here? Relying on intuition alone, I suspected that these gibberish data are actually x86 shellcode, and the change of <code>TYPE_C</code> somehow allows for running these shellcodes within the relocation VM. I made a little change to the instructions parsing script to dump out all these &ldquo;shellcodes&rdquo;, and throw the dump into IDA. And indeed, these are x86 code!</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>I still don&rsquo;t know how changing the type of a symbol and then relocate it leads to an execution of native code like this. Please enlighten me if you know why!</em></div>
+        </div>
+    </div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="n">r_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">read64</span><span class="p">(</span><span class="mh">0x8040ac</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0x1000a0000001a</span> <span class="ow">and</span> <span class="n">r_sym</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">shell_len</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="n">pc</span><span class="o">+</span><span class="mi">24</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">shell_addr</span> <span class="o">=</span> <span class="n">read64</span><span class="p">(</span><span class="mh">0x8040b4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">shellcode</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">mem</span><span class="p">[</span><span class="n">shell_addr</span><span class="p">:</span><span class="n">shell_addr</span><span class="o">+</span><span class="n">shell_len</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write64</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- SHELLCODE&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write64</span><span class="p">(</span><span class="n">r_offset</span><span class="p">,</span> <span class="n">r_addend</span> <span class="o">+</span> <span class="n">read64</span><span class="p">(</span><span class="n">sym_addr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&lt;- </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">print_offset</span><span class="p">,</span> <span class="n">regs</span><span class="p">[</span><span class="n">sym_addr</span><span class="p">],</span> <span class="n">print_addend</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span></code></pre></div><p>There are 78 of them in total. The first one is used to check if all the bytes in <code>serial</code> are printable and if the length is equal to 28. The last one is used to check if <code>VAL_D</code> is equal to 0 or not. The rest are simply one bitwise arithmetic instruction on <code>VAL_E</code> with another constant (including <code>and</code>, <code>or</code>, <code>xor</code>, <code>shl</code>, <code>shr</code>, <code>rol</code> and <code>ror</code>). Because the format of those x86 bitwise arithmetic instructions are very similar, i can write a script to parse them out.</p>
+<p>All the other codes in this section follow the similar pattern to the constant multiplication used in the last section. It means that to check the last 12 bytes of <code>serial</code>, in each equation, the VM uses constant multiplication on some of the bytes and bitwise shellcode on the others. The goal is still to make <code>VAL_D</code> equals to 0. The script <a href="/posts/20220704-ggctf2022-writeups/parse_consts_2.py" rel="">parse_consts_2.py</a> is written to dump all of the constants out. There are 17 equations in total, here is an example:</p>
+<pre tabindex="0"><code>76
+104
+AND 159
+ROL 86
+OR 71
+SHR 0
+84
+3
+SHL 2
+OR 184
+30
+233
+</code></pre><p>The lines that don&rsquo;t contain a keyword simply mean multiplication. With these constant values all parsed out, I could write another z3 script to solve for the 2nd part of <code>serial</code> (<a href="/posts/20220704-ggctf2022-writeups/solve_2.py" rel="">solve_2.py</a>). The result is <code>3_3LF_m4g1c}</code>.</p>
+<p>Combining the 2 parts, the complete value of <code>serial</code> is our flag: <code>CTF{H0p3_y0u_l1k3_3LF_m4g1c}</code></p>
+<h2 id="appendix">Appendix</h2>
+<ul>
+<li><a href="/posts/20220704-ggctf2022-writeups/parse_opcode.py" rel="">parse_opcode.py</a> - the script to parse and pretty print VM instructions</li>
+<li><a href="/posts/20220704-ggctf2022-writeups/patch.py" rel="">patch.py</a> - the script to remove some part of the relocation metadata to help debugging</li>
+<li><a href="/posts/20220704-ggctf2022-writeups/parse_consts_1.py" rel="">parse_consts_2.py</a> and <a href="/posts/20220704-ggctf2022-writeups/parse_consts_1.py" rel="">parse_consts_2.py</a> - the scripts to parse multiplication (and bitwise) constants for the 1st and 2nd part of the flag</li>
+<li><a href="/posts/20220704-ggctf2022-writeups/logic_1.py" rel="">logic_1.py</a> and <a href="/posts/20220704-ggctf2022-writeups/logic_2.py" rel="">logic_2.py</a> - the VM code checking logic for each part of the flag, rewritten in python</li>
+<li><a href="/posts/20220704-ggctf2022-writeups/solve_1.py" rel="">solve_1.py</a> and <a href="/posts/20220704-ggctf2022-writeups/solve_2.py" rel="">solve_2.py</a> - the z3 scripts to solve the 24-byte buffer and the 2nd part of the flag</li>
+<li><a href="/posts/20220704-ggctf2022-writeups/brute_1.py" rel="">brute_1.py</a> - the script to brute fore the 1st part of the flag from the 24-byte buffer</li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-07-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20210719-ggctf2021-writeups/" class="prev" rel="prev" title="GoogleCTF2021 - weather writeups"><i class="fas fa-angle-left fa-fw"></i>GoogleCTF2021 - weather writeups</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>
