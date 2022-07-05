@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20220704-ggctf2022-writeups\/"
-        },"genre": "posts","wordcount":  4812 ,
+        },"genre": "posts","wordcount":  4875 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20220704-ggctf2022-writeups\/","datePublished": "2022-07-03T22:28:02+07:00","dateModified": "2022-07-03T22:28:02+07:00","publisher": {
             "@type": "Organization",
             "name": "Midas"},"author": {
@@ -93,7 +93,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">GoogleCTF2022 - eldar writeups</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-03">2022-07-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4812 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-03">2022-07-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4875 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;23 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -186,7 +186,7 @@
             <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content">IDA goes absolutely crazy and wrong when displaying the relocation metadata, I don&rsquo;t really know why it happens, but it&rsquo;s better to look at the output of <code>readelf -r</code> when inspecting those.</div>
+            <div class="admonition-content"><em>IDA goes absolutely crazy and wrong when displaying the relocation metadata, I don&rsquo;t really know why it happens, but it&rsquo;s better to look at the output of <code>readelf -r</code> when inspecting those. Turns out IDA behaves this way because it tries to apply the relocations and because they are self-modifying, they will go all chaotic. Launching IDA with <code>IDA_NORELOC=1</code> might fix it. Thanks @aaSSfxxx on Twitter for this info.</em></div>
         </div>
     </div>
 <p>In this VM, symbols act as registers. By using <code>readelf -s eldar</code>, we can see that the VM uses 10 of them with the names from <code>^A</code> to <code>^J</code>:</p>
@@ -561,7 +561,7 @@
             <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>I still don&rsquo;t know how changing the type of a symbol and then relocate it leads to an execution of native code like this. Please enlighten me if you know why!</em></div>
+            <div class="admonition-content"><em>Turns out, the <code>0xa</code> in <code>0x1000a0000001a</code> of new <code>TYPE_C</code> means that <code>C</code> now has <code>IFUNC</code> type. When invoking a relocation with type <code>R_X86_64_64</code> on an <code>IFUNC</code> symbol, the function where its value is pointing at will be executed, and the return value will be saved to <code>r_offset</code>, as described <a href="https://github.com/angea/pocorgtfo/blob/master/contents/articles/00-05.pdf" target="_blank" rel="noopener noreffer">here</a>. Thanks @NopNopGoose on Twitter for this info.</em></div>
         </div>
     </div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">...</span>
