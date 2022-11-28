@@ -3,7 +3,14 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Nov 2022 08:43:57 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>N1CTF 2022 Solana Challenges Writeups</title>
+    <link>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</link>
+    <pubDate>Mon, 28 Nov 2022 08:43:57 -0600</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</guid>
+    <description><![CDATA[Writeups for N1CTF 2022 Solana challenges]]></description>
+</item><item>
     <title>GoogleCTF2022 - eldar writeups</title>
     <link>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</link>
     <pubDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</pubDate>
@@ -66,12 +73,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</guid>
     <description><![CDATA[Writeups for ASCIS/SVATTT2020 Quals reversing challenges]]></description>
-</item><item>
-    <title>ISITDTUCTF2020 Quals - rev02 writeup</title>
-    <link>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</link>
-    <pubDate>Mon, 12 Oct 2020 20:01:13 -0700</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20201012-isitdtuctf2020quals-writeups/</guid>
-    <description><![CDATA[Writeup for ISITDTUCTF2020 Quals rev02 challenge]]></description>
 </item></channel>
 </rss>

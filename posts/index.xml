@@ -3,7 +3,14 @@
         <title>All Posts - Midas Blog</title>
         <link>https://lkmidas.github.io/posts/</link>
         <description>All Posts | Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Nov 2022 08:43:57 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>N1CTF 2022 Solana Challenges Writeups</title>
+    <link>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</link>
+    <pubDate>Mon, 28 Nov 2022 08:43:57 -0600</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</guid>
+    <description><![CDATA[Writeups for N1CTF 2022 Solana challenges]]></description>
+</item><item>
     <title>GoogleCTF2022 - eldar writeups</title>
     <link>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</link>
     <pubDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</pubDate>
@@ -66,12 +73,5 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</guid>
     <description><![CDATA[The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr]]></description>
-</item><item>
-    <title>TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</title>
-    <link>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</link>
-    <pubDate>Sun, 03 Jan 2021 04:48:09 -0800</pubDate>
-    <author>Author</author>
-    <guid>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</guid>
-    <description><![CDATA[Writeups for TetCTF2021 heap pwn challenges]]></description>
 </item></channel>
 </rss>

