@@ -2,78 +2,88 @@
     <channel>
         <title>Midas Blog</title>
         <link>https://lkmidas.github.io/</link>
-        <description>Midas Blog</description>
+        <description>This is my cool site</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Nov 2022 08:43:57 -0600</lastBuildDate>
             <atom:link href="https://lkmidas.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>N1CTF 2022 Solana Challenges Writeups</title>
     <link>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</link>
     <pubDate>Mon, 28 Nov 2022 08:43:57 -0600</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</guid>
     <description><![CDATA[Writeups for N1CTF 2022 Solana challenges]]></description>
-</item><item>
+</item>
+<item>
     <title>GoogleCTF2022 - eldar writeups</title>
     <link>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</link>
     <pubDate>Sun, 03 Jul 2022 22:28:02 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</guid>
     <description><![CDATA[Writeup for GoogleCTF2022 eldar challenge]]></description>
-</item><item>
+</item>
+<item>
     <title>GoogleCTF2021 - weather writeups</title>
     <link>https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/</link>
     <pubDate>Mon, 19 Jul 2021 19:40:02 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/</guid>
     <description><![CDATA[Writeup for GoogleCTF2021 weather challenge]]></description>
-</item><item>
+</item>
+<item>
     <title>OMHCTF2021 - Flag saver, GRUB writeups</title>
     <link>https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/</link>
     <pubDate>Mon, 17 May 2021 10:28:35 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/</guid>
     <description><![CDATA[Writeup for OMHCTF2021 Flag saver, GRUB challenge]]></description>
-</item><item>
+</item>
+<item>
     <title>AeroCTF2021 - Dummyper writeups</title>
     <link>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</link>
     <pubDate>Sun, 28 Feb 2021 15:33:12 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/</guid>
     <description><![CDATA[Writeup for AeroCTF2021 Dummyper challenge]]></description>
-</item><item>
+</item>
+<item>
     <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path</title>
     <link>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</link>
     <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</guid>
     <description><![CDATA[A popular and powerful technique to exploit the Linux kernel through modprobe_path]]></description>
-</item><item>
+</item>
+<item>
     <title>Learning Linux Kernel Exploitation - Part 3</title>
     <link>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</link>
     <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</guid>
     <description><![CDATA[The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection]]></description>
-</item><item>
+</item>
+<item>
     <title>justCTF[*]2020 - debug_me_if_you_can, REmap writeups</title>
     <link>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</link>
     <pubDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</guid>
     <description><![CDATA[Writeups for justCTF[*]2020 reversing challenges]]></description>
-</item><item>
+</item>
+<item>
     <title>Learning Linux Kernel Exploitation - Part 2</title>
     <link>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</link>
     <pubDate>Thu, 28 Jan 2021 16:04:24 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/</guid>
     <description><![CDATA[The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP]]></description>
-</item><item>
+</item>
+<item>
     <title>Learning Linux Kernel Exploitation - Part 1</title>
     <link>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</link>
     <pubDate>Sat, 23 Jan 2021 16:33:12 &#43;0700</pubDate>
-    <author>Author</author>
+    <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/</guid>
     <description><![CDATA[The first part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Setting up the environment and the simplest technique of ret2usr]]></description>
-</item></channel>
+</item>
+</channel>
 </rss>

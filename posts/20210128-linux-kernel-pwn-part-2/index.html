@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>Learning Linux Kernel Exploitation - Part 2 - Midas Blog</title><meta name="Description" content="The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP"><meta property="og:title" content="Learning Linux Kernel Exploitation - Part 2" />
 <meta property="og:description" content="The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-01-28T16:04:24+07:00" />
-<meta property="article:modified_time" content="2021-01-28T16:04:24+07:00" />
+<meta property="article:modified_time" content="2021-01-28T16:04:24+07:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="Learning Linux Kernel Exploitation - Part 2"/>
 <meta name="twitter:description" content="The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="next" href="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="next" href="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  3747 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210128-linux-kernel-pwn-part-2\/","datePublished": "2021-01-28T16:04:24+07:00","dateModified": "2021-01-28T16:04:24+07:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "The second part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Adding SMEP, KPTI and SMAP"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">Learning Linux Kernel Exploitation - Part 2</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-28">2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3747 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;18 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Learning Linux Kernel Exploitation - Part 2</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>pwning</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-01-28">2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3747 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;18 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -123,16 +116,16 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><ul>
-<li><a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 1</a></li>
-<li><a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer">Learning Linux Kernel Exploitation - Part 3</a></li>
+<li><a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer ">Learning Linux Kernel Exploitation - Part 1</a></li>
+<li><a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer ">Learning Linux Kernel Exploitation - Part 3</a></li>
 </ul>
 <h2 id="preface">Preface</h2>
-<p>Welcome to the second part of <strong>Learning Linux Kernel Exploitation</strong>. In the <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">first part</a>, I have introduced what this series is about, demonstrated how to setup the environment and successfully implemented the simplest kernel exploit technique <code>ret2usr</code>, while explaining each and every steps in the exploitation using the environment provided by <code>hxpCTF 2020</code> challenge <code>kernel-rop</code>. In this part, what I&rsquo;m going to do is to gradually adding more mitigation features, namely <code>SMEP</code>, <code>KPTI</code>, and <code>SMAP</code>, one-by-one, explain how they can change our exploit method, then rebuild our exploitation to bypass them in different assumed scenarios.</p>
-<p>I probably won&rsquo;t re-explain what I have demonstrated and developed in the <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">first part</a>, so if some contents in this post don&rsquo;t make sense to you, give the first part a shot, because I might have explained it there.</p>
+<p>Welcome to the second part of <strong>Learning Linux Kernel Exploitation</strong>. In the <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer ">first part</a>, I have introduced what this series is about, demonstrated how to setup the environment and successfully implemented the simplest kernel exploit technique <code>ret2usr</code>, while explaining each and every steps in the exploitation using the environment provided by <code>hxpCTF 2020</code> challenge <code>kernel-rop</code>. In this part, what I&rsquo;m going to do is to gradually adding more mitigation features, namely <code>SMEP</code>, <code>KPTI</code>, and <code>SMAP</code>, one-by-one, explain how they can change our exploit method, then rebuild our exploitation to bypass them in different assumed scenarios.</p>
+<p>I probably won&rsquo;t re-explain what I have demonstrated and developed in the <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer ">first part</a>, so if some contents in this post don&rsquo;t make sense to you, give the first part a shot, because I might have explained it there.</p>
 <p>With those in mind, let&rsquo;s start cracking up the difficulty.</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
@@ -140,11 +133,11 @@
     </div>
 <h2 id="adding-smep">Adding SMEP</h2>
 <h3 id="introduction">Introduction</h3>
-<p><code>SMEP</code>, abbreviated for <a href="https://web.archive.org/web/20160803075007/https://www.ncsi.com/nsatc11/presentations/wednesday/emerging_technologies/fischer.pdf" target="_blank" rel="noopener noreffer">Supervisor mode execution protection (SMEP)</a>, is a feature which marks all the userland pages in the page table as non-executable when the process is exectuting in <code>kernel-mode</code>. In the kernel, this is enabled by setting the <code>20th bit</code> of Control Register <code>CR4</code>. On boot, it can be enabled by adding <code>+smep</code> to <code>-cpu</code>, and disabled by adding <code>nosmep</code> to <code>-append</code>.</p>
+<p><code>SMEP</code>, abbreviated for <a href="https://web.archive.org/web/20160803075007/https://www.ncsi.com/nsatc11/presentations/wednesday/emerging_technologies/fischer.pdf" target="_blank" rel="noopener noreffer ">Supervisor mode execution protection (SMEP)</a>, is a feature which marks all the userland pages in the page table as non-executable when the process is exectuting in <code>kernel-mode</code>. In the kernel, this is enabled by setting the <code>20th bit</code> of Control Register <code>CR4</code>. On boot, it can be enabled by adding <code>+smep</code> to <code>-cpu</code>, and disabled by adding <code>nosmep</code> to <code>-append</code>.</p>
 <p>Recall from the last part, where we achieved root privileges using a piece of code that we wrote ourselves, this strategy won&rsquo;t be viable anymore with <code>SMEP</code> on. The reason is because our piece of code retains in <code>user-space</code>, and as I have explained above, <code>SMEP</code> has already marked the page which contains our code as non-executable when the process is executing in <code>kernel-mode</code>. Recall further back to when most of us learned userland pwn, this is effectively the same as setting <code>NX</code> bit to make the stack non-executable. That is the time when we were introduced to <code>Return-oriented programming (ROP)</code> after learning <code>ret2shellcode</code>. The same concept applies with kernel exploitation, I will now introduce <code>kernel ROP</code> after having introduced <code>ret2usr</code>.</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>As I have mentioned in part 1, readers are assumed to have sufficient knowledge about userland exploitation, therefore, I won&rsquo;t explain what ROP is all over again. You can always look it up in a lot of resources on the Internet since it&rsquo;s a basic technique.</em></div>
@@ -163,7 +156,7 @@
 </span></span><span class="line"><span class="cl">-&gt; ffffffff814443e0 T native_write_cr4
 </span></span></code></pre></div><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Important Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Important Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>For all the exploitation that I will introduce in this post, I will only explain the parts that are different from <code>ret2usr</code>. The parts that are exactly the same as the previous post are: <strong>saving the state, opening the device, and leaking stack cookie.</strong></em></div>
@@ -196,7 +189,7 @@
 </span></span></code></pre></div><p>For gadgets such as <code>pop rdi ; ret</code>, we can easily find them by grepping the <code>gadgets.txt</code> file that was generated by running <code>ROPgadget</code> on the kernel image in the first post.</p>
 <div class="details admonition warning open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-exclamation-triangle fa-fw" aria-hidden="true"></i>Warning<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>It seems that in the kernel image file <code>vmlinux</code>, there is no information about whether a region is executable or not, so <code>ROPgadget</code> will attempt to find all the gadgets that exist in the binary, even the non-executable ones. If you try to use a gadget and the kernel crashes because it is non-executable, you just have to try another one.</em></div>
@@ -225,7 +218,7 @@
 </span></span><span class="line"><span class="cl">			  <span class="n">bits_changed</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>And there is also <a href="https://patchwork.kernel.org/project/kernel-hardening/patch/20190220180934.GA46255@beast/" target="_blank" rel="noopener noreffer">a documentation on CR4 bits pinning</a>. Reading the mentioned resources, it is clear that in newer kernel versions, the 20th and 21st bits of <code>CR4</code> are pinned on boot, and will immediately be set again after being cleared, so <em><strong>they can never be overwritten this way anymore!</strong></em></p>
+</span></span></code></pre></div><p>And there is also <a href="https://patchwork.kernel.org/project/kernel-hardening/patch/20190220180934.GA46255@beast/" target="_blank" rel="noopener noreffer ">a documentation on CR4 bits pinning</a>. Reading the mentioned resources, it is clear that in newer kernel versions, the 20th and 21st bits of <code>CR4</code> are pinned on boot, and will immediately be set again after being cleared, so <em><strong>they can never be overwritten this way anymore!</strong></em></p>
 <p>So my first attempt was a fail. At least we now know that even though we have the power to overwrite <code>CR4</code> in <code>kernel-mode</code>, the kernel developers have already awared of it and prohibited us from using such thing to exploit the kernel. Let&rsquo;s move on to develop a stronger exploitation that will actually work.</p>
 <h3 id="building-a-complete-escalation-rop-chain">Building a complete escalation ROP chain</h3>
 <p>In this second attempt, we will get rid of the idea of getting root privileges by running our own code completely, and try to achieve it by using ROP only. The plan is straightforward:</p>
@@ -306,10 +299,10 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">mov_esp_pop2_ret</span> <span class="o">=</span> <span class="mh">0xffffffff8196f56a</span><span class="p">;</span> <span class="c1">// mov esp, 0x5b000000 ; pop r12 ; pop rbp ; ret
 </span></span></span></code></pre></div><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>Many readers have asked me that why does the <code>mov esp</code> gadget work, even though in kernel space, the higher 4 bytes of <code>rsp</code> is not 0 and <code>esp</code> only affects the lower 4 bytes. The answer to this is documented in the documentation of Intel x86 <a href="http://x86asm.net/articles/x86-64-tour-of-intel-manuals/#General-purpose-Registers" target="_blank" rel="noopener noreffer">here</a>. TL;DR: by design, a mov instruction that has a 32-bit register as the destination in x86-64 actually zeroes the upper 32 bits of the whole 64-bit register.</em></div>
+            <div class="admonition-content"><em>Many readers have asked me that why does the <code>mov esp</code> gadget work, even though in kernel space, the higher 4 bytes of <code>rsp</code> is not 0 and <code>esp</code> only affects the lower 4 bytes. The answer to this is documented in the documentation of Intel x86 <a href="http://x86asm.net/articles/x86-64-tour-of-intel-manuals/#General-purpose-Registers" target="_blank" rel="noopener noreffer ">here</a>. TL;DR: by design, a mov instruction that has a 32-bit register as the destination in x86-64 actually zeroes the upper 32 bits of the whole 64-bit register.</em></div>
         </div>
     </div>
 <p>So that&rsquo;s what we will overwrite the return address with, but before that, we have to setup our fake stack first. Since <code>esp</code> will become <code>0x5b000000</code> after that, we will map a fixed page there, then start writing our ROP chain into it:</p>
@@ -330,11 +323,11 @@
 <p>And that is how we get a root shell while only being able to overflow the stack up to the return address. It also concludes my introduction to bypassing <code>SMEP</code>, let&rsquo;s now add one more mitigation, namely <code>KPTI</code>.</p>
 <h2 id="adding-kpti">Adding KPTI</h2>
 <h3 id="introduction-1">Introduction</h3>
-<p><code>KPTI</code>, abbreviated for <a href="https://lwn.net/Articles/741878/" target="_blank" rel="noopener noreffer">Kernel page-table isolation</a>, is a feature which separates <code>user-space</code> and <code>kernel-space</code> page tables entirely, instead of using just one set of page tables that contains both <code>user-space</code> and <code>kernel-space</code> addresses. One set of page tables includes both <code>kernel-space</code> and <code>user-space</code> addresses same as before, but it is only used when the system is running in kernel mode. The second set of page tables for use in user mode contains a copy of <code>user-space</code> and a <em>minimal set of <code>kernel-space</code> addresses</em>. It can be enabled/disabled by adding <code>kpti=1</code> or <code>nopti</code> under <code>-append</code> option.</p>
+<p><code>KPTI</code>, abbreviated for <a href="https://lwn.net/Articles/741878/" target="_blank" rel="noopener noreffer ">Kernel page-table isolation</a>, is a feature which separates <code>user-space</code> and <code>kernel-space</code> page tables entirely, instead of using just one set of page tables that contains both <code>user-space</code> and <code>kernel-space</code> addresses. One set of page tables includes both <code>kernel-space</code> and <code>user-space</code> addresses same as before, but it is only used when the system is running in kernel mode. The second set of page tables for use in user mode contains a copy of <code>user-space</code> and a <em>minimal set of <code>kernel-space</code> addresses</em>. It can be enabled/disabled by adding <code>kpti=1</code> or <code>nopti</code> under <code>-append</code> option.</p>
 <p>This feature is very unique to the kernel and was introduced to prevent <code>meltdown</code> in Linux kernel, therefore, there will be no equivalence in the userland to compare to this time. Firstly, trying to run any of the exploits in the last section will cause a crash. But the interesting thing is, the crash is a normal userland <code>Segmentation fault</code>, not a crash in the kernel. The reason is because even though we have already returned the execution to user-mode, the page tables that it is using is still the kernel&rsquo;s, with all the pages in userland marked as <code>non-executable</code>.</p>
 <p>Bypassing <code>KPTI</code> is actually not complicated at all, here are the 2 methods that I have read about in some writeups:</p>
 <ol>
-<li>Using a <code>signal handler</code> (method by <code>@ntrung03</code> in <a href="https://trungnguyen1909.github.io/blog/post/matesctf/KSMASH/" target="_blank" rel="noopener noreffer">this writeup</a>): this is a very clever solution, the fact that it is so simple. The idea is that because what we are dealing with is a <code>SIGSEGV</code> in the userland, we can just add a signal handler to it which calls <code>get_shell()</code> by simply inserting this line in to <code>main</code>: <code>signal(SIGSEGV, get_shell);</code>. I still don&rsquo;t fully understand this though, because for whatever reasons, even though the handler <code>get_shell()</code> itself also resides in non-executable pages, it can still be executed normally if a <code>SIGSEGV</code> is caught (instead of looping the handler indefinitely or fallback to default handler or undefined behavior, etc.), but it does work.</li>
+<li>Using a <code>signal handler</code> (method by <code>@ntrung03</code> in <a href="https://trungnguyen1909.github.io/blog/post/matesctf/KSMASH/" target="_blank" rel="noopener noreffer ">this writeup</a>): this is a very clever solution, the fact that it is so simple. The idea is that because what we are dealing with is a <code>SIGSEGV</code> in the userland, we can just add a signal handler to it which calls <code>get_shell()</code> by simply inserting this line in to <code>main</code>: <code>signal(SIGSEGV, get_shell);</code>. I still don&rsquo;t fully understand this though, because for whatever reasons, even though the handler <code>get_shell()</code> itself also resides in non-executable pages, it can still be executed normally if a <code>SIGSEGV</code> is caught (instead of looping the handler indefinitely or fallback to default handler or undefined behavior, etc.), but it does work.</li>
 <li>Using a <code>KPTI trampoline</code> (used by most writeups): this method is based on the idea that if a syscall returns normally, there must be a piece of code in the kernel that will swap the page tables back to the userland ones, so we will try to reuse that code to our purpose. That piece of code is called a <code>KPTI trampoline</code>, and what it does is to swap page tables, <code>swapgs</code> and <code>iretq</code>. We will take a deeper look at this method.</li>
 </ol>
 <h3 id="tweaking-the-rop-chain">Tweaking the ROP chain</h3>
@@ -404,7 +397,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>This payload is even easier to build than the one with 2 seperate gadgets for <code>swapgs</code> and <code>iretq</code> that I have introduced in the last section, and it will also work fine with or without <code>KPTI</code> enabled (most of the time <code>KPTI</code> will be enabled along with <code>SMEP</code>). Therefore, it is recommended to just use this payload as default instead of the old one, that one is just for demonstration purpose. You can also pivot the stack and put this payload in the fake stack when facing the second scenario.</em></div>
@@ -412,7 +405,7 @@
     </div>
 <p>And that&rsquo;s how we successfully bypassed <code>KPTI</code> in a clean way. Let&rsquo;s move on to the final section of this post and discuss a little bit about <code>SMAP</code>.</p>
 <h2 id="adding-smap">Adding SMAP</h2>
-<p><code>SMAP</code>, abbreviated for <a href="https://lwn.net/Articles/517475/" target="_blank" rel="noopener noreffer">Supervisor Mode Access Prevention (SMAP)</a> is introduced to complement <code>SMEP</code>, this feature marks all the userland pages in the page table as non-accessible when the process is in kernel-mode, which means they cannot be read or written as well. In the kernel, this is enabled by setting the <code>21st bit</code> of Control Register <code>CR4</code>. On boot, it can be enabled by adding <code>+smap</code> to <code>-cpu</code>, and disabled by adding <code>nosmap</code> to <code>-append</code>.</p>
+<p><code>SMAP</code>, abbreviated for <a href="https://lwn.net/Articles/517475/" target="_blank" rel="noopener noreffer ">Supervisor Mode Access Prevention (SMAP)</a> is introduced to complement <code>SMEP</code>, this feature marks all the userland pages in the page table as non-accessible when the process is in kernel-mode, which means they cannot be read or written as well. In the kernel, this is enabled by setting the <code>21st bit</code> of Control Register <code>CR4</code>. On boot, it can be enabled by adding <code>+smap</code> to <code>-cpu</code>, and disabled by adding <code>nosmap</code> to <code>-append</code>.</p>
 <p>The situation becomes significantly different for the two scenarios:</p>
 <ol>
 <li>In the <em>first scenario</em>, our whole ROP chain is stored on the kernel stack, and no data are accessed from the userland. Therefore, our previous payload would <em><strong>still be viable</strong></em> without any modification.</li>
@@ -431,13 +424,11 @@
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2021-01-28</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" data-title="Learning Linux Kernel Exploitation - Part 2" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" data-title="Learning Linux Kernel Exploitation - Part 2"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" data-title="Learning Linux Kernel Exploitation - Part 2"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" data-title="Learning Linux Kernel Exploitation - Part 2"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -449,22 +440,22 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210123-linux-kernel-pwn-part-1/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 1"><i class="fas fa-angle-left fa-fw"></i>Learning Linux Kernel Exploitation - Part 1</a>
-            <a href="/posts/20210201-justctf2020-writeups/" class="next" rel="next" title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups">justCTF[*]2020 - debug_me_if_you_can, REmap writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210123-linux-kernel-pwn-part-1/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 1"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Learning Linux Kernel Exploitation - Part 1</a>
+            <a href="/posts/20210201-justctf2020-writeups/" class="next" rel="next" title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups">justCTF[*]2020 - debug_me_if_you_can, REmap writeups<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

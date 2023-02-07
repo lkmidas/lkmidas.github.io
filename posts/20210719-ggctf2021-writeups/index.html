@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>GoogleCTF2021 - weather writeups - Midas Blog</title><meta name="Description" content="Writeup for GoogleCTF2021 weather challenge"><meta property="og:title" content="GoogleCTF2021 - weather writeups" />
 <meta property="og:description" content="Writeup for GoogleCTF2021 weather challenge" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-07-19T19:40:02+07:00" />
-<meta property="article:modified_time" content="2021-07-19T19:40:02+07:00" />
+<meta property="article:modified_time" content="2021-07-19T19:40:02+07:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="GoogleCTF2021 - weather writeups"/>
 <meta name="twitter:description" content="Writeup for GoogleCTF2021 weather challenge"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210517-omhctf2021-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  4724 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210719-ggctf2021-writeups\/","datePublished": "2021-07-19T19:40:02+07:00","dateModified": "2021-07-19T19:40:02+07:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "Writeup for GoogleCTF2021 weather challenge"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">GoogleCTF2021 - weather writeups</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-07-19">2021-07-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4724 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;23 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">GoogleCTF2021 - weather writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-07-19">2021-07-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4724 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;23 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -115,7 +108,7 @@
 </nav></div>
             </div><div class="content" id="content"><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
@@ -124,7 +117,7 @@
 <h2 id="introduction">Introduction</h2>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -138,7 +131,7 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -182,7 +175,7 @@
 </span></span><span class="line"><span class="cl">  <span class="n">register_printf_function</span><span class="p">(</span><span class="sc">&#39;I&#39;</span><span class="p">,</span> <span class="n">format_I_and</span><span class="p">,</span> <span class="n">do_nothing</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">register_printf_function</span><span class="p">(</span><span class="sc">&#39;U&#39;</span><span class="p">,</span> <span class="n">format_U_or</span><span class="p">,</span> <span class="n">do_nothing</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>This function uses <code>register_printf_function</code> to register new formats for <code>printf</code>, more about it can be found <a href="https://www.gnu.org/software/libc/manual/html_node/Registering-New-Conversions.html" target="_blank" rel="noopener noreffer">here</a>. The most important parts are the first and second parameters to it. The first one is a single <code>char</code>, which is the new format, and the second one is the handler function for that format. So it is clear that the job now is to reverse each of them.</p>
+</span></span></code></pre></div><p>This function uses <code>register_printf_function</code> to register new formats for <code>printf</code>, more about it can be found <a href="https://www.gnu.org/software/libc/manual/html_node/Registering-New-Conversions.html" target="_blank" rel="noopener noreffer ">here</a>. The most important parts are the first and second parameters to it. The first one is a single <code>char</code>, which is the new format, and the second one is the handler function for that format. So it is clear that the job now is to reverse each of them.</p>
 <h2 id="analyzing-each-format-handler-function">Analyzing each format handler function</h2>
 <p>There are 16 new formats registered, I will explain each of them:</p>
 <ul>
@@ -190,7 +183,7 @@
 <li><code>%F</code> is also a wrapper around other <code>printf</code> formats, but it uses <code>%C</code>, which is a new format.</li>
 <li><code>%C</code> is where it gets interesting. In this handler function we can see that instead of using the <code>printf</code>&rsquo;s <code>args</code>, it uses the <code>info</code> instead.</li>
 </ul>
-<p>The struct definition for <code>printf_info</code> can be found <a href="https://code.woboq.org/userspace/glibc/stdio-common/printf.h.html" target="_blank" rel="noopener noreffer">here</a> and it&rsquo;s documentation can be found <a href="https://www.gnu.org/software/libc/manual/html_node/Conversion-Specifier-Options.html" target="_blank" rel="noopener noreffer">here</a>:</p>
+<p>The struct definition for <code>printf_info</code> can be found <a href="https://code.woboq.org/userspace/glibc/stdio-common/printf.h.html" target="_blank" rel="noopener noreffer ">here</a> and it&rsquo;s documentation can be found <a href="https://www.gnu.org/software/libc/manual/html_node/Conversion-Specifier-Options.html" target="_blank" rel="noopener noreffer ">here</a>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">printf_info</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">prec</span><span class="p">;</span>                        <span class="cm">/* Precision.  */</span>
@@ -224,7 +217,7 @@
 </ul>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>You may be unfamiliar with the <code>:1</code> after field names. This in C is used to define bit fields. For example: all 8 fields from <code>is_long_double</code> to <code>group</code> are only 1 bit in size, so they all will be stored in 1 single byte instead of 8 different bytes for memory optimization.</em></div>
@@ -889,7 +882,7 @@
 <p>The first step is to insert <code>z3</code> into our input. By looking at the function at <code>MEM[500]</code>, <code>MEM[1262]</code> and <code>MEM[653]</code>, we can see that the correct input is probably 28 bytes in length. Because we already knew the first byte, I declared 27 <code>BitVec</code> for the rest 27.</p>
 <div class="details admonition warning open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-exclamation-triangle fa-fw" aria-hidden="true"></i>Warning<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content">*The <code>BitVec</code>s MUST be declared as 32-bit instead of 8-bit !!! The reason is all the calculations in this VM is 32-bit, if you declare the <code>BitVec</code> to be 8-bit it will truncate the result to 8-bit and ruin the calculations. This costs me like 2-3 hours to figure out.</div>
@@ -909,13 +902,11 @@
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2021-07-19</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" data-title="GoogleCTF2021 - weather writeups" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" data-title="GoogleCTF2021 - weather writeups"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" data-title="GoogleCTF2021 - weather writeups"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" data-title="GoogleCTF2021 - weather writeups"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -927,22 +918,22 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210517-omhctf2021-writeups/" class="prev" rel="prev" title="OMHCTF2021 - Flag saver, GRUB writeups"><i class="fas fa-angle-left fa-fw"></i>OMHCTF2021 - Flag saver, GRUB writeups</a>
-            <a href="/posts/20220704-ggctf2022-writeups/" class="next" rel="next" title="GoogleCTF2022 - eldar writeups">GoogleCTF2022 - eldar writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210517-omhctf2021-writeups/" class="prev" rel="prev" title="OMHCTF2021 - Flag saver, GRUB writeups"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>OMHCTF2021 - Flag saver, GRUB writeups</a>
+            <a href="/posts/20220704-ggctf2022-writeups/" class="next" rel="next" title="GoogleCTF2022 - eldar writeups">GoogleCTF2022 - eldar writeups<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

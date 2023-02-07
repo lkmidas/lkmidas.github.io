@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>justCTF[*]2020 - debug_me_if_you_can, REmap writeups - Midas Blog</title><meta name="Description" content="Writeups for justCTF[*]2020 reversing challenges"><meta property="og:title" content="justCTF[*]2020 - debug_me_if_you_can, REmap writeups" />
 <meta property="og:description" content="Writeups for justCTF[*]2020 reversing challenges" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-01T10:03:59+07:00" />
-<meta property="article:modified_time" content="2021-02-01T10:03:59+07:00" />
+<meta property="article:modified_time" content="2021-02-01T10:03:59+07:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="justCTF[*]2020 - debug_me_if_you_can, REmap writeups"/>
 <meta name="twitter:description" content="Writeups for justCTF[*]2020 reversing challenges"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><link rel="next" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" /><link rel="next" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  3344 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210201-justctf2020-writeups\/","datePublished": "2021-02-01T10:03:59+07:00","dateModified": "2021-02-01T10:03:59+07:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "Writeups for justCTF[*]2020 reversing challenges"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">justCTF[*]2020 - debug_me_if_you_can, REmap writeups</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-01">2021-02-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3344 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;16 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">justCTF[*]2020 - debug_me_if_you_can, REmap writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-02-01">2021-02-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3344 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;16 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -127,7 +120,7 @@
 </nav></div>
             </div><div class="content" id="content"><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the challenge that you are interested in.</em></div>
@@ -138,7 +131,7 @@
 <h3 id="introduction">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -152,7 +145,7 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -169,10 +162,10 @@
 <p>The <a href="/posts/20210201-justctf2020-writeups/debug_me/supervisor" rel="">supervisor</a> seems like a good place to start, so I started looking at it first. It is clear that it initializes a lot of data, then <code>fork()</code> a child process. The child process will then make a call to <code>ptrace()</code> with <code>PTRACE_TRACEME</code>, then execute <a href="/posts/20210201-justctf2020-writeups/debug_me/crackme.enc" rel="">crackme.enc</a> via <code>execl</code>. To this point, I already knew that this is a <code>Nanomites</code> type challenge that makes it hard for us to debug the child process, which is where all the main logics are.</p>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>Nanomites is an anti-debug software protection technique. Resource for further information: <a href="https://malwareandstuff.com/nanomites-on-linux/" target="_blank" rel="noopener noreffer">Nanomites on Linux</a></em></div>
+            <div class="admonition-content"><em>Nanomites is an anti-debug software protection technique. Resource for further information: <a href="https://malwareandstuff.com/nanomites-on-linux/" target="_blank" rel="noopener noreffer ">Nanomites on Linux</a></em></div>
         </div>
     </div>
 <h3 id="analyze-the-parent-process">Analyze the parent process</h3>
@@ -188,7 +181,7 @@
 </ol>
 <p>It modifies the child&rsquo;s code by using <code>ptrace()</code> with <code>PTRACE_POKETEXT</code>. The code is decrypted using the data it reads from the child using <code>PTRACE_PEEKTEXT</code> and the data that it initilized back at <code>main()</code>. The data go through a bunch of bitwise operations, which I had no intent to see what it does since I can hook <code>ptrace()</code> and dump these values out.</p>
 <h3 id="hooking-ptrace-with-ld_preload">Hooking ptrace with LD_PRELOAD</h3>
-<p>This is a well-known technique for dealing with <code>Nanomites</code>, as introduced <a href="https://tbrindus.ca/correct-ld-preload-hooking-libc/" target="_blank" rel="noopener noreffer">here</a>. Since it is <code>ptrace()</code> with <code>PTRACE_POKETEXT</code> and <code>PTRACE_SETREGS</code> that we are intrested in, I decided to hook exactly those 2:</p>
+<p>This is a well-known technique for dealing with <code>Nanomites</code>, as introduced <a href="https://tbrindus.ca/correct-ld-preload-hooking-libc/" target="_blank" rel="noopener noreffer ">here</a>. Since it is <code>ptrace()</code> with <code>PTRACE_POKETEXT</code> and <code>PTRACE_SETREGS</code> that we are intrested in, I decided to hook exactly those 2:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">long</span> <span class="kt">int</span> <span class="nf">ptrace</span><span class="p">(</span><span class="k">enum</span> <span class="n">__ptrace_request</span> <span class="n">__request</span><span class="p">,</span> <span class="p">...){</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pid_t</span> <span class="n">caller</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="n">va_list</span> <span class="n">list</span><span class="p">;</span>
@@ -269,7 +262,7 @@
 <p>After patching and decompiling, it can be easily seen that the process tries to read from a file named <code>secret_key</code>. I didn&rsquo;t have that file yet, that&rsquo;s why it only decrypts 2 short blocks of code. Adding a file named <code>secret_key</code> with some dummy contents inside, then re-running the program will reveal more code blocks that are decrypted. Simply applying the exact same patching strategy as above, I could construct the full checking routine in the child (check the full patching code at <a href="/posts/20210201-justctf2020-writeups/debug_me/patch.py" rel="">patch.py</a>).</p>
 <div class="details admonition warning open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-exclamation-triangle fa-fw" aria-hidden="true"></i>Warning<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>As I have mentioned above, when each decrypted code block returns, the parent will try to re-encrypt the code. Therefore, we only need to apply the patch for the FIRST appearance of each address, and ignore all the subsequent ones.</em></div>
@@ -355,7 +348,7 @@
 <h3 id="introduction-1">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -369,11 +362,11 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
-<li>Extrace <code>PyInstaller</code> packed executable with <a href="https://github.com/extremecoders-re/pyinstxtractor" target="_blank" rel="noopener noreffer">pyinstxtractor.py</a> -&gt; See entry point at <code>backup_decryptor.pyc</code>.</li>
+<li>Extrace <code>PyInstaller</code> packed executable with <a href="https://github.com/extremecoders-re/pyinstxtractor" target="_blank" rel="noopener noreffer ">pyinstxtractor.py</a> -&gt; See entry point at <code>backup_decryptor.pyc</code>.</li>
 <li>Try to decompile/disassemble it -&gt; Fail because of invalid arg count.</li>
 <li>Recognize that it has remapped all the python opcodes -&gt; Find a way to find the mapping back to the original.</li>
 <li>Write code to convert the mapped <code>pyc</code> to the original -&gt; Decompile it.</li>
@@ -383,7 +376,7 @@
         </div>
     </div>
 <h3 id="extracting-the-executable">Extracting the executable</h3>
-<p>Initially, I threw the executable into IDA, it&rsquo;s a huge binary, and I saw an interesting string <code>_MEIPASS2</code>. Googling this string reveals that this is an exe generated by <a href="https://www.pyinstaller.org/" target="_blank" rel="noopener noreffer">PyInstaller</a>, which is generated from python code. An easy way to extract this is to use the <a href="https://github.com/extremecoders-re/pyinstxtractor" target="_blank" rel="noopener noreffer">pyinstxtractor.py</a>, here is the result:</p>
+<p>Initially, I threw the executable into IDA, it&rsquo;s a huge binary, and I saw an interesting string <code>_MEIPASS2</code>. Googling this string reveals that this is an exe generated by <a href="https://www.pyinstaller.org/" target="_blank" rel="noopener noreffer ">PyInstaller</a>, which is generated from python code. An easy way to extract this is to use the <a href="https://github.com/extremecoders-re/pyinstxtractor" target="_blank" rel="noopener noreffer ">pyinstxtractor.py</a>, here is the result:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Processing backup_decryptor.exe
 </span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Pyinstaller version: 2.1+
 </span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Python version: <span class="m">38</span>
@@ -397,9 +390,9 @@
 </span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Successfully extracted pyinstaller archive: backup_decryptor.exe
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">You can now use a python decompiler on the pyc files within the extracted directory
-</span></span></code></pre></div><p>As you can see, it extracts the executable into a folder, which contains the python interpreter <code>python38.dll</code> itself, and a bunch of python compiled code <code>pyc</code> files. Out of the 3 possible entry points that it found, it is almost 100% sure that the real entry point is <code>backup_decryptor.pyc</code>. Since <code>pyc</code> files are just python bytecodes, we need a way to decompile/disassemble them. I tried out the 2 popular python decompiler, which are <a href="https://pypi.org/project/uncompyle6/" target="_blank" rel="noopener noreffer">uncompyle6</a> and <a href="https://github.com/rocky/python-decompile3" target="_blank" rel="noopener noreffer">decompyle3</a>, but both of them didn&rsquo;t succeed in doing so. I struggling for a while, then decided to disassemble it first instead of decompiling using python&rsquo;s built-in <code>dis</code> package, but it fails as well! All the failure was due to invalid argument count for an opcode. I actually got frustrated a lot and tried out a lot of different methods to decompile it, but all fails.</p>
+</span></span></code></pre></div><p>As you can see, it extracts the executable into a folder, which contains the python interpreter <code>python38.dll</code> itself, and a bunch of python compiled code <code>pyc</code> files. Out of the 3 possible entry points that it found, it is almost 100% sure that the real entry point is <code>backup_decryptor.pyc</code>. Since <code>pyc</code> files are just python bytecodes, we need a way to decompile/disassemble them. I tried out the 2 popular python decompiler, which are <a href="https://pypi.org/project/uncompyle6/" target="_blank" rel="noopener noreffer ">uncompyle6</a> and <a href="https://github.com/rocky/python-decompile3" target="_blank" rel="noopener noreffer ">decompyle3</a>, but both of them didn&rsquo;t succeed in doing so. I struggling for a while, then decided to disassemble it first instead of decompiling using python&rsquo;s built-in <code>dis</code> package, but it fails as well! All the failure was due to invalid argument count for an opcode. I actually got frustrated a lot and tried out a lot of different methods to decompile it, but all fails.</p>
 <h3 id="remapping-the-python-opcodes">Remapping the python opcodes</h3>
-<p>A while after, I decided to open the <code>pyc</code> file in a hex editor, and compare it with a normal test <code>pyc</code> generated by myself. What I found is that the first few opcodes of the 2 are different (typically the first few opcodes of all <code>pyc</code> files are the same). Looking back at the challenge&rsquo;s name, I finally recognized that this python interpreter is a custom one, and the opcodes value have been shuffled around. This is a kinda well-known technique to obfuscate python executables, as explained quite detailed <a href="https://medium.com/tenable-techblog/remapping-python-opcodes-67d79586bfd5" target="_blank" rel="noopener noreffer">here</a>. So the goal now is to find a mapping back to the original opcodes from the modified ones, there are 3 approaches that I had thought of:</p>
+<p>A while after, I decided to open the <code>pyc</code> file in a hex editor, and compare it with a normal test <code>pyc</code> generated by myself. What I found is that the first few opcodes of the 2 are different (typically the first few opcodes of all <code>pyc</code> files are the same). Looking back at the challenge&rsquo;s name, I finally recognized that this python interpreter is a custom one, and the opcodes value have been shuffled around. This is a kinda well-known technique to obfuscate python executables, as explained quite detailed <a href="https://medium.com/tenable-techblog/remapping-python-opcodes-67d79586bfd5" target="_blank" rel="noopener noreffer ">here</a>. So the goal now is to find a mapping back to the original opcodes from the modified ones, there are 3 approaches that I had thought of:</p>
 <ol>
 <li>Copy the modified <code>python38.dll</code> interpreter into my own python folder and run it, then use the <code>opcode</code> package to get the info.</li>
 <li>Diffing the modified interpreter with the original one to find out the different opcodes.</li>
@@ -525,13 +518,11 @@
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2021-02-01</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" data-title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" data-title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" data-title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20210201-justctf2020-writeups/" data-title="justCTF[*]2020 - debug_me_if_you_can, REmap writeups"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -543,22 +534,22 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210128-linux-kernel-pwn-part-2/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 2"><i class="fas fa-angle-left fa-fw"></i>Learning Linux Kernel Exploitation - Part 2</a>
-            <a href="/posts/20210205-linux-kernel-pwn-part-3/" class="next" rel="next" title="Learning Linux Kernel Exploitation - Part 3">Learning Linux Kernel Exploitation - Part 3<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210128-linux-kernel-pwn-part-2/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 2"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Learning Linux Kernel Exploitation - Part 2</a>
+            <a href="/posts/20210205-linux-kernel-pwn-part-3/" class="next" rel="next" title="Learning Linux Kernel Exploitation - Part 3">Learning Linux Kernel Exploitation - Part 3<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

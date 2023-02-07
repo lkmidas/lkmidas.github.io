@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>GoogleCTF2022 - eldar writeups - Midas Blog</title><meta name="Description" content="Writeup for GoogleCTF2022 eldar challenge"><meta property="og:title" content="GoogleCTF2022 - eldar writeups" />
 <meta property="og:description" content="Writeup for GoogleCTF2022 eldar challenge" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-07-03T22:28:02+07:00" />
-<meta property="article:modified_time" content="2022-07-03T22:28:02+07:00" />
+<meta property="article:modified_time" content="2022-07-03T22:28:02+07:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="GoogleCTF2022 - eldar writeups"/>
 <meta name="twitter:description" content="Writeup for GoogleCTF2022 eldar challenge"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  4875 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20220704-ggctf2022-writeups\/","datePublished": "2022-07-03T22:28:02+07:00","dateModified": "2022-07-03T22:28:02+07:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "Writeup for GoogleCTF2022 eldar challenge"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">GoogleCTF2022 - eldar writeups</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-03">2022-07-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;4875 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;23 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">GoogleCTF2022 - eldar writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-03">2022-07-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4875 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;23 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -117,7 +110,7 @@
 </nav></div>
             </div><div class="content" id="content"><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
@@ -128,7 +121,7 @@
 <h2 id="introduction">Introduction</h2>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -142,12 +135,12 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
 <li>Analyze <code>eldar</code> file -&gt; it&rsquo;s just a simple file that takes a value <code>serial</code> from <code>libserial.so</code> that we can compile from <code>serial.c</code>, but the check is nowhere to be seen and instead the relocation section of the file is MASSIVE with tons of relocation metadata.</li>
-<li><a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer">This paper</a> and <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer">this talk</a> provide many useful information about using ELF relocation metadata as a VM -&gt; write a script to parse the relocation metadata out as VM instructions.</li>
+<li><a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer ">This paper</a> and <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer ">this talk</a> provide many useful information about using ELF relocation metadata as a VM -&gt; write a script to parse the relocation metadata out as VM instructions.</li>
 <li>Analyze the VM code -&gt; figure out that the first 16 bytes of <code>serial</code> and the last 12 bytes go through different calculations -&gt; our goal is to make the output of the VM equals to 0.</li>
 <li>Analyze the first part -&gt; figure out that the first 16 bytes go through a shuffling algorithm to generate a 24 bytes buffer, each 2 bytes of <code>serial</code> correspond to 3 bytes of this buffer -&gt; each byte of the buffer is multiplied by a constant and sum together several times with other negative constants -&gt; the sum needs to be equal to 0 for the output to be 0.</li>
 <li>Write a script to parse out the constants.</li>
@@ -164,7 +157,7 @@
 <p>The problem here is that there is no other code in the binary, there is no function to check <code>serial</code>, no function to set <code>fail</code>. Instead, if we scroll down in IDA to the relocation section at <code>0x804000</code>, we can see a huge region with an unsual amount of relocation metadata. These metadata are not processed by the binary itself, but instead by the system&rsquo;s <strong>ELF Loader</strong>. So the suspicion here is that the binary actually uses the <strong>ELF Loader</strong> to perform checks on <code>serial</code> before executing itself, using those metadata.</p>
 <p>By the sheer size of the metadata region, I suspected this to be a VM revering challenge (also because Google CTF loves this kind of weird machine challenges).</p>
 <h2 id="about-the-elf-relocation-metadata-machine">About the ELF relocation metadata machine</h2>
-<p>This technique of running a &ldquo;weird&rdquo; virtual machine using ELF relocation metadata and symbol metadata has been discovered and explained a long time a go in the paper <a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer">“Weird Machines” in ELF: A Spotlight on the Underappreciated Metadata</a> and the talk <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer">Programming Weird Machines with ELF Metadata</a> (yes they were 10 years ago!). The idea is to use the <strong>ELF Loader</strong> as an interpreter to execute a weird VM with carefully crafted ELF relocation metadata as VM instructions and symbol metadata as registers.</p>
+<p>This technique of running a &ldquo;weird&rdquo; virtual machine using ELF relocation metadata and symbol metadata has been discovered and explained a long time a go in the paper <a href="https://www.cs.dartmouth.edu/~sergey/wm/woot13-shapiro.pdf" target="_blank" rel="noopener noreffer ">“Weird Machines” in ELF: A Spotlight on the Underappreciated Metadata</a> and the talk <a href="https://www.youtube.com/watch?v=YgtxxLCVD-o" target="_blank" rel="noopener noreffer ">Programming Weird Machines with ELF Metadata</a> (yes they were 10 years ago!). The idea is to use the <strong>ELF Loader</strong> as an interpreter to execute a weird VM with carefully crafted ELF relocation metadata as VM instructions and symbol metadata as registers.</p>
 <p>In our binary <code>eldar</code>, those metadata is located in the section mapped at address <code>0x804000</code>, which can be inspected in IDA. The symbol metadata table is located at <code>0x804064</code>, while the relocation metadata is located at <code>0x80428A</code>. I&rsquo;d like to talk about relocation metadata first, because these are our VM instructions. Take a look at the structure of each relocation <code>Elf64_Rela</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Elf64_Addr</span> <span class="n">r_offset</span><span class="p">;</span>
@@ -183,7 +176,7 @@
 </ul>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>IDA goes absolutely crazy and wrong when displaying the relocation metadata, I don&rsquo;t really know why it happens, but it&rsquo;s better to look at the output of <code>readelf -r</code> when inspecting those. Turns out IDA behaves this way because it tries to apply the relocations and because they are self-modifying, they will go all chaotic. Launching IDA with <code>IDA_NORELOC=1</code> might fix it. Thanks @aaSSfxxx on Twitter for this info.</em></div>
@@ -214,7 +207,7 @@
 </span></span></code></pre></div><p>This structure is 24 bytes in size. The first 64 bits contains <code>st_name</code>, <code>st_info</code>, <code>st_other</code> and <code>st_shndx</code>, these are not so important yet so I&rsquo;ll explain them later when needed. Then the last 2 fields contain the value of the symbol (<code>sym.value</code>) and it&rsquo;s size (<code>sym.size</code>). Therefore, the VM can use <code>R_X86_64_RELATIVE</code> to move an immediate value to a symbol or any place in memory, <code>R_X86_64_64</code> or <code>R_X86_64_32</code> to move the value (64 bits or 32 bits, respectively) of a symbol to another symbol or any place in memory, and <code>R_X86_64_COPY</code> to copy the data at the address in a symbol&rsquo;s value to another place in memory, and by changing <code>sym.size</code>, it can control how many bytes to copy.</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Because the relocation metadata also reside in the same memory region, it can self-modify its &ldquo;instructions&rdquo; on the fly as well. This is actually the technique that this VM uses a lot.</em></div>
@@ -289,14 +282,14 @@
 ...
 </code></pre><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>There is a lot of <code>804000 &lt;- 0</code> instructions in the code, this is basically just a NOP instruction.</em></div>
         </div>
     </div>
 <h2 id="attempting-to-one-shot-with-z3">Attempting to one-shot with Z3</h2>
-<p>As usual with VM flag checker reversing challenges, with the VM code emulator in hand, I decided to try injecting z3 variables to the input and let the emulator solve itself (just like what I did with <a href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" target="_blank" rel="noopener noreffer">Google CTF 2021 VM challenge</a>). However, things are not as easy this time. There are some problems that prevents this approach to success:</p>
+<p>As usual with VM flag checker reversing challenges, with the VM code emulator in hand, I decided to try injecting z3 variables to the input and let the emulator solve itself (just like what I did with <a href="https://lkmidas.github.io/posts/20210719-ggctf2021-writeups/" target="_blank" rel="noopener noreffer ">Google CTF 2021 VM challenge</a>). However, things are not as easy this time. There are some problems that prevents this approach to success:</p>
 <ul>
 <li>The first algorithm in the VM code uses out input as index to memory, both on ther read side and on the write side. Unfortunately, z3 variables can&rsquo;t be used as array index, and using z3 <code>Array()</code> to model the whole VM memory is not feasible at all.</li>
 <li>The final part of the VM code actually jumps to x86 shellcode to execute them, then jump back to VM code (will explain later). A lot more work would be needed to parse and emulate those code as well.</li>
@@ -558,10 +551,10 @@
 <p>So what&rsquo;s happening here? Relying on intuition alone, I suspected that these gibberish data are actually x86 shellcode, and the change of <code>TYPE_C</code> somehow allows for running these shellcodes within the relocation VM. I made a little change to the instructions parsing script to dump out all these &ldquo;shellcodes&rdquo;, and throw the dump into IDA. And indeed, these are x86 code!</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>Turns out, the <code>0xa</code> in <code>0x1000a0000001a</code> of new <code>TYPE_C</code> means that <code>C</code> now has <code>IFUNC</code> type. When invoking a relocation with type <code>R_X86_64_64</code> on an <code>IFUNC</code> symbol, the function where its value is pointing at will be executed, and the return value will be saved to <code>r_offset</code>, as described <a href="https://github.com/angea/pocorgtfo/blob/master/contents/articles/00-05.pdf" target="_blank" rel="noopener noreffer">here</a>. Thanks @NopNopGoose on Twitter for this info.</em></div>
+            <div class="admonition-content"><em>Turns out, the <code>0xa</code> in <code>0x1000a0000001a</code> of new <code>TYPE_C</code> means that <code>C</code> now has <code>IFUNC</code> type. When invoking a relocation with type <code>R_X86_64_64</code> on an <code>IFUNC</code> symbol, the function where its value is pointing at will be executed, and the return value will be saved to <code>r_offset</code>, as described <a href="https://github.com/angea/pocorgtfo/blob/master/contents/articles/00-05.pdf" target="_blank" rel="noopener noreffer ">here</a>. Thanks @NopNopGoose on Twitter for this info.</em></div>
         </div>
     </div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">...</span>
@@ -605,13 +598,11 @@ OR 184
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2022-07-03</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" data-title="GoogleCTF2022 - eldar writeups" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" data-title="GoogleCTF2022 - eldar writeups"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" data-title="GoogleCTF2022 - eldar writeups"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/" data-title="GoogleCTF2022 - eldar writeups"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -623,22 +614,22 @@ OR 184
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210719-ggctf2021-writeups/" class="prev" rel="prev" title="GoogleCTF2021 - weather writeups"><i class="fas fa-angle-left fa-fw"></i>GoogleCTF2021 - weather writeups</a>
-            <a href="/posts/20221128-n1ctf2022-writeups/" class="next" rel="next" title="N1CTF 2022 Solana Challenges Writeups">N1CTF 2022 Solana Challenges Writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210719-ggctf2021-writeups/" class="prev" rel="prev" title="GoogleCTF2021 - weather writeups"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>GoogleCTF2021 - weather writeups</a>
+            <a href="/posts/20221128-n1ctf2022-writeups/" class="next" rel="next" title="N1CTF 2022 Solana Challenges Writeups">N1CTF 2022 Solana Challenges Writeups<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

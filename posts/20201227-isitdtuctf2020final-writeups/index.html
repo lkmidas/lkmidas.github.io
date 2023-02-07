@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups - Midas Blog</title><meta name="Description" content="Writeups for ISITDTUCTF2020 Finals reversing challenges"><meta property="og:title" content="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups" />
 <meta property="og:description" content="Writeups for ISITDTUCTF2020 Finals reversing challenges" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-12-27T05:58:43-08:00" />
-<meta property="article:modified_time" content="2020-12-27T05:58:43-08:00" />
+<meta property="article:modified_time" content="2020-12-27T05:58:43-08:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups"/>
 <meta name="twitter:description" content="Writeups for ISITDTUCTF2020 Finals reversing challenges"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/" /><link rel="next" href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  5150 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20201227-isitdtuctf2020final-writeups\/","datePublished": "2020-12-27T05:58:43-08:00","dateModified": "2020-12-27T05:58:43-08:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "Writeups for ISITDTUCTF2020 Finals reversing challenges"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-27">2020-12-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5150 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;25 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2020-12-27">2020-12-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;5150 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;25 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -142,7 +135,7 @@
 </nav></div>
             </div><div class="content" id="content"><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the challenge that you are interested in.</em></div>
@@ -153,7 +146,7 @@
 <h3 id="introduction">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -167,7 +160,7 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -182,7 +175,7 @@
         </div>
     </div>
 <h3 id="analyzing-launcherexe">Analyzing Launcher.exe</h3>
-<p>The <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/Launcher.exe" rel="">Launcher.exe</a> executable file throws an error when being executed, then it seems like nothing happens after that. So I started to reverse it statically using IDA. The flow is quite simple: it first throws a fake error about missing a DLL, then clones itself using the name <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/XblAuthenticator.exe" rel="">capture.pcapng</a>, then decrypts some data and saves it under the name <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/XblCloud.dll" rel="">Launcher.exe</a>, all the files created by this program are somehow related to XBox stuffs, but most likely they are just fake names and fake strings. My teammates said that it also does something to the registry hive, but that information is unecessary for the solution. The most important thing then was to get the DLL file. I think it can be retrieved by reversing the decryption function and decrypting the data, but my teammate <a href="https://blog.efiens.com/author/edisc/" target="_blank" rel="noopener noreffer">@Edisc</a> used <code>SpyStudio</code> and dumped it out for me. So all I needed to do was to analyze the DLL file and the traffic capture file.</p>
+<p>The <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/Launcher.exe" rel="">Launcher.exe</a> executable file throws an error when being executed, then it seems like nothing happens after that. So I started to reverse it statically using IDA. The flow is quite simple: it first throws a fake error about missing a DLL, then clones itself using the name <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/XblAuthenticator.exe" rel="">capture.pcapng</a>, then decrypts some data and saves it under the name <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/XblCloud.dll" rel="">Launcher.exe</a>, all the files created by this program are somehow related to XBox stuffs, but most likely they are just fake names and fake strings. My teammates said that it also does something to the registry hive, but that information is unecessary for the solution. The most important thing then was to get the DLL file. I think it can be retrieved by reversing the decryption function and decrypting the data, but my teammate <a href="https://blog.efiens.com/author/edisc/" target="_blank" rel="noopener noreffer ">@Edisc</a> used <code>SpyStudio</code> and dumped it out for me. So all I needed to do was to analyze the DLL file and the traffic capture file.</p>
 <h3 id="first-look-at-capturepcapng">First look at capture.pcapng</h3>
 <p>Before reversing the big DLL file, I took a look at the network traffic capture. One of the things that I like to do when analyzing a <code>pcap</code> file is to throw it into <code>Wireshark</code> and then use the <code>Follow TCP stream</code> functionality to skim through all the TCP streams. Here are the informations that I gathered from doing that:</p>
 <ul>
@@ -193,7 +186,7 @@
 <p>Since the packets are likely to be encoded in a custom protocol, I moved on to investigate <a href="/posts/20201227-isitdtuctf2020final-writeups/keylogger/XblCloud.dll" rel="">Launcher.exe</a> to reverse its encoding.</p>
 <h3 id="analyzing-xblclouddll">Analyzing XblCloud.dll</h3>
 <p>Analyzing from <code>DllEntryPoint()</code> onward, I arrived at function <code>sub_180002370</code>, which makes a lot of calls to <code>GetAsyncKeyState()</code>, which means it is where the keys are logged.</p>
-<p>The first two <code>GetAsyncKeyState()</code> are called with parameters 1 and 2, respectively. Looking at Microsoft&rsquo;s <a href="https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes" target="_blank" rel="noopener noreffer">virtual key codes documentation</a>, I knew that these are to log mouse clicks. I could also see that the X and Y coordinates of the cursor are encrypted by XORing with <code>0xCAFEFAAA</code>.</p>
+<p>The first two <code>GetAsyncKeyState()</code> are called with parameters 1 and 2, respectively. Looking at Microsoft&rsquo;s <a href="https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes" target="_blank" rel="noopener noreffer ">virtual key codes documentation</a>, I knew that these are to log mouse clicks. I could also see that the X and Y coordinates of the cursor are encrypted by XORing with <code>0xCAFEFAAA</code>.</p>
 <p>The next two <code>GetAsyncKeyState()</code> are called with parameters from <code>0x30 - 0x39</code> and <code>0x60 - 0x69</code>. Again looking at the documentation, these are the number keys from 0 to 9, with <code>0x30 - 0x39</code> being the normal keys and <code>0x60 - 0x69</code> being the numpad keys. Both of them are then added with a constant to map into the range of <code>0x96 - 0x9f</code>.</p>
 <p>The next <code>GetAsyncKeyState()</code> is called with parameter from <code>0x41 - 0x5a</code>, these are uppercase characters from A to Z. The encoding here is subtracting by <code>0x7a</code>.</p>
 <p>The last <code>GetAsyncKeyState()</code> is specifically for the whitespace character <code>0x20</code>, which is encoded into <code>0x86</code>.</p>
@@ -348,21 +341,21 @@
 <h3 id="introduction-1">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
 <li><strong>Given files:</strong> <a href="/posts/20201227-isitdtuctf2020final-writeups/game/Auto9Yin.2.72.17.zip" rel="">Auto9Yin.2.72.17.zip</a>.</li>
 <li><strong>Description:</strong> Decrypt this: <code>C2BAC628EC275E5F9D64A403A57AF4E9880BA46AE78560CC0B26F6D630C93A5BC3153098F77E7A871FE7C7484F72F36BC42BFA9E0E331C186E33646BDC61C9F21958CBE5DC6468EB84676F99C2504BA7B8BA29463E9C481C1182C4A718D2E45EB2ACEA664D10249E8F34DDA801E5692ECB3E4E34375589D38CCE4018A004C7EC9C6805C27A2D37C45290C38F7D7CE679762567DB2FDD44309F74365C18310673F6B98D99A1A27E2204555B3D12113CC4C72B665548C3738BE2E310206A68E89A1E5BE492AC00ABC22ACA5099FDF7E1426D82AF89AF53D8A84255002D166352890DA2FE8881450D836FC95AE28C9F604ACB00D3CF95CB2AAF1445F0D1234DE1BAD13739E6D18B3D0718ABD10C259635B6</code></li>
 <li><strong>Category:</strong> Reverse engineering</li>
-<li><strong>Summary:</strong> This is a real world reverse engineering problem of an online game&rsquo;s third-party module. This is a paid botting module that requires player to buy a key to gain access to its features. Our task is to reverse engineer the key check phase in order to decrypt the given key. The author also gives us a <a href="http://cuuam.gosu.vn/tai-game.html" target="_blank" rel="noopener noreffer">link to download the actual game</a> (which is 22GB in size!) and a <a href="https://www.youtube.com/watch?v=M-GNl2B6m7A" target="_blank" rel="noopener noreffer">link to a video</a> where he shows us how to install and use the <code>Auto9Yin</code> module.</li>
+<li><strong>Summary:</strong> This is a real world reverse engineering problem of an online game&rsquo;s third-party module. This is a paid botting module that requires player to buy a key to gain access to its features. Our task is to reverse engineer the key check phase in order to decrypt the given key. The author also gives us a <a href="http://cuuam.gosu.vn/tai-game.html" target="_blank" rel="noopener noreffer ">link to download the actual game</a> (which is 22GB in size!) and a <a href="https://www.youtube.com/watch?v=M-GNl2B6m7A" target="_blank" rel="noopener noreffer ">link to a video</a> where he shows us how to install and use the <code>Auto9Yin</code> module.</li>
 </ul>
 </div>
         </div>
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -403,7 +396,7 @@
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">            <span class="k">break</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span>
-</span></span></code></pre></div><p>Using this python function to decrypt the encrypted buffer, I obtained the code in <code>xingxiang.lua</code>, which is obfuscated in the way that each of its function is written on only one line. I asked my teammate <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer">@pcback</a> to help me beautify the lua code and re-implement it in python:</p>
+</span></span></code></pre></div><p>Using this python function to decrypt the encrypted buffer, I obtained the code in <code>xingxiang.lua</code>, which is obfuscated in the way that each of its function is written on only one line. I asked my teammate <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer ">@pcback</a> to help me beautify the lua code and re-implement it in python:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">axing</span><span class="p">(</span><span class="n">buff</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span><span class="mi">16</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buff</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">
@@ -435,7 +428,7 @@
 <p>This function is quite small. First it uses the same decryption routine that decrypts the <code>xingxiang</code> script on a small string to obtain the string <code>&quot;xingxiang&quot;</code>, then it uses some lua API functions on this string and on the encrypted parameter. I didn&rsquo;t look much into the documentation this time, because it is almost certain that it uses <code>xingxiang</code> to decrypt the encrypted parameter, so I simply used the python code for <code>xingxiang</code> above to decrypt all of <code>auto_main.dll</code> and <code>auto_core.dll</code>.</p>
 <p>Disappointingly, decrypting these 2 DLLs only results in lua scripts that handle the in-game botting stuffs, there is no code in those scripts that take care of the key. My thought process then was to decrypt all of the DLLs to find what I seek. Of course though, I had to look at the DLLs that have the most interesting names first, so I instantly looked at <code>auto_9yin.dll</code>, and I did hit the jackpot.</p>
 <h3 id="running-auto9_yin-to-decrypt-the-key">Running auto9_yin to decrypt the key</h3>
-<p>The decrypted lua code from <code>auto_9yin.dll</code> is well commented, and it is used to handle everything about the key. There is a decrypt function in there, so firstly, I asked <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer">@pcback</a> again to recode it into python. However, because of some differences between lua and python, he didn&rsquo;t succeed in doing that this time, so I had to find another way to do it.</p>
+<p>The decrypted lua code from <code>auto_9yin.dll</code> is well commented, and it is used to handle everything about the key. There is a decrypt function in there, so firstly, I asked <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer ">@pcback</a> again to recode it into python. However, because of some differences between lua and python, he didn&rsquo;t succeed in doing that this time, so I had to find another way to do it.</p>
 <p>My solution was to run the lua script itself on the given key to get the flag. However, there were also some hiccups doing this:</p>
 <ul>
 <li>The script requires some packages that is loaded somewhere else and I didn&rsquo;t have them, so I simply tried to remove all the <code>require()</code> calls.</li>
@@ -446,7 +439,7 @@
 <p>With the above setups, I could successfully run the lua script to get the flag: <code>danchoihephoco,1922762076,This key was used as a real world challenge for a cyber security contest (see https://www.facebook.com/isitdtu/). If you are owner of this product, please do not share or leak it, thanks a lot. ISITDTU{r34l_w0rd_1s_fUn_4nd_34sY_bUt_lu4_sUcKs}</code></p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Actually I forgot the technique of &ldquo;googling the constant&rdquo; when I was onsite at the competition. If I did a quick google search of the <code>delta = 0x9E3779B9</code> value in the script, I would have known that this encryption is <code>XTEA</code> and not have to waste time trying to recode/run the lua script.</em></div>
@@ -462,7 +455,7 @@
 <h3 id="introduction-2">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -475,7 +468,7 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -540,13 +533,11 @@
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2020-12-27</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" data-title="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" data-title="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" data-title="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/" data-title="ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -558,22 +549,22 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20201201-ascis2020final-writeups/" class="prev" rel="prev" title="ASCIS2020 Finals - RWE writeup"><i class="fas fa-angle-left fa-fw"></i>ASCIS2020 Finals - RWE writeup</a>
-            <a href="/posts/20210103-heap-seccomp-rop/" class="next" rel="next" title="Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP">Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20201201-ascis2020final-writeups/" class="prev" rel="prev" title="ASCIS2020 Finals - RWE writeup"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>ASCIS2020 Finals - RWE writeup</a>
+            <a href="/posts/20210103-heap-seccomp-rop/" class="next" rel="next" title="Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP">Glibc 2.31 Heap + Seccomp Exploitation Technique using ROP<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

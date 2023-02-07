@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups - Midas Blog</title><meta name="Description" content="Writeups for TetCTF2021 heap pwn challenges"><meta property="og:title" content="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups" />
 <meta property="og:description" content="Writeups for TetCTF2021 heap pwn challenges" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-01-03T04:48:09-08:00" />
-<meta property="article:modified_time" content="2021-01-03T04:48:09-08:00" />
+<meta property="article:modified_time" content="2021-01-03T04:48:09-08:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"/>
 <meta name="twitter:description" content="Writeups for TetCTF2021 heap pwn challenges"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" /><link rel="next" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" /><link rel="next" href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  3653 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210103-tetctf2021-writeups\/","datePublished": "2021-01-03T04:48:09-08:00","dateModified": "2021-01-03T04:48:09-08:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "Writeups for TetCTF2021 heap pwn challenges"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-03">2021-01-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3653 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;18 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-01-03">2021-01-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3653 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;18 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -140,7 +133,7 @@
 <p>As always, <strong>TetCTF</strong> is a great event to start the year with. This year, I managed to first-blood (and we Efiens are being the only Vietnamese team that can solve) the 3 phenomenal heap pwning challenges. Here are my writeups for them.</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the challenge that you are interested in.</em></div>
@@ -151,7 +144,7 @@
 <h3 id="introduction">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -165,7 +158,7 @@
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -207,8 +200,8 @@
 </span></span><span class="line"><span class="cl">0011: 0x06 0x00 0x00 0x00000000  <span class="k">return</span> KILL
 </span></span><span class="line"><span class="cl">0012: 0x06 0x00 0x00 0x7fff0000  <span class="k">return</span> ALLOW
 </span></span></code></pre></div><h3 id="finding-hash-collision">Finding hash collision</h3>
-<p>I don&rsquo;t know much about math and cryptography, so I started googling to see which hashing algorithm does <code>C++</code> standard library use. It lead me to <a href="https://sites.google.com/site/murmurhash/" target="_blank" rel="noopener noreffer">this site</a>, where most variances of <code>MurmurHash</code> is implemented. The version that <code>C++</code> standard library uses in a 64-bit environment is <code>MurmurHash2Unaligned</code>, which is implemented as <code>MurmurHash64A</code> in <a href="/posts/20210103-tetctf2021-writeups/cache_v1/MurmurHash2.cpp" rel="">MurmurHash2_64.cpp</a>.</p>
-<p>More googling on how to collide this hash lead me to <a href="http://emboss.github.io/blog/2012/12/14/breaking-murmur-hash-flooding-dos-reloaded/" target="_blank" rel="noopener noreffer">this post</a>, which shows in details how to create collided keys for <code>MurmurHash2</code>. The implementation of <code>MurmurHash2</code> in the blog post is almost identical to the one in <code>C++</code>, except some constants. I asked my team&rsquo;s crypto player <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer">@pcback</a> to read it and try to re-implement it for me, and he came up with this script:</p>
+<p>I don&rsquo;t know much about math and cryptography, so I started googling to see which hashing algorithm does <code>C++</code> standard library use. It lead me to <a href="https://sites.google.com/site/murmurhash/" target="_blank" rel="noopener noreffer ">this site</a>, where most variances of <code>MurmurHash</code> is implemented. The version that <code>C++</code> standard library uses in a 64-bit environment is <code>MurmurHash2Unaligned</code>, which is implemented as <code>MurmurHash64A</code> in <a href="/posts/20210103-tetctf2021-writeups/cache_v1/MurmurHash2.cpp" rel="">MurmurHash2_64.cpp</a>.</p>
+<p>More googling on how to collide this hash lead me to <a href="http://emboss.github.io/blog/2012/12/14/breaking-murmur-hash-flooding-dos-reloaded/" target="_blank" rel="noopener noreffer ">this post</a>, which shows in details how to create collided keys for <code>MurmurHash2</code>. The implementation of <code>MurmurHash2</code> in the blog post is almost identical to the one in <code>C++</code>, except some constants. I asked my team&rsquo;s crypto player <a href="https://blog.efiens.com/author/pcback/" target="_blank" rel="noopener noreffer ">@pcback</a> to read it and try to re-implement it for me, and he came up with this script:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">INV_MAGIC</span> <span class="o">=</span> <span class="mh">0x5f7a0ea7e59b19bd</span>
 </span></span><span class="line"><span class="cl"><span class="n">R</span> <span class="o">=</span> <span class="mi">16</span>
 </span></span><span class="line"><span class="cl"><span class="n">MASK64</span> <span class="o">=</span> <span class="mh">0xffffffffffffffff</span>
@@ -277,7 +270,7 @@ c2c4c9faed854236c2c4c9faed854236
 </span></span><span class="line"><span class="cl"><span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span> <span class="o">-</span> <span class="mh">0x1ebbe0</span>
 </span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;libc: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">address</span><span class="p">)))</span>
 </span></span></code></pre></div><h3 id="tcache-poisoning">Tcache poisoning</h3>
-<p>Freeing the two <code>victim</code> chunks and we can easily overwrite their <code>fd</code> pointer, classic <code>tcache poisoning</code>. With that, I now could overwrite <code>__free_hook</code> and also had all the leaked addresses in my hands. I could just use my ROP chain that I explained <a href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" target="_blank" rel="noopener noreffer">here</a> to read the flag. Note that the <code>payload</code> must be put into a cache&rsquo;s <code>name</code>, not <code>content</code>, because the <code>name</code> is what actually got <code>free()</code> first when we call <code>erase</code>.</p>
+<p>Freeing the two <code>victim</code> chunks and we can easily overwrite their <code>fd</code> pointer, classic <code>tcache poisoning</code>. With that, I now could overwrite <code>__free_hook</code> and also had all the leaked addresses in my hands. I could just use my ROP chain that I explained <a href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" target="_blank" rel="noopener noreffer ">here</a> to read the flag. Note that the <code>payload</code> must be put into a cache&rsquo;s <code>name</code>, not <code>content</code>, because the <code>name</code> is what actually got <code>free()</code> first when we call <code>erase</code>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">## Erase victims, overwrite victim2&#39;s fd to __free_hook</span>
 </span></span><span class="line"><span class="cl"><span class="n">erase</span><span class="p">(</span><span class="s2">&#34;victim1&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">erase</span><span class="p">(</span><span class="s2">&#34;victim2&#34;</span><span class="p">)</span>
@@ -310,7 +303,7 @@ c2c4c9faed854236c2c4c9faed854236
 <h3 id="introduction-1">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -324,7 +317,7 @@ c2c4c9faed854236c2c4c9faed854236
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -382,7 +375,7 @@ c2c4c9faed854236c2c4c9faed854236
 </span></span><span class="line"><span class="cl"><span class="n">l</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span> <span class="o">-</span> <span class="mh">0x1ebbe0</span>
 </span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;libc: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">address</span><span class="p">)))</span>
 </span></span></code></pre></div><h3 id="tcache-poisoning-1">Tcache poisoning</h3>
-<p>Exactly the same as <code>cache_v1</code>: Freeing the two <code>victim</code> chunks and we can easily overwrite their <code>fd</code> pointer, classic <code>tcache poisoning</code>. With that, I now can overwrite <code>__free_hook</code> and also have all the leaked addresses in my hands. I could just use my ROP chain that I explained <a href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" target="_blank" rel="noopener noreffer">here</a> to read the flag. Note that the <code>payload</code> must be put into a cache&rsquo;s <code>name</code>, not <code>content</code>, because the <code>name</code> is what actually got <code>free()</code> first when we call <code>erase</code>.</p>
+<p>Exactly the same as <code>cache_v1</code>: Freeing the two <code>victim</code> chunks and we can easily overwrite their <code>fd</code> pointer, classic <code>tcache poisoning</code>. With that, I now can overwrite <code>__free_hook</code> and also have all the leaked addresses in my hands. I could just use my ROP chain that I explained <a href="https://lkmidas.github.io/posts/20210103-heap-seccomp-rop/" target="_blank" rel="noopener noreffer ">here</a> to read the flag. Note that the <code>payload</code> must be put into a cache&rsquo;s <code>name</code>, not <code>content</code>, because the <code>name</code> is what actually got <code>free()</code> first when we call <code>erase</code>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">## Erase victims, overwrite victim2&#39;s fd to __free_hook</span>
 </span></span><span class="line"><span class="cl"><span class="n">erase</span><span class="p">(</span><span class="s2">&#34;victim1&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">erase</span><span class="p">(</span><span class="s2">&#34;victim2&#34;</span><span class="p">)</span>
@@ -413,7 +406,7 @@ c2c4c9faed854236c2c4c9faed854236
 <h3 id="introduction-2">Introduction</h3>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Challenge Info<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ul>
@@ -427,7 +420,7 @@ c2c4c9faed854236c2c4c9faed854236
     </div>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>TL;DR<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><ol>
@@ -463,7 +456,7 @@ c2c4c9faed854236c2c4c9faed854236
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Actually, as the author <code>@d4rkn3ss</code> reveals, there is a path truncation bug in the authentication process that can let you login to anything and read any file. With this you can leak every addresses through <code>/proc/self/maps</code>, leak <code>admin</code>&rsquo;s hashed password to crack it, and leak the number of CPUs through <code>/proc/cpuinfo</code>. But I still managed to solve this without using this bug.</em></div>
@@ -503,7 +496,7 @@ c2c4c9faed854236c2c4c9faed854236
 </span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;libc: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">address</span><span class="p">)))</span>
 </span></span></code></pre></div><h3 id="exploit-the-multithreaded-heap">Exploit the multithreaded heap</h3>
 <p>The exploitation path is quite clear then: if we can <code>add</code> a note exactly the same size as a <code>session</code> struct, then it will be allocated at the freed <code>session</code> we are currently in and we can overwrite everything in it. But here is the big problem: Each thread will <code>malloc()</code> into its own <code>heap arena</code>, so initially, it seems like there are no way to <code>malloc()</code> into the <code>main arena</code> from another thread.</p>
-<p>That&rsquo;s when the <strong>hint</strong> comes in handy. By googling about this multithreading heap management stuff, I came into <a href="https://sourceware.org/glibc/wiki/MallocInternals" target="_blank" rel="noopener noreffer">this doc about MallocInternals</a>. It says that the maximum number of heap arenas is <code>8 * number-of-processors</code>. After all the arenas have been allocated, threads will try to reuse one of the other arenas. This is so nice because we can use <code>sleep mode</code> to create a lot of hanging threads, then try to <code>malloc()</code> into the <code>main arena</code> in the next (the author is nice enough to even make a call to <code>malloc()</code> in <code>sleep mode</code>). That&rsquo;s exactly what I did, even though the intended way is to read <code>/proc/cpuinfo</code> to know the number of processors, I just assumed that it&rsquo;s 1 and try it out (if it&rsquo;s not I could always bruteforce it, can&rsquo;t be too big anyway). Therefore I created 8 sleeping threads:</p>
+<p>That&rsquo;s when the <strong>hint</strong> comes in handy. By googling about this multithreading heap management stuff, I came into <a href="https://sourceware.org/glibc/wiki/MallocInternals" target="_blank" rel="noopener noreffer ">this doc about MallocInternals</a>. It says that the maximum number of heap arenas is <code>8 * number-of-processors</code>. After all the arenas have been allocated, threads will try to reuse one of the other arenas. This is so nice because we can use <code>sleep mode</code> to create a lot of hanging threads, then try to <code>malloc()</code> into the <code>main arena</code> in the next (the author is nice enough to even make a call to <code>malloc()</code> in <code>sleep mode</code>). That&rsquo;s exactly what I did, even though the intended way is to read <code>/proc/cpuinfo</code> to know the number of processors, I just assumed that it&rsquo;s 1 and try it out (if it&rsquo;s not I could always bruteforce it, can&rsquo;t be too big anyway). Therefore I created 8 sleeping threads:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">## Fill all 8 created arenas with 8 notes</span>
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">##print(i)</span>
@@ -555,13 +548,11 @@ c2c4c9faed854236c2c4c9faed854236
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2021-01-03</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" data-title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" data-title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" data-title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/" data-title="TetCTF2021 - cache_v1, cache_v2, SimpleSystem writeups"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -573,22 +564,22 @@ c2c4c9faed854236c2c4c9faed854236
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210103-heap-seccomp-rop/" class="prev" rel="prev" title="Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP"><i class="fas fa-angle-left fa-fw"></i>Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP</a>
-            <a href="/posts/20210123-linux-kernel-pwn-part-1/" class="next" rel="next" title="Learning Linux Kernel Exploitation - Part 1">Learning Linux Kernel Exploitation - Part 1<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210103-heap-seccomp-rop/" class="prev" rel="prev" title="Glibc 2.31 Heap &#43; Seccomp Exploitation Technique using ROP"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Glibc 2.31 Heap + Seccomp Exploitation Technique using ROP</a>
+            <a href="/posts/20210123-linux-kernel-pwn-part-1/" class="next" rel="next" title="Learning Linux Kernel Exploitation - Part 1">Learning Linux Kernel Exploitation - Part 1<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>

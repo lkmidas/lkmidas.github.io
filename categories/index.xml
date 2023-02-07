@@ -10,12 +10,14 @@
     <author>Author</author>
     <guid>https://lkmidas.github.io/categories/writeups/</guid>
     <description><![CDATA[]]></description>
-</item><item>
+</item>
+<item>
     <title>pwning</title>
     <link>https://lkmidas.github.io/categories/pwning/</link>
     <pubDate>Tue, 23 Feb 2021 20:20:10 &#43;0700</pubDate>
     <author>Author</author>
     <guid>https://lkmidas.github.io/categories/pwning/</guid>
     <description><![CDATA[]]></description>
-</item></channel>
+</item>
+</channel>
 </rss>

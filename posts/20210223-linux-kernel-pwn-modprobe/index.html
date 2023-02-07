@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>Linux Kernel Exploitation Technique: Overwriting modprobe_path - Midas Blog</title><meta name="Description" content="A popular and powerful technique to exploit the Linux kernel through modprobe_path"><meta property="og:title" content="Linux Kernel Exploitation Technique: Overwriting modprobe_path" />
 <meta property="og:description" content="A popular and powerful technique to exploit the Linux kernel through modprobe_path" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-23T20:20:10+07:00" />
-<meta property="article:modified_time" content="2021-02-23T20:20:10+07:00" />
+<meta property="article:modified_time" content="2021-02-23T20:20:10+07:00" /><meta property="og:site_name" content="My cool site" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
 <meta name="twitter:title" content="Linux Kernel Exploitation Technique: Overwriting modprobe_path"/>
 <meta name="twitter:description" content="A popular and powerful technique to exploit the Linux kernel through modprobe_path"/>
-<meta name="application-name" content="Midas Blog">
-<meta name="apple-mobile-web-app-title" content="Midas Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="next" href="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" /><link rel="prev" href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><link rel="next" href="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -32,13 +33,13 @@
         },"genre": "posts","wordcount":  1758 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20210223-linux-kernel-pwn-modprobe\/","datePublished": "2021-02-23T20:20:10+07:00","dateModified": "2021-02-23T20:20:10+07:00","publisher": {
             "@type": "Organization",
-            "name": "Midas"},"author": {
+            "name": ""},"author": {
                 "@type": "Person",
                 "name": "Midas"
             },"description": "A popular and powerful technique to exploit the Linux kernel through modprobe_path"
     }
     </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,9 +55,8 @@
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a>
-            </div>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
         </div>
     </div>
 </header><header class="mobile" id="header-mobile">
@@ -77,28 +77,21 @@
             </div>
         </div>
         <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
+</header><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">Linux Kernel Exploitation Technique: Overwriting modprobe_path</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw"></i>pwning</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-23">2021-02-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1758 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;9 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Linux Kernel Exploitation Technique: Overwriting modprobe_path</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/pwning/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>pwning</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-02-23">2021-02-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1758 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;9 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -117,12 +110,12 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h2 id="preface">Preface</h2>
-<p>If you have taken a look at <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer">my series on learning linux kernel exploitation</a>, you probably have known that I have been learning the topic lately. For the previous several weeks, my team and I have participated in some CTFs, namely <code>DiceCTF</code> and <code>UnionCTF</code>, which both have a linux kernel pwn challenge. To my little knowledge and average brain power, I could not solve any of them, but through reading the writeups from other wonderful CTF teams and players, I have found out that a lot of them use a similar technique, in which the payload doesn&rsquo;t need to go through a painful process of making calls to <code>prepare_kernel_cred()</code> and <code>commit_creds()</code> at all. That technique is by overwriting the <code>modprobe_path</code> in the kernel. It is completely new to me, so I did some research on the Internet and experimented it out for myself. What I found is that this technique is quite popular and so easy to use, to a point that lots of pwners prefer to use it over all the traditional techniques.</p>
+<p>If you have taken a look at <a href="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" target="_blank" rel="noopener noreffer ">my series on learning linux kernel exploitation</a>, you probably have known that I have been learning the topic lately. For the previous several weeks, my team and I have participated in some CTFs, namely <code>DiceCTF</code> and <code>UnionCTF</code>, which both have a linux kernel pwn challenge. To my little knowledge and average brain power, I could not solve any of them, but through reading the writeups from other wonderful CTF teams and players, I have found out that a lot of them use a similar technique, in which the payload doesn&rsquo;t need to go through a painful process of making calls to <code>prepare_kernel_cred()</code> and <code>commit_creds()</code> at all. That technique is by overwriting the <code>modprobe_path</code> in the kernel. It is completely new to me, so I did some research on the Internet and experimented it out for myself. What I found is that this technique is quite popular and so easy to use, to a point that lots of pwners prefer to use it over all the traditional techniques.</p>
 <p>However, during my research, I didn&rsquo;t come across many posts or articles which explain the technique clearly, that&rsquo;s why I decided to write this post to clarify it a little bit. The technique itself is not complicated at all, I might also say that it is much simpler than the one that I demonstrated in me previous series. To demonstrate it in this post, I will be (ab)using <code>hxpCTF 2020</code> challenge <code>kernel-rop</code> again, simply because its simplicity is perfect for demonstration purpose.</p>
 <p>This post is gonna be on the shorter side, but I hope it can be useful for those who haven&rsquo;t known of this technique yet.</p>
 <div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
@@ -139,7 +132,7 @@
 <p>And these are the information that we can get from those files:</p>
 <ul>
 <li>The system has full protection: <code>SMEP</code>, <code>SMAP</code>, <code>KPTI</code> and <code>KASLR</code>.</li>
-<li>The linux kernel uses <a href="https://lwn.net/Articles/824307/" target="_blank" rel="noopener noreffer">FG-KASLR</a>, a non-mainstream version of <code>KASLR</code> which adds an extra layer of protection by randomizing each functions&rsquo; addresses, instead of just the kernel base.</li>
+<li>The linux kernel uses <a href="https://lwn.net/Articles/824307/" target="_blank" rel="noopener noreffer ">FG-KASLR</a>, a non-mainstream version of <code>KASLR</code> which adds an extra layer of protection by randomizing each functions&rsquo; addresses, instead of just the kernel base.</li>
 <li>The vulnearable module registers a device named <code>hackme</code> in <code>hackme_init()</code>, which we can open and perform read/write operations on it.</li>
 <li>The <code>hackme_read()</code> and <code>hackme_write()</code> functions have a stack buffer overflow vulnerability, which allows us to read and write almost infinitely on the kernel stack:</li>
 </ul>
@@ -178,10 +171,10 @@
 </span></span></code></pre></div><p>That&rsquo;s it for the challenge and its environment, super simple and standard. Now let&rsquo;s get into the most important part, which is explaining the technique itself.</p>
 <div class="details admonition tip open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content"><em>In the <a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer">final part</a> of my previous series, I have demonstrated an exploit that is used by the author, using a 4-stage payload to call <code>commit_creds(prepare_kernel_cred(0))</code>. If you are interested, you can check it out.</em></div>
+            <div class="admonition-content"><em>In the <a href="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" target="_blank" rel="noopener noreffer ">final part</a> of my previous series, I have demonstrated an exploit that is used by the author, using a 4-stage payload to call <code>commit_creds(prepare_kernel_cred(0))</code>. If you are interested, you can check it out.</em></div>
         </div>
     </div>
 <h2 id="the-overwriting-modprobe_path-technique">The overwriting modprobe_path technique</h2>
@@ -192,15 +185,15 @@
 <p>Firstly, the path to <code>modprobe</code>, which is <code>/sbin/modprobe</code> by default, is stored under the symbol <code>modprobe_path</code> in the kernel itself, and also in a writable page. We can get its address by reading <code>/proc/kallsyms</code> (the address will be different for you since there is <code>KASLR</code>):</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep modprobe_path
 </span></span><span class="line"><span class="cl">-&gt; ffffffffa7a61820 D modprobe_path
-</span></span></code></pre></div><p>Secondly, the program, whose path is stored in <code>modprobe_path</code>, will be executed when we execute a file with an unknown file type. More precisely, if we call <code>execve()</code> on a file whose <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank" rel="noopener noreffer">file signature</a> (aka magic header) is unknown by the system, it will then make the following calls, which in the end invokes <code>modprobe</code>:</p>
+</span></span></code></pre></div><p>Secondly, the program, whose path is stored in <code>modprobe_path</code>, will be executed when we execute a file with an unknown file type. More precisely, if we call <code>execve()</code> on a file whose <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank" rel="noopener noreffer ">file signature</a> (aka magic header) is unknown by the system, it will then make the following calls, which in the end invokes <code>modprobe</code>:</p>
 <ol>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1977" target="_blank" rel="noopener noreffer">do_execve()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1855" target="_blank" rel="noopener noreffer">do_execveat_common()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1788" target="_blank" rel="noopener noreffer">bprm_execve()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1740" target="_blank" rel="noopener noreffer">exec_binprm()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1694" target="_blank" rel="noopener noreffer">search_binary_handler()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L124" target="_blank" rel="noopener noreffer">request_module()</a></li>
-<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L69" target="_blank" rel="noopener noreffer">call_modprobe()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1977" target="_blank" rel="noopener noreffer ">do_execve()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1855" target="_blank" rel="noopener noreffer ">do_execveat_common()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1788" target="_blank" rel="noopener noreffer ">bprm_execve()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1740" target="_blank" rel="noopener noreffer ">exec_binprm()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/fs/exec.c#L1694" target="_blank" rel="noopener noreffer ">search_binary_handler()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L124" target="_blank" rel="noopener noreffer ">request_module()</a></li>
+<li><a href="https://elixir.bootlin.com/linux/latest/source/kernel/kmod.c#L69" target="_blank" rel="noopener noreffer ">call_modprobe()</a></li>
 </ol>
 <p>All of those calls will do this in the end:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">call_modprobe</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">module_name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">wait</span><span class="p">)</span>
@@ -316,13 +309,11 @@
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2021-02-23</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" data-title="Linux Kernel Exploitation Technique: Overwriting modprobe_path" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" data-title="Linux Kernel Exploitation Technique: Overwriting modprobe_path"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" data-title="Linux Kernel Exploitation Technique: Overwriting modprobe_path"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/" data-title="Linux Kernel Exploitation Technique: Overwriting modprobe_path"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -334,22 +325,22 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/20210205-linux-kernel-pwn-part-3/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 3"><i class="fas fa-angle-left fa-fw"></i>Learning Linux Kernel Exploitation - Part 3</a>
-            <a href="/posts/20210228-aeroctf2021-writeups/" class="next" rel="next" title="AeroCTF2021 - Dummyper writeups">AeroCTF2021 - Dummyper writeups<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/20210205-linux-kernel-pwn-part-3/" class="prev" rel="prev" title="Learning Linux Kernel Exploitation - Part 3"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Learning Linux Kernel Exploitation - Part 3</a>
+            <a href="/posts/20210228-aeroctf2021-writeups/" class="next" rel="next" title="AeroCTF2021 - Dummyper writeups">AeroCTF2021 - Dummyper writeups<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw"></i>
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw"></i>
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
             gtag('config', 'G-HGQHGNF9HJ');
         </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
