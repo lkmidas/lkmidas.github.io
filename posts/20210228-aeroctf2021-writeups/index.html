@@ -10,7 +10,6 @@
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210228-aeroctf2021-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-28T15:33:12+07:00" />
 <meta property="article:modified_time" content="2021-02-28T15:33:12+07:00" /><meta property="og:site_name" content="My cool site" />
-
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
@@ -200,8 +199,8 @@
 <p>By looking at the <code>AES</code> code, I realized that the <code>key</code> and <code>IV</code> are deep copy into <code>AES_ctx</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">AES_init_ctx_iv</span><span class="p">(</span><span class="k">struct</span> <span class="n">AES_ctx</span><span class="o">*</span> <span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">iv</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">KeyExpansion</span><span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">RoundKey</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">memcpy</span> <span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">Iv</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">AES_BLOCKLEN</span><span class="p">);</span> <span class="cm">/* deep copy IV */</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">KeyExpansion</span><span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">RoundKey</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memcpy</span> <span class="p">(</span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">Iv</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">AES_BLOCKLEN</span><span class="p">);</span> <span class="cm">/* deep copy IV */</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">KeyExpansion</span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span> <span class="n">RoundKey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">Key</span><span class="p">)</span>
@@ -267,7 +266,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.110.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>

