@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20221128-n1ctf2022-writeups\/"
-        },"genre": "posts","wordcount":  2452 ,
+        },"genre": "posts","wordcount":  2377 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20221128-n1ctf2022-writeups\/","datePublished": "2022-11-28T08:43:57-06:00","dateModified": "2022-11-28T08:43:57-06:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -85,7 +85,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">N1CTF 2022 Solana Challenges Writeups</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-11-28">2022-11-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2452 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-11-28">2022-11-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2377 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;12 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
@@ -126,7 +126,7 @@
         </div>
     </div>
 <h2 id="preface">Preface</h2>
-<p>It&rsquo;s been a pretty long time since I last wrote a blog post and my blog is collecting dust. Therefore, I decided to start writing about some basic stuffs that I learnt about pwning Solana Smart Contract, something that I am currently interested in and have been learning it for the past several weeks. Again, like my previous series about the Linux kernel, I will use CTF challenges as targets for my study. This post will be about 2 Solana challenges in N1CTF 2022, which is the most recent CTF that I have played.</p>
+<p>It has been quite a while since my last blog post, and my blog has been gathering dust. Consequently, I have made the decision to begin writing about some fundamental concepts I have learned regarding exploiting Solana Smart Contracts, an area of interest that I have been studying for the past few weeks. Similar to my previous series on the Linux kernel, I will be utilizing CTF challenges as the focus of my investigation. This post will cover two Solana challenges from N1CTF 2022, the most recent CTF in which I have participated.</p>
 <h2 id="about-solana">About Solana</h2>
 <p>I won&rsquo;t go into details about Solana or blockchain related stuffs in this post because first of all, I myself am not fully understand everything about them still, and I don&rsquo;t want to spread misinformation; and secondly, it would be quite redundant since there exists many resources about Solana on the Internet already. Some of those resources:</p>
 <ul>
@@ -151,11 +151,11 @@
         </div>
     </div>
 <h3 id="given-files">Given files</h3>
-<p>There are a handful of files that are given with the challenge, so I will briefly walkthrough all of them in this section. First of all, we have 3 directories: <code>program</code>, <code>server</code>, and <code>solve</code>.</p>
+<p>This section provides a brief overview of the handful of files included in the challenge. There are three directories: <code>program</code>, <code>server</code>, and <code>solve</code>.</p>
 <ul>
-<li>The <code>program</code> directory is a Rust project containing the source code of the target contract itself. It consists of some usual <code>cargo</code> stuffs and the <code>src</code> directory, containing the Rust source files <code>entrypoints.rs</code>, <code>lib.rs</code>, and <code>processor.rs</code> (more on them later).</li>
-<li>The <code>server</code> directory is also a Rust project implementing a program that will handle our connection to the challenge&rsquo;s server. It is written using <a href="https://github.com/otter-sec/solana-poc-framework" target="_blank" rel="noopener noreffer ">Ottersec&rsquo;s Solana PoC framework</a>, and is used to initialize the Solana environment everytime we connect to the server.</li>
-<li>The <code>solve</code> directory is yet again another Rust project. Our job is to modify the <code>src/processor.rs</code> file here to implement our exploit contract, then run the <code>solve.py</code> script to run this contract against the server and hopefully retrieve the flag if our exploit works.</li>
+<li>The <code>program</code> directory contains the Rust project for the target contract&rsquo;s source code. It includes typical <code>cargo</code> components and the <code>src</code> directory, which consists of the Rust source files <code>entrypoints.rs</code>, <code>lib.rs</code>, and <code>processor.rs</code> (I will cover these files later).</li>
+<li>The <code>server</code> directory is another Rust project that implements a program to manage our connection to the challenge&rsquo;s server. It is created using <a href="https://github.com/otter-sec/solana-poc-framework" target="_blank" rel="noopener noreffer ">Ottersec&rsquo;s Solana PoC framework</a> and initializes the Solana environment whenever we connect to the server.</li>
+<li>The <code>solve</code> directory is also a Rust project. Our objective is to modify the <code>src/processor.rs</code> file to create our exploit contract. We can then utilize the <code>solve.py</code> script to run this contract against the server to obtain the flag if our exploit succeeds.</li>
 </ul>
 <h3 id="the-target-contract-functionalities">The target contract functionalities</h3>
 <p>Let&rsquo;s take a deeper look at the functionalities of our target contract. As the name suggests, it&rsquo;s a payment service that is implemented with two PDAs: a <code>reserve</code> account to store all the actual funds, and an <code>escrow</code> account for each user to manage their balance on the contract:</p>
@@ -166,7 +166,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">amount</span>: <span class="kt">u16</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">bump</span>: <span class="kt">u8</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div><p>There are 4 instructions that can be used to interact with this contract. Firstly, the user can invoke the <code>Init</code> instruction to create their own <code>escrow</code> account, the amount of funds stored in this account is initialized to 0, as to be expected:</p>
+</span></span></span></code></pre></div><p>This contract supports 4 instructions for interaction. Firstly, users can use the <code>Init</code> instruction to create their own <code>escrow</code> account, with the amount of funds initialized to 0:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke_signed</span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">&amp;</span><span class="n">system_instruction</span>::<span class="n">create_account</span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
@@ -184,13 +184,13 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">amount</span>: <span class="mi">0</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">bump</span>: <span class="nc">escrow_bump</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
-</span></span></span></code></pre></div><p>Next, users can deposit and withdraw their lamports to the contract by using the <code>Deposit</code> and <code>Withdraw</code> instructions. When the <code>Deposit</code> instruction is invoked, there are some checks that are made before the transactions:</p>
+</span></span></span></code></pre></div><p>Users can then deposit or withdraw lamports to the contract using the <code>Deposit</code> and <code>Withdraw</code> instructions, which include transaction checks to ensure the signer is the user and the accounts are the correct PDAs belonging to the contract and user respectively:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="fm">assert!</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">is_signer</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">expected_reserve</span><span class="p">,</span><span class="w"> </span><span class="n">_reserve_bump</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_reserve</span><span class="p">(</span><span class="o">*</span><span class="n">program</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">expected_reserve</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">expected_escrow</span><span class="p">,</span><span class="w"> </span><span class="n">_escrow_bump</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_escrow</span><span class="p">(</span><span class="o">*</span><span class="n">program</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">expected_escrow</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">key</span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></div><p>These checks ensure that the user who invoked the instruction is the signer of the transaction, the <code>reserve</code> account is the correct PDA which belongs to the contract, and the <code>escrow</code> account is the correct PDA which belongs to the user. After that, the desired amount of lamport will be transferred to the <code>reserve</code> account, and the <code>amount</code> field of the <code>escrow</code> account will also be increased accordingly:</p>
+</span></span></span></code></pre></div><p>The desired amount of lamports will then be transferred to the reserve account, and the amount field of the escrow account will be increased or decreased accordingly:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke</span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">system_instruction</span>::<span class="n">transfer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reserve</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">deposit_amount</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">),</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="p">[</span><span class="w">
@@ -202,8 +202,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">escrow_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">Escrow</span>::<span class="n">deserialize</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">escrow_account</span><span class="p">.</span><span class="n">data</span><span class="p">).</span><span class="n">borrow_mut</span><span class="p">()[</span><span class="o">..</span><span class="p">])</span><span class="o">?</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">deposit_amount</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></div><p>The <code>Withdraw</code> instruction is pretty much the same, after some checks, all the lamports in <code>escrow_data.amount</code> will be transferred from the <code>reserve</code> account to the <code>user</code>, and <code>escrow</code> account&rsquo;s <code>amount</code> will be set to 0.</p>
-<p>The final instruction of this contract is the most unique and interesting one, as it allows a user to use their funds directly from the <code>escrow</code> account to make &ldquo;utility payment&rdquo;. When the <code>Pay</code> instruction is invoked, there are some usual checks like the ones above, following by the payment logic:</p>
+</span></span></span></code></pre></div><p>The <code>Withdraw</code> instruction is pretty much the same, after some checks, ALL the lamports in <code>escrow_data.amount</code> will be transferred from the <code>reserve</code> account to the <code>user</code>, and <code>escrow</code> account&rsquo;s <code>amount</code> will be set to 0.</p>
+<p>The <code>Pay</code> instruction, the most unique and interesting of the four, allows users to utilize funds directly from their <code>escrow</code> account to make a &ldquo;utility payment&rdquo;. The transaction checks are similar to those for <code>Deposit</code> and <code>Withdraw</code>, and after being validated, the payment logic is executed:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">base_fee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15_</span><span class="k">u16</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">if</span><span class="w"> </span><span class="n">escrow_data</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">base_fee</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -219,22 +219,22 @@
 <h3 id="the-vulnerability">The vulnerability</h3>
 <p>As we can see in the code snippet above, the user can only make a payment if they have deposited 10 lamports or more. After that, the desired amount of lamport will be used to make a payment, but the minimum amount that will be used is <code>base_fee</code>, which equals to 15.</p>
 <p>So what if the user invokes this instruction with an amount that is above 10 but below 15? In this case, both <code>escrow_data.amount &gt;= 10</code> and <code>amount &lt; base_fee</code> checks will pass, and then <code>escrow_data.amount -= base_fee</code> will be executed. Therefore, if they have only deposited an amount that is less than 15, their <code>escrow_data.amount</code> will be less than 15, and this will be an <strong>integer underflow</strong> because <code>escrow_data.amount</code> is an unsigned type <code>u16</code>.</p>
-<p>A common misconception for Rust developers is that Rust is a safe language and will always check for arithmetic overflows/underflows by itself. This is <strong>NOT TRUE</strong>, by default, Rust will check for these things <strong>ONLY IN DEBUG BUILD</strong>, and not release build. Rust will silently ignores arithmetic overflows/underflows in its default release build, the same way C does. As far as I know, there are 2 ways to tell Rust to check for those in the release build:</p>
+<p>A common misconception for Rust developers is that Rust is a safe language and will always check for arithmetic overflows/underflows by itself. This is <strong>NOT TRUE</strong>, by default, Rust only checks for these things in <strong>DEBUG BUILD</strong>, and not release build. Rust silently ignores arithmetic overflows/underflows in its default release build, the same way C does. As far as I know, there are 2 ways to tell Rust to check for those in the release build:</p>
 <ul>
 <li>By using <code>.checked_</code> functions, for example, a safe arithmetic in this case will be <code>escrow_data.amount.checked_sub(base_fee)</code>.</li>
 <li>By setting the <code>overflow-checks</code> option to <code>true</code> in <code>Cargo.toml</code>, as explained in the Rust documentation <a href="https://doc.rust-lang.org/cargo/reference/profiles.html#overflow-checks" target="_blank" rel="noopener noreffer ">here</a>. In this challenge, this option is not enabled in <code>program/Cargo.toml</code>.</li>
 </ul>
 <h3 id="the-server-program">The server program</h3>
-<p>Let&rsquo;s take a quick look at what are initialized on the server before crafting our exploit, implemented in <code>server/src/main.rs</code>. It&rsquo;s actually pretty simple, this is what it does step by step:</p>
+<p>Let&rsquo;s take a quick look at what are initialized on the server before crafting our exploit, implemented in <code>server/src/main.rs</code>. It&rsquo;s actually pretty straightforward, this is what it does step by step:</p>
 <ol>
 <li>Make a <code>user</code> account</li>
 <li>Make a <code>reserve</code> PDA for the target contract</li>
 <li>Give <code>user</code> 50 lamports</li>
 <li>Give <code>reserve</code> 1_000_000 lamports</li>
 <li>Run our exploit contract</li>
-<li>Check if <code>user</code>&rsquo;s balance is more than 60_000 or not, if so then print the flag.</li>
+<li>Check if <code>user</code>&rsquo;s balance is more than 60_000 or not. If they do, the flag is printed</li>
 </ol>
-<p>So our goal is clearly to turn our 50 lamports to an amount greater than 60_000 with our exploit contract.</p>
+<p>It&rsquo;s clear that the objective is to turn our 50 lamports to an amount greater than 60_000 with our exploit contract.</p>
 <h3 id="the-exploit-contract">The exploit contract</h3>
 <p>As explained in the vulnerability section above, our plan is to invoke the <code>Pay</code> instruction with an amount greater than 10 and less than 15, while our <code>escrow_data.amount</code> is also greater than 10 and less than 15. The steps to do that are:</p>
 <ol>
@@ -264,7 +264,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sys_prog_account</span><span class="p">.</span><span class="n">clone</span><span class="p">(),</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">],</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></div><p>Therefore, what I did was to copy this invocation 3 more times, and then just simply change the instruction names and arguments:</p>
+</span></span></span></code></pre></div><p>Therefore, what I did was to copy this invocation 3 more times, and then just simply changed the instruction names and arguments:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">invoke</span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&amp;</span><span class="n">Instruction</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">program_id</span>: <span class="o">*</span><span class="n">utility_program</span><span class="p">.</span><span class="n">key</span><span class="p">,</span><span class="w">
@@ -348,7 +348,7 @@
 <ul>
 <li><code>framework/chall/program/chall/src/lib.rs</code>: the implementation of the target contract.</li>
 <li><code>framework/chall/src/main.rs</code>: the implementation of the initializations on the server using <a href="https://github.com/otter-sec/sol-ctf-framework" target="_blank" rel="noopener noreffer ">Solana CTF Framework</a>.</li>
-<li><code>framework-solve/solve/program/solve/src/lib.rs</code> and <code>framework-solve/solve/src/main.rs</code>: the implementaion of our exploit contract and the invocation of it.</li>
+<li><code>framework-solve/solve/program/solve/src/lib.rs</code> and <code>framework-solve/solve/src/main.rs</code>: the implementaion of our exploit contract and its invocation.</li>
 </ul>
 <h3 id="the-target-contract-functionalities-1">The target contract functionalities</h3>
 <p>I don&rsquo;t really understand what &ldquo;staking&rdquo; means in this context, but it doesn&rsquo;t really matter. The contract implements 3 instructions: <code>Register</code>, <code>Deposit</code> and <code>Withdraw</code>.</p>
@@ -403,7 +403,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">    constraint = employee_record.key == user.key(),
 </span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">employee_record</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">EmployeeRecord</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
-</span></span></span></code></pre></div><p>Next, the <code>reserve</code> account and the <code>user_token_account</code> must be for correct <code>mint</code> token account:</p>
+</span></span></span></code></pre></div><p>Next, the <code>reserve</code> account and the <code>user_token_account</code> must correspond with the correct <code>mint</code> token account:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
 </span></span></span><span class="line"><span class="cl"><span class="cp">    mut,
 </span></span></span><span class="line"><span class="cl"><span class="cp">    seeds = [ b</span><span class="s">&#34;RESERVE&#34;</span><span class="cp"> ],
@@ -432,9 +432,9 @@
 <li>Deposit 500 tokens to this user&rsquo;s vault account</li>
 <li>Give the player 100 tokens</li>
 <li>Run our exploit contract</li>
-<li>Check if the player has more than 100 tokens, if so then prints the flag</li>
+<li>Check if the player has more than 100 tokens. If they do, the flag is printed</li>
 </ol>
-<p>So it&rsquo;s clear that the goal here is to steal tokens from <code>employ_A</code>&rsquo;s vault.</p>
+<p>It&rsquo;s clear that the objective is to steal tokens from <code>employ_A</code>&rsquo;s vault.</p>
 <h3 id="the-vulnerability-1">The vulnerability</h3>
 <p>Recall that when registering a user, it&rsquo;s entirely up to the user to choose their <code>org_name</code> and <code>employee_id</code>, as long as they are not already in the <code>catalog</code>. This is important because the seeds to generate the user&rsquo;s <code>vault</code> PDA are exactly those 2 values:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[account(
@@ -446,14 +446,14 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">)]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">vault</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Vault</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
 </span></span></span></code></pre></div><p>As we can see, those 2 values are simply concatenated together to form the seed. So for example in case of employee A, their seed will be <code>productemploy_A</code>.</p>
-<p>So what if we can somehow register a user that has the same seed as employee A? In that case, we can use employee A&rsquo;s <code>vault</code> as our own, and basically can withdraw anything from their vault. This is easy to do thanks to how the seeds are designed. If we create a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code>, it will pass all the checks because these values are not in the <code>catalog</code> yet, and our <code>vault</code> PDA&rsquo;s seeds will still be <code>productemploy_A</code>. And that is basically our strategy to exploit this contract.</p>
+<p>So what if we can somehow register a user that has the same seed as employee A? In that case, we can use employee A&rsquo;s <code>vault</code> as our own, and basically can withdraw anything from their vault. This is easy to do thanks to how the seeds are designed. If we create a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code>, it will pass all the checks because these values are not in the <code>catalog</code>, and our <code>vault</code> PDA&rsquo;s seeds will still be <code>productemploy_A</code>. And that is basically our strategy to exploit this contract.</p>
 <h3 id="the-exploit-contract-1">The exploit contract</h3>
 <p>Although the vulnerability is very sneaky, the exploit is very easy to implement.</p>
 <p>First of all, I changed the <code>vault</code> PDA&rsquo;s seeds in <code>framework-solve/solve/src/main.rs</code> from <code>&amp;[b&quot;product&quot;, b&quot;employ_B&quot;]</code> to <code>&amp;[b&quot;producte&quot;, b&quot;mploy_A&quot;]</code>. I also changed the host IP and port to be the challenge&rsquo;s server.</p>
 <p>The same goes for <code>o1</code> and <code>e1</code> in <code>framework-solve/solve/program/solve/src/lib.rs</code>, I also changed them to <code>producte</code> and <code>mploy_A</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">o1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;producte&#34;</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;mploy_A&#34;</span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></div><p>The invocation to the <code>Register</code> instruction is already written for us, so by changing these names, I will have a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code> registered.</p>
+</span></span></span></code></pre></div><p>The invocation of the <code>Register</code> instruction is already written for us, so by changing these names, I will have a user with <code>org_name = &quot;producte&quot;</code> and <code>employee_id = &quot;mploy_A&quot;</code> registered.</p>
 <p>Then, the only thing left to do is to invoke <code>Withdraw</code> to steal tokens from employee A&rsquo;s <code>vault</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">o2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;producte&#34;</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;mploy_A&#34;</span><span class="p">);</span><span class="w">
