@@ -3,7 +3,15 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Nov 2022 08:43:57 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 03 Mar 2023 11:32:39 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>idekCTF 2022 Solana Challenges Write-up</title>
+    <link>https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/</link>
+    <pubDate>Fri, 03 Mar 2023 11:32:39 -0600</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/</guid>
+    <description><![CDATA[Write-up for idekCTF 2022 Solana challenges]]></description>
+</item>
+<item>
     <title>N1CTF 2022 Solana Challenges Writeups</title>
     <link>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</link>
     <pubDate>Mon, 28 Nov 2022 08:43:57 -0600</pubDate>
@@ -74,14 +82,6 @@
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</guid>
     <description><![CDATA[Writeup for ASCIS/SVATTT2020 Finals RWE challenge]]></description>
-</item>
-<item>
-    <title>ASCIS2020 Quals - Findme, Crypt writeups</title>
-    <link>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</link>
-    <pubDate>Fri, 06 Nov 2020 05:56:39 -0800</pubDate>
-    <author>Midas</author>
-    <guid>https://lkmidas.github.io/posts/20201106-ascis2020quals-writeups/</guid>
-    <description><![CDATA[Writeups for ASCIS/SVATTT2020 Quals reversing challenges]]></description>
 </item>
 </channel>
 </rss>

