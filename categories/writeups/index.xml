@@ -3,7 +3,15 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 03 Mar 2023 11:32:39 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 04 Mar 2023 15:44:42 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>DiceCTF 2023 Solana Challenges Write-up</title>
+    <link>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</link>
+    <pubDate>Sat, 04 Mar 2023 15:44:42 -0600</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</guid>
+    <description><![CDATA[Write-up for DiceCTF 2023 Solana challenges]]></description>
+</item>
+<item>
     <title>idekCTF 2022 Solana Challenges Write-up</title>
     <link>https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/</link>
     <pubDate>Fri, 03 Mar 2023 11:32:39 -0600</pubDate>
@@ -12,12 +20,12 @@
     <description><![CDATA[Write-up for idekCTF 2022 Solana challenges]]></description>
 </item>
 <item>
-    <title>N1CTF 2022 Solana Challenges Writeups</title>
+    <title>N1CTF 2022 Solana Challenges Write-up</title>
     <link>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</link>
     <pubDate>Mon, 28 Nov 2022 08:43:57 -0600</pubDate>
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</guid>
-    <description><![CDATA[Writeups for N1CTF 2022 Solana challenges]]></description>
+    <description><![CDATA[Write-up for N1CTF 2022 Solana challenges]]></description>
 </item>
 <item>
     <title>GoogleCTF2022 - eldar writeups</title>
@@ -74,14 +82,6 @@
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/</guid>
     <description><![CDATA[Writeups for ISITDTUCTF2020 Finals reversing challenges]]></description>
-</item>
-<item>
-    <title>ASCIS2020 Finals - RWE writeup</title>
-    <link>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</link>
-    <pubDate>Tue, 01 Dec 2020 02:43:38 -0800</pubDate>
-    <author>Midas</author>
-    <guid>https://lkmidas.github.io/posts/20201201-ascis2020final-writeups/</guid>
-    <description><![CDATA[Writeup for ASCIS/SVATTT2020 Finals RWE challenge]]></description>
 </item>
 </channel>
 </rss>
