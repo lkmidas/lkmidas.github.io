@@ -3,7 +3,15 @@
         <title>writeups - Category - Midas Blog</title>
         <link>https://lkmidas.github.io/categories/writeups/</link>
         <description>writeups - Category - Midas Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 04 Mar 2023 15:44:42 -0600</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/writeups/" rel="self" type="application/rss+xml" /><item>
+    <title>SekaiCTF 2023 Solana Challenge The Bidding Write-up</title>
+    <link>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</link>
+    <pubDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</guid>
+    <description><![CDATA[Write-up for SekaiCTF 2023 The Bidding challenge]]></description>
+</item>
+<item>
     <title>DiceCTF 2023 Solana Challenges Write-up</title>
     <link>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</link>
     <pubDate>Sat, 04 Mar 2023 15:44:42 -0600</pubDate>
@@ -74,14 +82,6 @@
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210103-tetctf2021-writeups/</guid>
     <description><![CDATA[Writeups for TetCTF2021 heap pwn challenges]]></description>
-</item>
-<item>
-    <title>ISITDTUCTF2020 Finals - Keylogger, Game, Maze writeups</title>
-    <link>https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/</link>
-    <pubDate>Sun, 27 Dec 2020 05:58:43 -0800</pubDate>
-    <author>Midas</author>
-    <guid>https://lkmidas.github.io/posts/20201227-isitdtuctf2020final-writeups/</guid>
-    <description><![CDATA[Writeups for ISITDTUCTF2020 Finals reversing challenges]]></description>
 </item>
 </channel>
 </rss>

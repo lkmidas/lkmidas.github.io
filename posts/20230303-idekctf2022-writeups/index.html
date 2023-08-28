@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/lkmidas.github.io\/posts\/20230303-idekctf2022-writeups\/"
-        },"genre": "posts","wordcount":  1284 ,
+        },"genre": "posts","wordcount":  1327 ,
         "url": "https:\/\/lkmidas.github.io\/posts\/20230303-idekctf2022-writeups\/","datePublished": "2023-03-03T11:32:39-06:00","dateModified": "2023-03-03T11:32:39-06:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -85,7 +85,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">idekCTF 2022 Solana Challenges Write-up</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Midas</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeups/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>writeups</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-03">2023-03-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1284 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-03">2023-03-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1327 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
@@ -265,7 +265,7 @@
 </span></span></span></code></pre></div><p>The flag for this challenge is <code>idek{9ad7116e-468a-4968-b579-54a9b4964d9e}</code></p>
 <p>This vulnerability is fixed in <code>Blockchain 3</code> by putting <code>record.tries -= 1;</code> into the <code>if</code> statement.</p>
 <h3 id="the-3rd-vulnerability-admin-re-initialization">The 3rd vulnerability: Admin Re-initialization</h3>
-<p>Remember when I mentioned that the <code>Initialize</code> instruction is not to be ignored in this case? Indeed, as it turns out, the final vulnerability resides there. This instruction is utilized to establish an <code>admin</code> for the global <code>config</code> account. However, there is no mechanism in place to verify the identity of the given <code>admin</code>, or to check if the <code>config</code> account already has an existing <code>admin</code>. As a result, ANY user can execute this instruction and designate themselves as the <code>admin</code>. This is quite a sneaky bug that took me a bit longer to identify.</p>
+<p>Remember when I mentioned that the <code>Initialize</code> instruction is not to be ignored in this case? Indeed, as it turns out, the final vulnerability resides there. This instruction is utilized to establish an <code>admin</code> for the global <code>config</code> account. Importantly, the <code>config</code> account has the <code>init_if_needed</code> attribute instead of <code>init</code>, which will NOT trigger an error if the account is already initialized. According to the <a href="https://docs.rs/anchor-lang/latest/anchor_lang/derive.Accounts.html" target="_blank" rel="noopener noreffer ">Anchor documentation</a>, this attribute must be used with care because it is vulnerable to a re-initialization attack. However, there is no mechanism in place to verify the identity of the given <code>admin</code>, or to check if the <code>config</code> account already has an existing <code>admin</code>. As a result, ANY user can execute this instruction and designate themselves as the <code>admin</code>. This is quite a sneaky bug that took me a bit longer to identify.</p>
 <p>To exploit this vulnerability, simply set our user to be the admin using <code>Initialize</code>, and then withdraw all the tokens using <code>Deposit</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">cpi_accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chall</span>::<span class="n">cpi</span>::<span class="n">accounts</span>::<span class="n">Initialize</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">config</span>: <span class="nc">ctx</span><span class="p">.</span><span class="n">accounts</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">to_account_info</span><span class="p">(),</span><span class="w">

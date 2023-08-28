@@ -2,11 +2,12 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/writeups/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/categories/writeups/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20230303-idekctf2022-writeups/</loc><lastmod>2023-03-03T11:32:39-06:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20221128-n1ctf2022-writeups/</loc><lastmod>2022-11-28T08:43:57-06:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20220704-ggctf2022-writeups/</loc><lastmod>2022-07-03T22:28:02&#43;07:00</lastmod></url><url>

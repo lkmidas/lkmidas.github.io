@@ -3,9 +3,17 @@
         <title>Midas Blog</title>
         <link>https://lkmidas.github.io/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 04 Mar 2023 15:44:42 -0600</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</lastBuildDate>
             <atom:link href="https://lkmidas.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>SekaiCTF 2023 Solana Challenge The Bidding Write-up</title>
+    <link>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</link>
+    <pubDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</guid>
+    <description><![CDATA[Write-up for SekaiCTF 2023 The Bidding challenge]]></description>
+</item>
+<item>
     <title>DiceCTF 2023 Solana Challenges Write-up</title>
     <link>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</link>
     <pubDate>Sat, 04 Mar 2023 15:44:42 -0600</pubDate>
@@ -76,14 +84,6 @@
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</guid>
     <description><![CDATA[The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection]]></description>
-</item>
-<item>
-    <title>justCTF[*]2020 - debug_me_if_you_can, REmap writeups</title>
-    <link>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</link>
-    <pubDate>Mon, 01 Feb 2021 10:03:59 &#43;0700</pubDate>
-    <author>Midas</author>
-    <guid>https://lkmidas.github.io/posts/20210201-justctf2020-writeups/</guid>
-    <description><![CDATA[Writeups for justCTF[*]2020 reversing challenges]]></description>
 </item>
 </channel>
 </rss>
