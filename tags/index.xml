@@ -1,7 +1,7 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Tags - Tag - Midas Blog</title>
+        <title>Tags - Tag - Midas&#39;s Blog</title>
         <link>https://lkmidas.github.io/tags/</link>
-        <description>Tags - Tag - Midas Blog</description>
+        <description>Tags - Tag - Midas&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://lkmidas.github.io/tags/" rel="self" type="application/rss+xml" /></channel>
 </rss>

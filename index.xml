@@ -1,6 +1,6 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Midas Blog</title>
+        <title>Midas&#39;s Blog</title>
         <link>https://lkmidas.github.io/</link>
         <description>This is my cool site</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</lastBuildDate>
