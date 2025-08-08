@@ -2,9 +2,11 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
-            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/ai/</loc><lastmod>2025-08-07T22:18:43-07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/categories/</loc><lastmod>2025-08-07T22:18:43-07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/</loc><lastmod>2025-08-07T22:18:43-07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/</loc><lastmod>2025-08-07T22:18:43-07:00</lastmod></url><url>
+            <loc>https://lkmidas.github.io/posts/20250808-aixcc-recap/</loc><lastmod>2025-08-07T22:18:43-07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/categories/writeups/</loc><lastmod>2023-08-28T09:11:56&#43;07:00</lastmod></url><url>
             <loc>https://lkmidas.github.io/posts/20230304-dicectf2023-writeups/</loc><lastmod>2023-03-04T15:44:42-06:00</lastmod></url><url>

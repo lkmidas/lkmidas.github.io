@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>AI - Category - Midas&#39;s Blog</title>
+        <link>https://lkmidas.github.io/categories/ai/</link>
+        <description>AI - Category - Midas&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 07 Aug 2025 22:18:43 -0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/ai/" rel="self" type="application/rss+xml" /><item>
+    <title>Two-year Recap: A Story of 42-b3yond-6ug and AIxCC</title>
+    <link>https://lkmidas.github.io/posts/20250808-aixcc-recap/</link>
+    <pubDate>Thu, 07 Aug 2025 22:18:43 -0700</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20250808-aixcc-recap/</guid>
+    <description><![CDATA[Recaps, thoughts, and reflects on me and my team's AIxCC journey]]></description>
+</item>
+</channel>
+</rss>

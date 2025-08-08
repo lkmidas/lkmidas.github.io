@@ -3,7 +3,15 @@
         <title>All Posts - Midas&#39;s Blog</title>
         <link>https://lkmidas.github.io/posts/</link>
         <description>All Posts | Midas&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 07 Aug 2025 22:18:43 -0700</lastBuildDate><atom:link href="https://lkmidas.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Two-year Recap: A Story of 42-b3yond-6ug and AIxCC</title>
+    <link>https://lkmidas.github.io/posts/20250808-aixcc-recap/</link>
+    <pubDate>Thu, 07 Aug 2025 22:18:43 -0700</pubDate>
+    <author>Midas</author>
+    <guid>https://lkmidas.github.io/posts/20250808-aixcc-recap/</guid>
+    <description><![CDATA[Recaps, thoughts, and reflects on me and my team's AIxCC journey]]></description>
+</item>
+<item>
     <title>SekaiCTF 2023 Solana Challenge The Bidding Write-up</title>
     <link>https://lkmidas.github.io/posts/20230828-sekaictf2023-writeups/</link>
     <pubDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</pubDate>
@@ -74,14 +82,6 @@
     <author>Midas</author>
     <guid>https://lkmidas.github.io/posts/20210223-linux-kernel-pwn-modprobe/</guid>
     <description><![CDATA[A popular and powerful technique to exploit the Linux kernel through modprobe_path]]></description>
-</item>
-<item>
-    <title>Learning Linux Kernel Exploitation - Part 3</title>
-    <link>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</link>
-    <pubDate>Fri, 05 Feb 2021 10:11:42 &#43;0700</pubDate>
-    <author>Midas</author>
-    <guid>https://lkmidas.github.io/posts/20210205-linux-kernel-pwn-part-3/</guid>
-    <description><![CDATA[The final part of the series about learning Linux kernel exploitation through hxpCTF2020 kernel-rop: Full protection]]></description>
 </item>
 </channel>
 </rss>

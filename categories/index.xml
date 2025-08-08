@@ -3,7 +3,15 @@
         <title>Categories - Category - Midas&#39;s Blog</title>
         <link>https://lkmidas.github.io/categories/</link>
         <description>Categories - Category - Midas&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 07 Aug 2025 22:18:43 -0700</lastBuildDate><atom:link href="https://lkmidas.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>AI</title>
+    <link>https://lkmidas.github.io/categories/ai/</link>
+    <pubDate>Thu, 07 Aug 2025 22:18:43 -0700</pubDate>
+    <author>Author</author>
+    <guid>https://lkmidas.github.io/categories/ai/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
     <title>writeups</title>
     <link>https://lkmidas.github.io/categories/writeups/</link>
     <pubDate>Mon, 28 Aug 2023 09:11:56 &#43;0700</pubDate>
